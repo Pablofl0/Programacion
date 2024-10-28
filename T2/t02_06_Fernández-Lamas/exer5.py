@@ -28,7 +28,7 @@ def validacion(texto,desplazamiento):
 
 
 #Definición cifrado Cesar.
-def cifrado_Cesar(texto):
+def cifrado_Cesar(texto,desplazamiento):
     """Función que cifra texto mediante el método César.
 
     Args:
@@ -45,9 +45,10 @@ def cifrado_Cesar(texto):
         if codigo<=122 and codigo>=97:
             newcodigo = codigo + desplazamiento_float
             newcodigo_int=int(newcodigo)
-            if newcodigo > 122:
-                codigo = newcodigo - 26
-                cifrado += chr(codigo)
+            if newcodigo_int > 122:
+                codigo_grandes=newcodigo_int-122
+                resto=(codigo_grandes%26)
+                cifrado += chr(resto)
             else:
                 cifrado += chr(newcodigo_int)
         else:
@@ -59,8 +60,8 @@ try:
     texto = input("Introduce un texto: ")
     desplazamiento = input("Introduce el desplazamiento (mayor que 0) requerido: ")
     #validacion(texto,desplazamiento)
-    cifrado_final=cifrado_Cesar(texto)
-    print("El texto '" + str(texto) + "' cifrado es " + str(cifrado_final + "."))
+    cifrado_final=cifrado_Cesar(texto,desplazamiento)
+    print("El texto cifrado es " + str(cifrado_final) + ".")
 except ValueError:
     print("Error. Entrada no válida.")
 
