@@ -15,13 +15,15 @@ O usuario tamén indicará por teclado o desprazamento. Ademais recorda capturar
 __author__ = "Manuel Ramón Varela López"
 
 #Definición valores válidos.
-def validacion():
-    if type(texto)!= (str):
+def validacion(texto,desplazamiento):
+    #if type(texto)!= (str):
+     #   raise ValueError
+    #el
+    if type(desplazamiento)!=(float):
         raise ValueError
-    elif type(texto)!=():
+    elif desplazamiento < 0:
         raise ValueError
-    
-prueba
+    return None
 
 
 
@@ -39,21 +41,27 @@ def cifrado_Cesar(texto):
     cifrado=""
     for letra in texto:
         codigo = ord(letra)
+        desplazamiento_float=float(desplazamiento)
         if codigo<=122 and codigo>=97:
-            newcodigo = codigo + 5
+            newcodigo = codigo + desplazamiento_float
+            newcodigo_int=int(newcodigo)
             if newcodigo > 122:
                 codigo = newcodigo - 26
                 cifrado += chr(codigo)
             else:
-                cifrado += chr(newcodigo)
+                cifrado += chr(newcodigo_int)
         else:
             cifrado += letra
     return cifrado
 
 
-
-texto = input("Introduce un texto: ")
-cifrado_final=cifrado_Cesar(texto)
-print(cifrado_final)
+try:
+    texto = input("Introduce un texto: ")
+    desplazamiento = input("Introduce el desplazamiento (mayor que 0) requerido: ")
+    #validacion(texto,desplazamiento)
+    cifrado_final=cifrado_Cesar(texto)
+    print("El texto '" + str(texto) + "' cifrado es " + str(cifrado_final + "."))
+except ValueError:
+    print("Error. Entrada no válida.")
 
  
