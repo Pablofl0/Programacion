@@ -20,6 +20,8 @@ def validacion():
         raise ValueError
     elif type(texto)!=():
         raise ValueError
+    
+prueba
 
 
 
