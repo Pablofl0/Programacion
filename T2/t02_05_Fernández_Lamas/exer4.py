@@ -18,7 +18,7 @@ def raíz_cuadrada(número):
     Calcula la raíz cuadrada de un número.
 
     Args:
-        numero (float): el número del que se realiza la raíz cuadrada.
+        numero (float/int): el número del que se realiza la raíz cuadrada.
 
     Returns:
         float: el valor de la raíz cuadrada.
@@ -26,7 +26,7 @@ def raíz_cuadrada(número):
     Raises:
         ValueError: Si el valor introducido no es positivo o no es un número.
     """
-    if type(número) != (float):
+    if not(type(número) is (float) or type(número) is int):
         raise ValueError
     elif número < 0:
         raise ValueError

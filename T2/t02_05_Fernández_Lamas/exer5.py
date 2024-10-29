@@ -28,8 +28,10 @@ def sueldo_IRPF(sueldob,por_IRPF):
     Raises:
         ValueError: si el valor introducido del sueldo bruto no es positivo o no es un número y, si el valor del IRPF no está entre 0 y 100 o no es un número.
     """
-    if (type(sueldob) != (float)) or (type(por_IRPF) != (float)):
+    if not((type(sueldob) is (float)) or (type(sueldob) is (int))):
         raise ValueError
+    elif type(por_IRPF) is not int:
+          raise ValueError
     elif sueldob < 0:
         raise ValueError
     elif (0>por_IRPF) or (por_IRPF>100):
@@ -41,7 +43,7 @@ def sueldo_IRPF(sueldob,por_IRPF):
 #Petición sueldo bruto y porcentaje del IRPF y, muestra de resultado.
 try:
     sueldob=float(input("Introduce el sueldo bruto:"))
-    por_IRPF=float(input("Introduce el porcentaje de IRPF:"))
+    por_IRPF=int(input("Introduce el porcentaje de IRPF:"))
     desc_IRPF=sueldo_IRPF(sueldob,por_IRPF)
     print("El descuento del IRPF es " + str(desc_IRPF) +".")
 except ValueError:

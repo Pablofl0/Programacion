@@ -2,14 +2,11 @@
 # -*- coding: utf-8 -*-
 
 """
-O cifrado César é un tipo de cifrado de substitución no que unha letra do texto orixinal é substituída por outra letra que é un número fixo de posicións posteriores no alfabeto.
-Por exemplo se o desprazamento é 5, a ‘a’ cifrarase coa ‘f’. Débense ignorar os espazos en branco.
-Se nun desprazamento rematan as letras, volverase a comezar polo comezo do alfabeto.
-Supoñer que todos os nomes están en minúsculas e están compostos só polas seguintes letras: a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z.
-Realiza a implantación deste algoritmo na función cifra_cesar(texto: str, desprazamento: int): str. 
-Recorda que os caracteres diferentes as letras se deben manter. Comproba se o tipo de datos introducidos son válidos, e senón é así lanza unha excepción ValueError.
-O propio script debe utilizar ditas función para cifrar un texto introducido polo usuario para mostrar o texto cifrado por pantalla. 
-O usuario tamén indicará por teclado o desprazamento. Ademais recorda capturar a excepción.
+Realiza a implantación da función descifra_cesar(texto: str, desprazamento: int): str nun script que descifre unha cadea cifrada con cifrado César. 
+Lanza tamén excepción ValueError se os argumentos da función son do tipo de datos inválidos.
+
+O propio script debe utilizar dita función para descifrar un texto introducido polo usuario para mostrar o texto descifrado por pantalla. 
+O usuario tamén indicará por teclado o desprazamento.
 """
 
 __author__ = "Manuel Ramón Varela López"
@@ -38,32 +35,27 @@ def validacion(texto,desplazamiento):
 
 
 
-#Definición cifrado Cesar.
+#Definición descifrado Cesar.
 def cifrado_Cesar(texto,desplazamiento):
-    """Función que cifra texto mediante el método César.
+    """Función que descifra texto mediante el método César.
 
     Args:
         texto (cadena): cadena de texto.
         desplazamiento (int): valor del desplazamiento.
 
     Returns:
-        Cadena de texto: texto cifrado.
+        Cadena de texto: texto descifrado.
     """
     texto=texto.lower()
     cifrado=""
-    mínimo=96
     for letra in texto:
         codigo = ord(letra)
         desplazamiento_int=int(desplazamiento)
         if codigo<=122 and codigo>=97:
-            newcodigo = codigo + desplazamiento_int
-            if newcodigo > 122:
-                codigo_grandes=newcodigo-122
-                resto=(codigo_grandes%26)
-                cod_mín = mínimo + resto
-                cifrado += chr(cod_mín)
-            else:
-                cifrado += chr(newcodigo)
+            while desplazamiento_int>26:
+                desplazamiento_int -= 26
+            newcodigo = codigo - desplazamiento_int
+            cifrado += chr(newcodigo)
         else:
             cifrado += letra
     return cifrado
