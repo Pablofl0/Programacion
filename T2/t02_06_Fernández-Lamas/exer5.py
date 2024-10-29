@@ -63,7 +63,7 @@ def cifrado_Cesar(texto,desplazamiento):
                 cod_mín = mínimo + resto
                 cifrado += chr(cod_mín)
             else:
-                cifrado += chr(newcodigo)
+                cifrado += chr(newcodigo_int)
         else:
             cifrado += letra
     return cifrado
