@@ -12,7 +12,7 @@ O propio script debe utilizar ditas función para cifrar un texto introducido po
 O usuario tamén indicará por teclado o desprazamento. Ademais recorda capturar a excepción.
 """
 
-__author__ = "Manuel Ramón Varela López"
+__author__ = "PablO Fernández Lamas"
 
 #Definición valores válidos.
 def validacion(texto,desplazamiento):

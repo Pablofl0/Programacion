@@ -9,7 +9,7 @@ O propio script debe utilizar dita función para descifrar un texto introducido 
 O usuario tamén indicará por teclado o desprazamento.
 """
 
-__author__ = "Manuel Ramón Varela López"
+__author__ = "Pablo Fernández Lamas"
 
 #Definición valores válidos.
 def validacion(texto,desplazamiento):

@@ -11,33 +11,37 @@ https://www.interior.gob.es/opencms/es/servicios-al-ciudadano/tramites-y-gestion
 Por último imprime Válido ou Inválido segundo corresponda.
 """
 
-__author__ = "Manuel Ramón Varela López"
+__author__ = "Pablo Fernández Lamas"
 
-def validacion(DNI):
-    if len(DNI) is not 9:
-        raise ValueError
-    elif for numeroDNI in DNI[:8]
-    type(DNI[:8]) is not int:
-        raise ValueError
-    elif not(ord(DNI[8])<=90 or ord(DNI[8])>=65):
-        raise ValueError
+def validacion1(DNI):
+        if len(DNI) != 9:
+            raise ValueError
+        elif not(ord(DNI[8])<=90 or ord(DNI[8])>=65):
+            raise ValueError
+        
+        
+def validacion2(DNI):
+    for numeroDNI in DNI[:8]:
+        if not(ord(numeroDNI)<=57 or ord(numeroDNI)>=48):
+            raise ValueError
+    else:
+        pass
 
 def control(DNI):
-    suma=0
-    for numero in DNI[:8]:
-        suma += numero
-    while suma > 23:
-        suma -= 23
+    resto=int(DNI[:8])%23
     letras_control='TRWAGMYFPDXBNJZSQVHLCKE'
-    if letras_control[suma] is not DNI[8]:
+    if letras_control[resto] != DNI[8]:
         raise ValueError
+    else:
+        pass
 
 
 
 try:
     DNI=input("Introduce el DNI: ")
+    validacion1(DNI)
+    validacion2(DNI)
     control(DNI)
-    validacion(DNI)
     print("Válido")
 except ValueError:
     print("Inválido")
