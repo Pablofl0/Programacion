@@ -13,30 +13,52 @@ Por último imprime Válido ou Inválido segundo corresponda.
 
 __author__ = "Pablo Fernández Lamas"
 
+#Definición validación longitud y números.
 def validacion1(DNI):
-        if len(DNI) != 9:
-            raise ValueError
-        elif not(ord(DNI[8])<=90 or ord(DNI[8])>=65):
-            raise ValueError
+    """Fucnión que valida la longitud y, si son números los 8 primeros dígitos.
+
+    Args:
+        DNI (str): número del DNI.
+
+    Raises:
+        ValueError: si los valores introducidos no son válidos.
+        ValueError: si los valores introducidos no son válidos.
+    """
+    if len(DNI) != 9:
+        raise ValueError
+    elif not(ord(DNI[8])<=90 or ord(DNI[8])>=65):
+        raise ValueError
         
-        
+#Definición validación letra.    
 def validacion2(DNI):
+    """Función que valida si el último dígito del DNI es una letra mayúscula.
+
+    Args:
+        DNI (str): número del DNI.
+
+    Raises:
+        ValueError: si los valores introducidos no son válidos.
+    """
     for numeroDNI in DNI[:8]:
         if not(ord(numeroDNI)<=57 or ord(numeroDNI)>=48):
             raise ValueError
-    else:
-        pass
 
+#Definición código de control. 
 def control(DNI):
+    """Función que comprueba si la letra del DNI coincide con el código de control.
+
+    Args:
+        DNI (str): número del DNI
+
+    Raises:
+        ValueError: si los valores introducidos no son válidos.
+    """
     resto=int(DNI[:8])%23
     letras_control='TRWAGMYFPDXBNJZSQVHLCKE'
     if letras_control[resto] != DNI[8]:
         raise ValueError
-    else:
-        pass
 
-
-
+#Petición de DNI y muestra de resultado.
 try:
     DNI=input("Introduce el DNI: ")
     validacion1(DNI)

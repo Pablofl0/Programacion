@@ -51,19 +51,18 @@ def cifrado_Cesar(texto,desplazamiento):
     """
     texto=texto.lower()
     cifrado=""
-    mínimo=96
     for letra in texto:
         codigo = ord(letra)
         desplazamiento_int=int(desplazamiento)
         if codigo<=122 and codigo>=97:
+            if desplazamiento_int > 26:
+                desplazamiento_int -= 26
             newcodigo = codigo + desplazamiento_int
             if newcodigo > 122:
-                codigo_grandes=newcodigo-122
-                resto=(codigo_grandes%26)
-                cod_mín = mínimo + resto
-                cifrado += chr(cod_mín)
+                codigo_grandes=newcodigo-26
+                cifrado += chr(codigo_grandes)
             else:
-                cifrado += chr(newcodigo_int)
+                cifrado += chr(newcodigo)
         else:
             cifrado += letra
     return cifrado
