@@ -46,58 +46,102 @@ __author__ = "Pablo Fernández Lamas"
 def validacion_nota(nota):
     if type(nota) is not float:
         return False
+    if not (0 <= nota and nota <= 10):
+        return False
+    return True
 
-# Escogiendo el cambio que el usuario desea realizar.
-print("Elige una de las siguientes opciones:")
-print("\ta) Añadir nota.")
-print("\tb) Ver media.")
-print("\tc) Ver número de aprobados.")
-print("\td) Ver máxima nota.")
-print("\te) Eliminar nota.")
-print("\tf) Salir.")
-opción = input("> ")
+#Def validacion_indice.
+def validacion_indice(indice,notas):
+    if type(indice) is not int:
+        return False
+    elif not(0<=indice and indice<=(len(notas)-1)):
+        return False
+    else:
+        return True
 
-
-#Opción a).
-notas = []
-# Imos metendo tódlas notas
-while True:
-    
-    # Collemos unha nota ou a palabra fin
-    nota_str = input()
-
-    # Comprobamos se e a nota fin
-    if nota_str == "fin":
-        break
-
-    # Comprobamos se e un número
-    try:
-        nota = int(nota_str)
-    except:
-        continue
-
-    # Comprobamos que a nota estea entre 0 e 10
-    if 0 <= nota and nota <= 10:
+#Def añadir_nota.
+def añadir_nota(nota,notas):
+    if validacion_nota(nota) == True:
         notas.append(nota)
     else:
-        print()
+        raise ValueError
+    return notas
+    
+#Def mostrar_nota.
+def mostrar_nota(notas):
+    #indices=[]
+    for indice, valor in enumerate(notas):
+        #indices.append(indice)
+        lista_notas=(f"{indice}:{valor}")
+        #return indice,lista_notas
+        return lista_notas
 
-# Realizamos a suma de todalas notas
-suma = 0
-for nota in notas:
-    suma = suma + nota
-
-# Dividimos entre o numero de notas
-media = suma / len(notas)
-
-print(media)
+#Def ver_media.
+def ver_media(notas):
+    suma = 0
+    for cualificacion in notas:
+        suma += cualificacion
+    media=suma/len(notas)
+    return media
 
 
+#Def ver_numero_aprobados.
+def ver_numero_aprobados(nota,notas):
+    aprobados=0
+    for nota in notas:
+        if nota >= 5:
+            aprobados += 1
+    return aprobados
+
+#Def ver_maximanota.
+def ver_maximanota(notas):
+    notas.sort()
+    maximo=notas[:-1]
+    return maximo
 
 
+#Def eliminar_nota.
+def eliminar_nota(indice,notas):
+    if validacion_indice==True:
+        del notas[indice]
+    return notas
+
+#Inicializando variables.
+notas=[]
+
+#Estableciendo ejecución de programa según opción escogida.
+while True:
+    try:
+        # Escogiendo el cambio que el usuario desea realizar.
+        print("Elige una de las siguientes opciones:")
+        print("\ta) Añadir nota.")
+        print("\tb) Ver media.")
+        print("\tc) Ver número de aprobados.")
+        print("\td) Ver máxima nota.")
+        print("\te) Eliminar nota.")
+        print("\tf) Salir.")
+        opción = input("> ")
+        opción.lower()
+        if opción=='a':
+            nota=float(input("Introduzca nota: "))
+            añadir_nota(nota,notas)
+            print(notas)
+        elif opción=='b':
+            print("La media de las notas es " + str(ver_media(notas)) + ".")
+        elif opción=='c':
+            print("El número de aprobados es " + str(ver_numero_aprobados(nota,notas)) + ".")
+        elif opción=='d':
+            print("La máxima nota es " + str(ver_maximanota(notas)) + ".")
+        elif opción=='e':
+            print(mostrar_nota(notas))
+            indice=int(input("Introduzca el índice correspondiente a la nota que desea eliminar: "))
+            eliminar_nota(indice)
+        elif opción=='f':
+            break
+    except ValueError:
+        print("Error.")
+
+#Llamando a funciones con valores.
+#indices_notas,tabla_indice_nota=mostrar_nota(notas)
 
 
-
-#Opción
-for indice, valor in enumerate(lista):
-    print(f"Índice: {indice}, Valor: {valor}")
