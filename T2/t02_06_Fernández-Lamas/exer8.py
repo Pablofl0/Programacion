@@ -7,7 +7,6 @@ O programa recibirá en orde os seguintes parámetros: tamaño da táboa, númer
 """
 
 __author__ = "Pablo Fernández Lamas"
-
 #Función de validación.
 def validacion(tamaño,folding,palabra):
     """Función que valida los datos a utilizar.
