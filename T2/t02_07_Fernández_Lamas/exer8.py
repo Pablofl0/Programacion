@@ -42,6 +42,11 @@ Se o índice non é válido lanza excepción ValueError.
 
 __author__ = "Pablo Fernández Lamas"
 
+#Def validación.
+def validacion_nota(nota):
+    if type(nota) is not float:
+        return False
+
 # Escogiendo el cambio que el usuario desea realizar.
 print("Elige una de las siguientes opciones:")
 print("\ta) Añadir nota.")
