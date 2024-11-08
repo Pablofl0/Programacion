@@ -42,8 +42,31 @@ Se o índice non é válido lanza excepción ValueError.
 
 __author__ = "Pablo Fernández Lamas"
 
-#Def validación.
+#Def validación_lista.
+def validacion_lista(notas):
+    """Función que valida si la lista de notas es una lista.
+
+    Args:
+        notas (list): lista de notas.
+
+    Returns:
+        boolean: True o False.
+    """
+    if not(type(notas)==list):
+        return False
+    return True
+    
+
+#Def validación_nota.
 def validacion_nota(nota):
+    """Función que valida nota entrante.
+
+    Args:
+        nota (float): nota entrante.
+
+    Returns:
+        boolean: True o False.
+    """
     if type(nota) is not float:
         return False
     if not (0 <= nota and nota <= 10):
@@ -52,15 +75,35 @@ def validacion_nota(nota):
 
 #Def validacion_indice.
 def validacion_indice(indice,notas):
+    """Función que valida índice entrante.
+
+    Args:
+        indice (int): índice entrante.
+        notas (list): lista de notas.
+
+    Returns:
+        boolean: True o False.
+    """
     if type(indice) is not int:
         return False
     elif not(0<=indice and indice<=(len(notas)-1)):
         return False
-    else:
-        return True
+    return True
 
 #Def añadir_nota.
 def añadir_nota(nota,notas):
+    """Función que añade una nota.
+
+    Raises:
+        ValueError: si la nota no es un número.
+
+    Returns:
+        list: lista de notas modificada.
+    """
+    if validacion_lista == False:
+        raise ValueError
+    else:
+        pass
     if validacion_nota(nota) == True:
         notas.append(nota)
     else:
@@ -69,15 +112,32 @@ def añadir_nota(nota,notas):
     
 #Def mostrar_nota.
 def mostrar_nota(notas):
-    #indices=[]
+    """Función que muestra las notas y con sus respectivos índices.
+
+    Args:
+        notas (list): lista de notas.
+    """
+    if validacion_lista == False:
+        raise ValueError
+    else:
+        pass
     for indice, valor in enumerate(notas):
-        #indices.append(indice)
-        lista_notas=(f"{indice}:{valor}")
-        #return indice,lista_notas
-        return lista_notas
+        print(f"{indice}:{valor}")
 
 #Def ver_media.
 def ver_media(notas):
+    """Función que calcula la media de las notas.
+
+    Args:
+        notas (list): lista de notas.
+
+    Returns:
+        float: media de notas.
+    """
+    if validacion_lista == False:
+        raise ValueError
+    else:
+        pass
     suma = 0
     for cualificacion in notas:
         suma += cualificacion
@@ -86,7 +146,19 @@ def ver_media(notas):
 
 
 #Def ver_numero_aprobados.
-def ver_numero_aprobados(nota,notas):
+def ver_numero_aprobados(notas):
+    """Función que calcula el número de aprobados.
+
+    Args:
+        notas (list): lista de notas.
+
+    Returns:
+        int: número de aprobados.
+    """
+    if validacion_lista == False:
+        raise ValueError
+    else:
+        pass
     aprobados=0
     for nota in notas:
         if nota >= 5:
@@ -95,14 +167,44 @@ def ver_numero_aprobados(nota,notas):
 
 #Def ver_maximanota.
 def ver_maximanota(notas):
+    """Función que calcula la máxima nota.
+
+    Args:
+        notas (list): lista de notas.
+
+    Returns:
+        float: nota máxima.
+    """
+    if validacion_lista == False:
+        raise ValueError
+    else:
+        pass
     notas.sort()
-    maximo=notas[:-1]
+    maximo=notas[(len(notas)-1)]
     return maximo
 
 
 #Def eliminar_nota.
 def eliminar_nota(indice,notas):
-    if validacion_indice==True:
+    """Función que elimina una nota.
+
+    Args:
+        indice (int): índice correspondiente a la nota a borrar.
+        notas (list): lista de notas.
+
+    Raises:
+        ValueError: si el índice no es un número entero.
+
+    Returns:
+        list: lista de notas modificada.
+    """
+    if validacion_lista == False:
+        raise ValueError
+    else:
+        pass
+    if validacion_indice==False:
+        raise ValueError
+    else:
         del notas[indice]
     return notas
 
@@ -129,19 +231,14 @@ while True:
         elif opción=='b':
             print("La media de las notas es " + str(ver_media(notas)) + ".")
         elif opción=='c':
-            print("El número de aprobados es " + str(ver_numero_aprobados(nota,notas)) + ".")
+            print("El número de aprobados es " + str(ver_numero_aprobados(notas)) + ".")
         elif opción=='d':
             print("La máxima nota es " + str(ver_maximanota(notas)) + ".")
         elif opción=='e':
             print(mostrar_nota(notas))
-            indice=int(input("Introduzca el índice correspondiente a la nota que desea eliminar: "))
-            eliminar_nota(indice)
+            indice=int(input("Introduzca el índice (entero) correspondiente a la nota que desea eliminar: "))
+            eliminar_nota(indice,notas)
         elif opción=='f':
             break
     except ValueError:
-        print("Error.")
-
-#Llamando a funciones con valores.
-#indices_notas,tabla_indice_nota=mostrar_nota(notas)
-
-
+        print("Error. Entrada no válida.")
