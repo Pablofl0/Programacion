@@ -8,24 +8,32 @@ Escribe un script que reciba por teclado o número de premios dispoñibles e imp
 
 __author__ = "Pablo Fernández Lamas"
 
+#Importando biblioteca.
 import random
 
+#Def números premiados.
 def premiados(n_ganadores):
+    """Función que calcula los números premiados.
+
+    Args:
+        n_ganadores (int): número de ganadores.
+
+    Returns:
+        list: lista de números premiados.
+    """
     lista=[]
-    lista_rep = []
     i=0
     while i < n_ganadores:
         numero_aleatorio = random.randint(1, 9999)
-        lista_rep.append(numero_aleatorio)
         if numero_aleatorio not in lista:
             i+=1
             lista.append(numero_aleatorio)
         else:
             continue
-    print (lista_rep)
     return lista
 
 
+#Pidiendo datos y mostrando resultado.
 n_ganadores=int(input("Introduzca el número de ganadores: "))
 lista_premiados=premiados(n_ganadores)
 print(lista_premiados)
