@@ -49,6 +49,7 @@ def cifrado_Cesar(texto,desplazamiento):
     Returns:
         Cadena de texto: texto cifrado.
     """
+    validacion(texto,desplazamiento)
     texto=texto.lower()
     cifrado=""
     for letra in texto:
@@ -71,7 +72,6 @@ def cifrado_Cesar(texto,desplazamiento):
 try:
     texto = str(input("Introduce un texto: "))
     desplazamiento = int(input("Introduce el desplazamiento (mayor que 0) requerido: "))
-    validacion(texto,desplazamiento)
     cifrado_final=cifrado_Cesar(texto,desplazamiento)
     print("El texto cifrado es " + str(cifrado_final) + ".")
 except ValueError:
