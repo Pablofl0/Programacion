@@ -15,8 +15,8 @@ __author__ = "Pablo Fernández Lamas"
 
 
 #Definición validación longitud y números.
-def validacion1(DNI):
-    """Fucnión que valida la longitud y, si son números los 8 primeros dígitos.
+def validacion_lon_letra(DNI):
+    """Fucnión que valida la longitud y, si el último dígito es una letra.
 
     Args:
         DNI (str): número del DNI.
@@ -33,8 +33,8 @@ def validacion1(DNI):
         return True
         
 #Definición validación letra.    
-def validacion2(DNI):
-    """Función que valida si el último dígito del DNI es una letra mayúscula.
+def validacion_num(DNI):
+    """Función que valida si si son números los 8 primeros dígitos.
 
     Args:
         DNI (str): número del DNI.
@@ -45,8 +45,7 @@ def validacion2(DNI):
     for numeroDNI in DNI[:8]:
         if not(ord(numeroDNI)<=57 or ord(numeroDNI)>=48):
             return False
-        else:
-            return True
+    return True
 
 #Definición código de control. 
 def control(DNI):
@@ -58,29 +57,34 @@ def control(DNI):
     Raises:
         ValueError: si los valores introducidos no son válidos.
     """
-    resto=int(DNI[:8])%23
-    letras_control='TRWAGMYFPDXBNJZSQVHLCKE'
-    if letras_control[resto] != DNI[8]:
-        return False
+    if validacion_lon_letra(DNI)==True and validacion_num(DNI)==True:
+        resto=int(DNI[:8])%23
+        letras_control='TRWAGMYFPDXBNJZSQVHLCKE'
+        if letras_control[resto] != DNI[8]:
+            return False
+        else:
+            return True
     else:
-        return True
+        return False
     
 #Se pueden hacer las validaciones todas juntas o no, pero al llamarlas es mejor crear una función que las llame a todas.
-def comprobar_DNI():
-    if validacion1(DNI)==False:
-        raise ValueError
-    elif validacion2(DNI)==False:
-        raise ValueError
-    elif control(DNI)==False:
-        raise ValueError
+def comprobar_DNI(DNI):
+    if validacion_lon_letra(DNI)==False:
+        return False
+    elif validacion_num(DNI)==False:
+        return False
+    #elif control(DNI)==False:
+        return False
     else: 
-        pass
+        return True
         
 
 #Petición de DNI y muestra de resultado.
-try:
+while True:
     DNI=input("Introduce el DNI: ")
-    comprobar_DNI()
-    print("Válido")
-except ValueError:
-    print("Inválido")
+    if comprobar_DNI(DNI)== True:
+        print("Válido")
+        break
+    elif comprobar_DNI(DNI)==False:
+        print("Inválido")
+        print(validacion_num(DNI))
