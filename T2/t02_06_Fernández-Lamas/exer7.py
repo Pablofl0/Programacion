@@ -13,6 +13,7 @@ Por último imprime Válido ou Inválido segundo corresponda.
 
 __author__ = "Pablo Fernández Lamas"
 
+
 #Definición validación longitud y números.
 def validacion1(DNI):
     """Fucnión que valida la longitud y, si son números los 8 primeros dígitos.
@@ -25,9 +26,11 @@ def validacion1(DNI):
         ValueError: si los valores introducidos no son válidos.
     """
     if len(DNI) != 9:
-        raise ValueError
+        return False
     elif not(ord(DNI[8])<=90 or ord(DNI[8])>=65):
-        raise ValueError
+        return False
+    else: 
+        return True
         
 #Definición validación letra.    
 def validacion2(DNI):
@@ -41,7 +44,9 @@ def validacion2(DNI):
     """
     for numeroDNI in DNI[:8]:
         if not(ord(numeroDNI)<=57 or ord(numeroDNI)>=48):
-            raise ValueError
+            return False
+        else:
+            return True
 
 #Definición código de control. 
 def control(DNI):
@@ -56,14 +61,26 @@ def control(DNI):
     resto=int(DNI[:8])%23
     letras_control='TRWAGMYFPDXBNJZSQVHLCKE'
     if letras_control[resto] != DNI[8]:
+        return False
+    else:
+        return True
+    
+#Se pueden hacer las validaciones todas juntas o no, pero al llamarlas es mejor crear una función que las llame a todas.
+def comprobar_DNI():
+    if validacion1(DNI)==False:
         raise ValueError
+    elif validacion2(DNI)==False:
+        raise ValueError
+    elif control(DNI)==False:
+        raise ValueError
+    else: 
+        pass
+        
 
 #Petición de DNI y muestra de resultado.
 try:
     DNI=input("Introduce el DNI: ")
-    validacion1(DNI)
-    validacion2(DNI)
-    control(DNI)
+    comprobar_DNI()
     print("Válido")
 except ValueError:
     print("Inválido")

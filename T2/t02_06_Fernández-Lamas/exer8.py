@@ -64,18 +64,10 @@ def hashing(palabra,folding):
 try:
     tamaño=int(input("Introduce el tamaño de la tabla: "))
     folding=int(input("Introduce el número de división por folding: "))
-    i=0
-    while i<int(tamaño):
-        palabra=input("Introduce la entrada que deseas: ")
-        llave=float(input("Introduce la llave correspondiente para cada entrada del diccionario: "))
-        indice_final=hashing(palabra,folding)
-        validacion(tamaño,folding,palabra)
-        print("El índice de la palabra '" + str(palabra) + "' es " + str(indice_final) + ".")
-        #No tener en cuenta.
-        #if validacion(tamaño,folding,palabra):
-        #    i+=1
-        #else:
-        #    i+=0
-    print("La tabla está completa.")
+    palabra=input("Introduce la entrada que deseas: ")
+    llave=float(input("Introduce la llave correspondiente para cada entrada del diccionario: "))
+    indice_final=hashing(palabra,folding)
+    validacion(tamaño,folding,palabra)
+    print("El índice de la palabra '" + str(palabra) + "' es " + str(indice_final) + ".")
 except ValueError:
     print("Error. Dato no válido.")

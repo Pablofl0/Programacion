@@ -54,9 +54,9 @@ def cifrado_Cesar(texto,desplazamiento):
     for letra in texto:
         codigo = ord(letra)
         desplazamiento_int=int(desplazamiento)
-        if codigo<=122 and codigo>=97:
-            if desplazamiento_int > 26:
+        while desplazamiento_int > 26:
                 desplazamiento_int -= 26
+        if codigo<=122 and codigo>=97:
             newcodigo = codigo + desplazamiento_int
             if newcodigo > 122:
                 codigo_grandes=newcodigo-26
