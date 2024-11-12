@@ -32,8 +32,24 @@ def premiados(n_ganadores):
             continue
     return lista
 
+def formato(numero_aleatorio):
+    """Función que pasa los números a 4 dígitos.
+
+    Args:
+        numero_aleatorio (int): número entero entre 1 y 9999.
+
+    Returns:
+        int: número entero entre 1 y 9999 con 4 dígitos.
+    """
+    numero_aleatorio_str=str(numero_aleatorio)
+    while len(numero_aleatorio_str)<4:
+        numero_aleatorio_str="0" + numero_aleatorio_str
+    return numero_aleatorio_str
+
+
 
 #Pidiendo datos y mostrando resultado.
 n_ganadores=int(input("Introduzca el número de ganadores: "))
 lista_premiados=premiados(n_ganadores)
-print(lista_premiados)
+for n in lista_premiados:
+    print("El número premiado es: " + formato(n) + ".")

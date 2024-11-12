@@ -100,11 +100,11 @@ def añadir_nota(nota,notas):
     Returns:
         list: lista de notas modificada.
     """
-    if validacion_lista == False:
+    if not validacion_lista(notas):
         raise ValueError
     else:
         pass
-    if validacion_nota(nota) == True:
+    if validacion_nota(nota):
         notas.append(nota)
     else:
         raise ValueError
@@ -117,7 +117,7 @@ def mostrar_nota(notas):
     Args:
         notas (list): lista de notas.
     """
-    if validacion_lista == False:
+    if not validacion_lista(notas):
         raise ValueError
     else:
         pass
@@ -134,15 +134,17 @@ def ver_media(notas):
     Returns:
         float: media de notas.
     """
-    if validacion_lista == False:
+    if not validacion_lista(notas):
         raise ValueError
+    if len(notas)==0:
+        media=0
+        return media
     else:
-        pass
-    suma = 0
-    for cualificacion in notas:
-        suma += cualificacion
-    media=suma/len(notas)
-    return media
+        suma = 0
+        for cualificacion in notas:
+            suma += cualificacion
+        media=suma/len(notas)
+        return media
 
 
 #Def ver_numero_aprobados.
@@ -155,7 +157,7 @@ def ver_numero_aprobados(notas):
     Returns:
         int: número de aprobados.
     """
-    if validacion_lista == False:
+    if not validacion_lista(notas):
         raise ValueError
     else:
         pass
@@ -175,10 +177,18 @@ def ver_maximanota(notas):
     Returns:
         float: nota máxima.
     """
-    if validacion_lista == False:
+    if not validacion_lista(notas):
         raise ValueError
-    else:
-        pass
+    while i<(len(notas)-1):
+        i=0
+        j=i+1
+        for nota in notas:
+            if nota[i]>nota[j]:
+                j+=1
+                maxima=nota[i]
+            else:
+                i+=1
+            
     notas.sort()
     maximo=notas[(len(notas)-1)]
     return maximo
@@ -198,11 +208,11 @@ def eliminar_nota(indice,notas):
     Returns:
         list: lista de notas modificada.
     """
-    if validacion_lista == False:
+    if not validacion_lista(notas):
         raise ValueError
     else:
         pass
-    if validacion_indice==False:
+    if not validacion_indice(indice,notas):
         raise ValueError
     else:
         del notas[indice]

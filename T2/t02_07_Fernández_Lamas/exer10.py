@@ -39,12 +39,12 @@ def ordenar(lista):
     Returns:
         list: lista con los números ordenados.
     """
-    i=0
-    while i<(len(lista)-1):
-        lista_ordenada=lista.sort()
-        if lista_ordenada == lista:
-            break
-        else:
+    
+    modificado=True
+    while modificado:
+        i=0
+        modificado=False
+        while i<(len(lista)-1):
             if lista[i] == lista[i+1]:
                 i+=1
             elif lista[i] < lista[i+1]:
@@ -54,7 +54,7 @@ def ordenar(lista):
                 lista[i]=lista[i+1]
                 lista[i+1]=reemplazo
                 i+=1
-    return lista
+                modificado=True
 
 
 
