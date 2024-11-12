@@ -14,7 +14,34 @@ ordenar unha lista de números de menor a maior.
 
 __author__ = "Pablo Fernández Lamas"
 
-dicionario = {'a': 1, 'b': 2, 'c': 3}
 
-for clave, valor in dicionario.items():
-    print(clave, valor)
+
+def contar_frecuencia(lista):
+    """
+    Conta a frecuencia de cada unha das palabras nunha lista
+
+    Args:
+        lista (list): lista de palabras
+
+    Returns:
+        dict: diccionario onde as chaves son as palabras e o seu valor o número de ocurrencias
+
+    """
+    # Creamos un dicionario baleiro
+    contador = {}
+
+    # Recorremos a lista
+    for palabra in lista:
+        # COmprobamos se hai unha clave que sexa a palabra da lista 
+        if palabra in contador:
+            # Aumentamos en 1 o contador da palabra
+            contador[palabra] = contador[palabra] + 1
+        else:
+            # Como non existe a clave coa palabra, creamola e asignamoslle o valor 1
+            contador[palabra] = 1
+
+    return contador
+
+lista_palabras = ['mazá', 'banana', 'mazá', 'laranxa', 'banana', 'mazá']
+
+print(contar_frecuencia(lista_palabras))
