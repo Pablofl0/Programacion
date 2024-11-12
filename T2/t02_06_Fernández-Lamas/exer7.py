@@ -42,8 +42,9 @@ def validacion_num(DNI):
     Raises:
         ValueError: si los valores introducidos no son válidos.
     """
-    for numeroDNI in DNI[:8]:
-        if not(ord(numeroDNI)<=57 or ord(numeroDNI)>=48):
+    for numeroDNI in DNI[0:8]:
+        codigo_dni=ord(numeroDNI)
+        if not((codigo_dni)<=57 or (codigo_dni)>=48):
             return False
     return True
 
@@ -69,12 +70,12 @@ def control(DNI):
     
 #Se pueden hacer las validaciones todas juntas o no, pero al llamarlas es mejor crear una función que las llame a todas.
 def comprobar_DNI(DNI):
-    if validacion_lon_letra(DNI)==False:
+    if not validacion_lon_letra(DNI):
         return False
-    elif validacion_num(DNI)==False:
+    elif not validacion_num(DNI):
         return False
-    #elif control(DNI)==False:
-        return False
+    #elif not control(DNI):
+    #    return False
     else: 
         return True
         
@@ -82,9 +83,9 @@ def comprobar_DNI(DNI):
 #Petición de DNI y muestra de resultado.
 while True:
     DNI=input("Introduce el DNI: ")
-    if comprobar_DNI(DNI)== True:
+    if comprobar_DNI(DNI):
         print("Válido")
         break
-    elif comprobar_DNI(DNI)==False:
+    elif not comprobar_DNI(DNI):
         print("Inválido")
         print(validacion_num(DNI))

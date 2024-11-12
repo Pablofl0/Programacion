@@ -36,7 +36,7 @@ def validacion(tamaño,folding,palabra):
 
 
 #Función de hashing.
-def hashing(palabra,folding):
+def hashing(palabra,folding,tamaño):
     """Función que calcula el índice de hash para cada entrada del diccionario.
 
     Args:
@@ -66,7 +66,7 @@ try:
     folding=int(input("Introduce el número de división por folding: "))
     palabra=input("Introduce la entrada que deseas: ")
     llave=float(input("Introduce la llave correspondiente para cada entrada del diccionario: "))
-    indice_final=hashing(palabra,folding)
+    indice_final=hashing(palabra,folding,tamaño)
     validacion(tamaño,folding,palabra)
     print("El índice de la palabra '" + str(palabra) + "' es " + str(indice_final) + ".")
 except ValueError:
