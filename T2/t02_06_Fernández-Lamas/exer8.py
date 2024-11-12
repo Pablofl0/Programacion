@@ -7,22 +7,23 @@ O programa recibirá en orde os seguintes parámetros: tamaño da táboa, númer
 """
 
 __author__ = "Pablo Fernández Lamas"
-#Función de validación.
-def validacion(tamaño,folding,palabra):
-    """Función que valida los datos a utilizar.
+
+#Función de hashing.
+def hashing(palabra,folding,tamaño):
+    """Función que realiza el hashing.
 
     Args:
-        tamaño (int): tamaño de la tabla.
-        folding (int): divisor de folding.
-        palabra (str): entrada del diccionario.
+        palabra (str): palabra a codificar.
+        folding (int): divisiçon por folding.
+        tamaño (int): tamaño tabla de hashing.
 
     Raises:
-        ValueError: si los valores introducidos no son válidos.
-        ValueError: si los valores introducidos no son válidos.
-        ValueError: si los valores introducidos no son válidos.
+        ValueError: si el tipo de la variable no coincide.
+        ValueError: si el tipo de la variable no coincide.
+        ValueError: si el tipo de la variable no coincide.
 
     Returns:
-        True: boolean.
+        int: índice en la tabla de hash.
     """
     if type(tamaño) is not int:
         raise ValueError
@@ -30,22 +31,6 @@ def validacion(tamaño,folding,palabra):
         raise ValueError
     elif type(palabra) is not str:
         raise ValueError
-    else:
-        return True
-
-
-
-#Función de hashing.
-def hashing(palabra,folding,tamaño):
-    """Función que calcula el índice de hash para cada entrada del diccionario.
-
-    Args:
-        palabra (str): entrada del diccionario
-        folding (int): divisor de folding.
-
-    Returns:
-        indice: indice de hash para la entrada.
-    """
     cifras=""
     suma=0
     palabra = palabra.lower()
@@ -67,7 +52,6 @@ try:
     palabra=input("Introduce la entrada que deseas: ")
     llave=float(input("Introduce la llave correspondiente para cada entrada del diccionario: "))
     indice_final=hashing(palabra,folding,tamaño)
-    validacion(tamaño,folding,palabra)
     print("El índice de la palabra '" + str(palabra) + "' es " + str(indice_final) + ".")
 except ValueError:
     print("Error. Dato no válido.")

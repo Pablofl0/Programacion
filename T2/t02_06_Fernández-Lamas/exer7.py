@@ -44,7 +44,7 @@ def validacion_num(DNI):
     """
     for numeroDNI in DNI[0:8]:
         codigo_dni=ord(numeroDNI)
-        if not((codigo_dni)<=57 or (codigo_dni)>=48):
+        if not((codigo_dni)<=57 and (codigo_dni)>=48):
             return False
     return True
 
@@ -58,15 +58,13 @@ def control(DNI):
     Raises:
         ValueError: si los valores introducidos no son válidos.
     """
-    if validacion_lon_letra(DNI)==True and validacion_num(DNI)==True:
-        resto=int(DNI[:8])%23
-        letras_control='TRWAGMYFPDXBNJZSQVHLCKE'
-        if letras_control[resto] != DNI[8]:
-            return False
-        else:
-            return True
-    else:
+    resto=int(DNI[:8])%23
+    letras_control='TRWAGMYFPDXBNJZSQVHLCKE'
+    if letras_control[resto] != DNI[8]:
         return False
+    else:
+        return True
+    
     
 #Se pueden hacer las validaciones todas juntas o no, pero al llamarlas es mejor crear una función que las llame a todas.
 def comprobar_DNI(DNI):
@@ -74,8 +72,8 @@ def comprobar_DNI(DNI):
         return False
     elif not validacion_num(DNI):
         return False
-    #elif not control(DNI):
-    #    return False
+    elif not control(DNI):
+        return False
     else: 
         return True
         
@@ -88,4 +86,3 @@ while True:
         break
     elif not comprobar_DNI(DNI):
         print("Inválido")
-        print(validacion_num(DNI))
