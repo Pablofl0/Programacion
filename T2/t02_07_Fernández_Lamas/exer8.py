@@ -179,19 +179,11 @@ def ver_maximanota(notas):
     """
     if not validacion_lista(notas):
         raise ValueError
-    while i<(len(notas)-1):
-        i=0
-        j=i+1
-        for nota in notas:
-            if nota[i]>nota[j]:
-                j+=1
-                maxima=nota[i]
-            else:
-                i+=1
-            
-    notas.sort()
-    maximo=notas[(len(notas)-1)]
-    return maximo
+    mayor = 0
+    for elemento in notas:
+        if elemento > mayor:
+            mayor = elemento
+    return mayor
 
 
 #Def eliminar_nota.
