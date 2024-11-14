@@ -2,46 +2,87 @@
 # -*- coding: utf-8 -*-
 
 """
-A ordenación por burbulla é un algoritmo de ordenación simple pero ineficiente para listas pequenas. 
-Funciona comparando elementos adxacentes na lista e intercambiándoos se están na orde incorrecta (é dicir,
-se o primeiro elemento é maior que o segundo). Este proceso repítese varias veces ata que toda a lista está ordenada.
+Realiza unha aplicación co seguinte menú:
 
-Cada “burbulla” (elemento grande) “sube” ata a súa posición correcta, movéndose cara ao final da lista en cada pasada.
+a) Ingresar datos alumno
 
-Escribe unha función en Python burbulla(lista: List) -> List que implante o algoritmo de ordenación por burbulla para 
-ordenar unha lista de números de menor a maior.
+b) Eliminar datos alumno
+
+Débese mostrar unha lista de alumnos nun menú e seleccionar o alumno a eliminar segundo o índice co seguinte formato: indice. apelidos_alumno, nome: nota.
+c) Modificar nota alumno
+
+Débese mostrar unha lista de alumnos nun menú e seleccionar o alumno a modificar a nota o índice co seguinte formato: indice. apelidos_alumno, nome: nota.
+d) Ver nomes e apelidos de alumnos aprobados
+
+Débese mostrar co seguinte formato: indice. apelidos_alumno, nome: nota
+e) Mostra alumnos alfabeticamente:
+
+Débese mostrar co seguinte formato: indice. apelidos_alumno, nome: nota
+Podes modificar a función do método da burbulla de tarefas anteriores.
+f) Ver a nota media.
+
+g) Sair.
+
+Para cada alumno necesitaremos gardar os seguintes datos:
+
+Nome
+Apelidos
+Nota con decimais.
+Axuda:
+
+A información de cada alumno almacenarase nun dicionario.
+Para gardar a información de cada alumno utilizaremos unha lista.
 """
 
 __author__ = "Pablo Fernández Lamas"
 
 
+#Mostrar notas.
+def mostrar_notas(alumnado):
+    for nom_ape in alumnado:
+        print(nom_ape, alumnado[nom_ape])
 
-def contar_frecuencia(lista):
-    """
-    Conta a frecuencia de cada unha das palabras nunha lista
 
-    Args:
-        lista (list): lista de palabras
+#Añadir datos alumno.
+def añadir_datos(nombre,apellido):
+    apellido.append(new_apellido)
+    nombre.append(new_nombre)
+    return nombre, apellido
 
-    Returns:
-        dict: diccionario onde as chaves son as palabras e o seu valor o número de ocurrencias
 
-    """
-    # Creamos un dicionario baleiro
-    contador = {}
 
-    # Recorremos a lista
-    for palabra in lista:
-        # COmprobamos se hai unha clave que sexa a palabra da lista 
-        if palabra in contador:
-            # Aumentamos en 1 o contador da palabra
-            contador[palabra] = contador[palabra] + 1
-        else:
-            # Como non existe a clave coa palabra, creamola e asignamoslle o valor 1
-            contador[palabra] = 1
+#Inicializando variables.
+apellido=[]
+nombre=[]
 
-    return contador
 
-lista_palabras = ['mazá', 'banana', 'mazá', 'laranxa', 'banana', 'mazá']
 
-print(contar_frecuencia(lista_palabras))
+#Estableciendo ejecución de programa según opción escogida.
+while True:
+    try:
+        # Escogiendo el cambio que el usuario desea realizar.
+        print("Elige una de las siguientes opciones:")
+        print("\ta) Ingresar datos alumno.")
+        print("\tb) Eliminar datos alumno.")
+        print("\tc) Modificar nota alumno.")
+        print("\td) Ver nomes e apelidos de alumnos aprobados.")
+        print("\te) Mostrar alumnos alfabéticamente.")
+        print("\tf) Ver la nota media.")
+        print("\tg) Salir.")
+        opción = input("> ")
+        opción.lower()
+        if opción=='a':
+            new_nombre=str(input("Introduzca el nombre: "))
+            new_apellido=str(input("Introduzca los apellidos: "))
+            nombres,apellidos=añadir_datos(nombre,apellido)
+            nom_ape={apellidos,nombres}
+            alumnado={[apellidos,nombres]:"nota"}
+            print(alumnado)
+        elif opción=='b':
+        elif opción=='c':
+        elif opción=='d':
+        elif opción=='e':
+        elif opción=='f':
+            break
+    except ValueError:
+        print("Error. Entrada no válida.") 
