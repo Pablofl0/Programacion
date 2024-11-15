@@ -37,23 +37,32 @@ Para gardar a información de cada alumno utilizaremos unha lista.
 __author__ = "Pablo Fernández Lamas"
 
 
-#Mostrar notas.
-def mostrar_notas(alumnado):
-    for nom_ape in alumnado:
-        print(nom_ape, alumnado[nom_ape])
-
-
 #Añadir datos alumno.
-def añadir_datos(nombre,apellido):
-    apellido.append(new_apellido)
-    nombre.append(new_nombre)
-    return nombre, apellido
+def datos_alumno(new_nombre,new_apellido,nota):
+    alumno={}
+    alumno['Nombre']=new_nombre
+    alumno['Apellidos']=new_apellido
+    alumno['Nota']=nota
+    return alumno
 
+#Mostrar notas.
+def mostrar_alumnado(alumnado):
+    for indice, datos in enumerate(alumnado):
+        print(f"{indice}. {datos['Apellidos']}, {datos['Nombre']}: {datos['Nota']}")
+
+#Eliminar datos alumno.
+def eliminar_datos(alumnado,indice):
+    alumnado.pop(indice)
+    return alumnado
+
+#Modificar nota alumno.
+def modificar_nota(indice,new_nota):
+    alumnado[indice]['Nota'] = new_nota
+    return alumnado
 
 
 #Inicializando variables.
-apellido=[]
-nombre=[]
+alumnado=[]
 
 
 
@@ -74,14 +83,22 @@ while True:
         if opción=='a':
             new_nombre=str(input("Introduzca el nombre: "))
             new_apellido=str(input("Introduzca los apellidos: "))
-            nombres,apellidos=añadir_datos(nombre,apellido)
-            nom_ape={apellidos,nombres}
-            alumnado={[apellidos,nombres]:"nota"}
-            print(alumnado)
+            nota=float(input("Introduzca la nota: "))
+            alumno=datos_alumno(new_nombre,new_apellido,nota)
+            alumnado.append(alumno)
+            mostrar_alumnado(alumnado)
         elif opción=='b':
+            mostrar_alumnado(alumnado)
+            indice=int(input("Introduzca el índice correspondiente al alumno que desea eliminar: "))
+            eliminar_datos(alumnado,indice)
+            mostrar_alumnado(alumnado)
         elif opción=='c':
-        elif opción=='d':
-        elif opción=='e':
+            mostrar_alumnado(alumnado)
+            indice=int(input("Introduzca el índice correspondiente al alumno cuya nota desea modificar: "))
+            new_nota=float(input("Introduzca la nota nueva: "))
+            modificar_nota
+        #elif opción=='d':
+        #elif opción=='e':
         elif opción=='f':
             break
     except ValueError:
