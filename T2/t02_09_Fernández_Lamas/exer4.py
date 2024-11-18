@@ -16,7 +16,7 @@ e Non palíndromo en caso contrario.
 
 __author__ = "Pablo Fernández Lamas"
 
-
+#Def función palídromo.
 def palindromo(palabra):
     """Función que comprueba si la palabra es políndroma o no.
 
@@ -36,7 +36,9 @@ def palindromo(palabra):
             return palindromo(resto_palabra)
         else: 
             return False
-        
+
+
+#Pidiendo datos y mostrando resultados. 
 palabra_mayus = str(input("Introduzca una palabra: "))
 palabra = palabra_mayus.lower()
 if palindromo(palabra):
