@@ -20,10 +20,39 @@ Implanta este xogo.
 
 __author__ = "Pablo Fernández Lamas"
 
-
 import random
 
+#Def validación número recibido.
+def validacion(n):
+    """Función que valida el número entrante.
+
+    Args:
+        n (int): número entrante.
+
+    Returns:
+        boolean: True o False.
+    """
+    if type(n) is not int:
+        return False
+    elif not(n>0 and n<10):
+        return False
+    return True
+
+#Def calculadora de números posibles.
 def numeros_posibles(n):
+    """Función que calcula los posibles números.
+
+    Args:
+        n (int): número entrante.
+
+    Raises:
+        ValueError: si los valores no son correctos.
+
+    Returns:
+        list: lista de números posibles.
+    """
+    if not(validacion(n)):
+        raise ValueError
     numeros = []
     lista = '123456789'
     #Caso columna.
@@ -62,32 +91,41 @@ if numero_aleatorio == 0:
     print("Tú serás el jugador A y tu compañero el jugador B.")
 else:
     print("Tú serás el jugador B y tu compañero el jugador A.")
-
-
+#Petición del primer número.
 nuevo_número_B = int(input("Introduzca su primer número, jugador B: "))  
 
 
 while True:
-    #Pidiendo números.
-    posibles = numeros_posibles(nuevo_número_B)
-    print(posibles)
-    print("Jugador A, introduzca uno de los siguientes 4 números:")
-    for n in posibles:
-        print(f"{n}")
-    nuevo_número_A = int(input("> "))
-    suma += nuevo_número_A
-    #Mostrando ganador.
-    if suma >= corte:
-        print("Ganador jugador B.")
-        break
-    #Pidiendo números.    
-    posibles = numeros_posibles(nuevo_número_A)
-    print("Jugador B, introduzca uno de los siguientes 4 números:")
-    for n in posibles:
-        print(f"{n}")
-    nuevo_número_B = int(input("> "))
-    suma += nuevo_número_B
-    #Mostrando ganador.
-    if suma >= corte:
-        print("Ganador jugador A.")
-        break
+    try:
+        #Pidiendo números.
+        incorrecto = True
+        posibles = numeros_posibles(nuevo_número_B)
+        while incorrecto:
+            print("Jugador A, introduzca uno de los siguientes 4 números:")
+            for n in posibles:
+                print(f"{n}")
+            nuevo_número_A = int(input("> "))
+            if nuevo_número_A in posibles:
+                incorrecto = False
+        suma += nuevo_número_A
+        #Mostrando ganador.
+        if suma >= corte:
+            print("Ganador jugador B.")
+            break
+        #Pidiendo números. 
+        incorrecto = True   
+        posibles = numeros_posibles(nuevo_número_A)
+        while incorrecto:
+            print("Jugador B, introduzca uno de los siguientes 4 números:")
+            for n in posibles:
+                print(f"{n}")
+            nuevo_número_B = int(input("> "))
+            if nuevo_número_B in posibles:
+                incorrecto = False
+        suma += nuevo_número_B
+        #Mostrando ganador.
+        if suma >= corte:
+            print("Ganador jugador A.")
+            break
+    except ValueError:
+        print("Entrada no válida.")
