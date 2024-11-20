@@ -15,9 +15,24 @@ Deberá ter unha compoñente aleatoria. O dano non sempre será o mesmo repetín
 
 __author__ = "Pablo Fernández Lamas"
 
-import random
 
+#Importando módulo.
+import random
+from math import trunc
+
+
+#Función de daño de ataque.
 def dano_ataque(pokemon_atacante,opcion,pokemon_atacado):
+    """Función que calcula el daño de un ataque en función de los tipos de ataque y pokemon.
+
+    Args:
+        pokemon_atacante (dict): pokemon que realiza el ataque.
+        opcion (str): número correspondiente al ataque realizado.
+        pokemon_atacado (dict): pokemon que recibe el ataque.
+
+    Returns:
+        int: daño del ataque realizado.
+    """
     numero_ataque = int(opcion) - 1
     #Tipo a favor:
     if pokemon_atacante['Tipo1'] == pokemon_atacante['Ataques'][numero_ataque]['Tipo'] or pokemon_atacante['Tipo2'] == pokemon_atacante['Ataques'][numero_ataque]['Tipo']:
@@ -33,6 +48,7 @@ def dano_ataque(pokemon_atacante,opcion,pokemon_atacado):
     tipo2_pokemonrecibe = (tipos.index(pokemon_atacado['Tipo2']))
     v1 = str(tipo_ataque) + str(tipo1_pokemonrecibe)
     v2 = str(tipo_ataque) + str(tipo2_pokemonrecibe)
+    #Cálculo de multiplicador según los tipos de ataque y pokemon.
     E = 1
     if v1 in por2:
         E *= 2
@@ -51,5 +67,5 @@ def dano_ataque(pokemon_atacante,opcion,pokemon_atacado):
     if P == 0:
         daño = 0
     else:
-        daño = 0.01*B*E*V*((((0.2*(N+1))*P)/25)+2)
+        daño = trunc(0.01*B*E*V*((((0.2*(N+1))*P)/25)+2))
     return daño
