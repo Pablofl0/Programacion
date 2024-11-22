@@ -36,8 +36,9 @@ charmander = {
     'Tipo1' : 'Fuego',
     'Tipo2' : '',
     'Nivel' : '',
-    'PS máx' : 40,
-    'PS now' : 40,
+    'PS base' : 39,
+    'PS máx' : '',
+    'PS now' : '',
     'Ataques' : [
         {
             'Nombre' : 'Arañazo',
@@ -70,8 +71,9 @@ bulbasaur = {
     'Tipo1' : 'Planta',
     'Tipo2' : 'Veneno',
     'Nivel' : '',
-    'PS máx' : 40,
-    'PS now' : 40,
+    'PS base' : 45,
+    'PS máx' : '',
+    'PS now' : '',
     'Ataques' : [
         {
             'Nombre' : 'Placaje',
@@ -103,8 +105,9 @@ squirtle = {
     'Tipo1' : 'Agua',
     'Tipo2' : '',
     'Nivel' : '',
-    'PS máx' : 40,
-    'PS now' : 40,
+    'PS base' : 44,
+    'PS máx' : '',
+    'PS now' : '',
     'Ataques' : [
         {
             'Nombre' : 'Placaje',

@@ -18,22 +18,34 @@ __author__ = "Pablo Fernández Lamas"
 
 
 #Importando módulos.
-from pokemons import charmander,bulbasaur
+from pokemons import charmander,bulbasaur,squirtle
 from xogo import dano_ataque
 from math import trunc
+import random
 
 
 
+
+#Lista de pokemon elegibles.
+pok_elegir = [charmander,bulbasaur,squirtle]
+indices = []
 
 #Programa principal.
-print("Adelante Charmander.")
-print("¡Char, char!")
-print("El rival sacó a Bulbaaur.")
-print("¡A por todas, Bulbasaur!")
+print("¿Con qué pokemon quieres combatir?")
+for pok in pok_elegir:
+    indices.append(pok_elegir.index(pok))
+    print(f"{(pok_elegir.index(pok))+1} - {pok['Nombre']}")
+num_elegido = int(input("> "))
+print(f"Adelante {pok_elegir[num_elegido-1]['Nombre']}.")
+indice_rival = None
+while (num_elegido - 1) == indice_rival or indice_rival == None:
+    indice_rival = random.randint(0,(len(pok_elegir)-1))
+print(f"El rival sacó a {pok_elegir[indice_rival]['Nombre']}.")
+print(f"¡A por todas, {pok_elegir[indice_rival]['Nombre']}!")
 juego = True
 while juego:
     try:
-        print("¿Qué ataque quieres que realice Charmander?")
+        print(f"¿Qué ataque quieres que realice {pok_elegir[num_elegido-1]['Nombre']}?")
         reserva = {}
         for indice,ataque in enumerate(charmander['Ataques']):
             reserva[f'{indice}'] = ataque['Nombre']
