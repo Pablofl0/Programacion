@@ -67,17 +67,18 @@ while juego:
         if not(opcion > 0 and opcion <= len(pok_elegir[indice_usuario]['Ataques'])):
             raise ValueError
         #Ataque seleccionado que no tiene PPs.
-        try:
-            pok_elegir[indice_usuario]['Ataques'][int(opcion)-1]['PP now'] -= 1
-            if pok_elegir[indice_usuario]['Ataques'][int(opcion)-1]['PP now'] < 0:
-                raise ValueError
-        except ValueError:
-            print("Movimiento sin PP.")
-        #Movimiento escogido.
+        pok_elegir[indice_usuario]['Ataques'][int(opcion)-1]['PP now'] -= 1
+        if pok_elegir[indice_usuario]['Ataques'][int(opcion)-1]['PP now'] < 0:
+            raise TypeError
+        #Ataque rival.
+        opcion_rival = None
+        while opcion_rival == None or pok_elegir[indice_rival]['Ataques'][opcion_rival - 1]['PP now'] == 0:
+            opcion_rival = random.randint(1,len(pok_elegir[indice_rival]['Ataques']))   
+        #Movimiento escogido ususario.
         print(f"{pok_elegir[indice_usuario]['Nombre']} usó {reserva[str(opcion-1)]}.")
         daño = (dano_ataque(pok_elegir[indice_usuario],opcion,pok_elegir[indice_rival]))
         pok_elegir[indice_rival]['PS now'] -= daño
-        #Pokemon debilitado.
+        #Pokemon rival debilitado.
         if pok_elegir[indice_rival]['PS now'] <= 0:
             pok_elegir[indice_rival]['PS now'] = 0
             print(f'Vida {pok_elegir[indice_rival]['Nombre']}: {pok_elegir[indice_rival]['PS now']}/{pok_elegir[indice_rival]['PS máx']}.')
@@ -85,11 +86,29 @@ while juego:
             #Para acabar el while.
             juego = False
             print("¡Has ganado el combate!")
-        #Pokemon vivo, se sigue combatiendo.
+        #Pokemon rival vivo, se sigue combatiendo.
         else:
             print(f"{pok_elegir[indice_usuario]['Nombre']} dañó a {pok_elegir[indice_rival]['Nombre']} {daño} puntos de salud.")
             print(f'Vida {pok_elegir[indice_rival]['Nombre']}: {pok_elegir[indice_rival]['PS now']}/{pok_elegir[indice_rival]['PS máx']}.')
+        #Movimiento escogido rival.
+        print(f"{pok_elegir[indice_rival]['Nombre']} usó {pok_elegir[indice_rival]['Ataques'][opcion_rival - 1]['Nombre']}.")
+        daño = (dano_ataque(pok_elegir[indice_rival],opcion_rival,pok_elegir[indice_usuario]))
+        pok_elegir[indice_usuario]['PS now'] -= daño
+        #Pokemon usuario debilitado.
+        if pok_elegir[indice_usuario]['PS now'] <= 0:
+            pok_elegir[indice_usuario]['PS now'] = 0
+            print(f'Vida {pok_elegir[indice_usuario]['Nombre']}: {pok_elegir[indice_usuario]['PS now']}/{pok_elegir[indice_usuario]['PS máx']}.')
+            print(f"{pok_elegir[indice_usuario]['Nombre']} ha sido debilitado.")
+            #Para acabar el while.
+            juego = False
+            print("¡Tu rival ha ganado el combate!")
+        #Pokemon rival vivo, se sigue combatiendo.
+        else:
+            print(f"{pok_elegir[indice_rival]['Nombre']} dañó a {pok_elegir[indice_usuario]['Nombre']} {daño} puntos de salud.")
+            print(f'Vida {pok_elegir[indice_usuario]['Nombre']}: {pok_elegir[indice_usuario]['PS now']}/{pok_elegir[indice_usuario]['PS máx']}.')
     #Excepciones.
+    except TypeError:
+            print("Movimiento sin PP.")
     except ValueError:
         print("Error. Elige uno de los ataques mostrados.")
     
