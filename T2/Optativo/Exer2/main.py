@@ -24,7 +24,10 @@ from math import trunc
 import random
 
 
-
+#Función cálculo PS.
+def calculo_PS(pokemon):
+    vida = pokemon['PS base'] + (pokemon['Nivel']*2)
+    return vida
 
 #Lista de pokemon elegibles.
 pok_elegir = [charmander,bulbasaur,squirtle]
@@ -36,47 +39,57 @@ for pok in pok_elegir:
     indices.append(pok_elegir.index(pok))
     print(f"{(pok_elegir.index(pok))+1} - {pok['Nombre']}")
 num_elegido = int(input("> "))
-print(f"Adelante {pok_elegir[num_elegido-1]['Nombre']}.")
+indice_usuario = num_elegido - 1
+print(f"Adelante {pok_elegir[indice_usuario]['Nombre']}.")
 indice_rival = None
 while (num_elegido - 1) == indice_rival or indice_rival == None:
     indice_rival = random.randint(0,(len(pok_elegir)-1))
+#Estableciendo nivel aleatorio y calculando PS de pokemon.
+nivel = random.randint(1,99)
+pok_elegir[indice_usuario]['Nivel'] = nivel
+pok_elegir[indice_rival]['Nivel'] = nivel
+pok_elegir[indice_usuario]['PS now'] = calculo_PS(pok_elegir[indice_usuario])
+pok_elegir[indice_usuario]['PS máx'] = calculo_PS(pok_elegir[indice_usuario])
+pok_elegir[indice_rival]['PS now'] = calculo_PS(pok_elegir[indice_rival])
+pok_elegir[indice_rival]['PS máx'] = calculo_PS(pok_elegir[indice_rival])
 print(f"El rival sacó a {pok_elegir[indice_rival]['Nombre']}.")
 print(f"¡A por todas, {pok_elegir[indice_rival]['Nombre']}!")
 juego = True
 while juego:
     try:
-        print(f"¿Qué ataque quieres que realice {pok_elegir[num_elegido-1]['Nombre']}?")
+        print(f"¿Qué ataque quieres que realice {pok_elegir[indice_usuario]['Nombre']}?")
         reserva = {}
-        for indice,ataque in enumerate(charmander['Ataques']):
+        for indice,ataque in enumerate(pok_elegir[indice_usuario]['Ataques']):
             reserva[f'{indice}'] = ataque['Nombre']
             print(f'{indice+1} - {ataque['Nombre']}')
         opcion = int(input('> '))
         #Opción número que no se corresponde con ningún ataque mostrado.
-        if not(opcion > 0 and opcion <= len(charmander['Ataques'])):
+        if not(opcion > 0 and opcion <= len(pok_elegir[indice_usuario]['Ataques'])):
             raise ValueError
         #Ataque seleccionado que no tiene PPs.
-        charmander['Ataques'][int(opcion)-1]['PP now'] -= 1
-        if charmander['Ataques'][int(opcion)-1]['PP now'] < 0:
-            raise TypeError
+        try:
+            pok_elegir[indice_usuario]['Ataques'][int(opcion)-1]['PP now'] -= 1
+            if pok_elegir[indice_usuario]['Ataques'][int(opcion)-1]['PP now'] < 0:
+                raise ValueError
+        except ValueError:
+            print("Movimiento sin PP.")
         #Movimiento escogido.
-        print(f"Charmander usó {reserva[str(opcion-1)]}.")
-        daño = (dano_ataque(charmander,opcion,bulbasaur))
-        bulbasaur['PS now'] -= daño
+        print(f"{pok_elegir[indice_usuario]['Nombre']} usó {reserva[str(opcion-1)]}.")
+        daño = (dano_ataque(pok_elegir[indice_usuario],opcion,pok_elegir[indice_rival]))
+        pok_elegir[indice_rival]['PS now'] -= daño
         #Pokemon debilitado.
-        if bulbasaur['PS now'] <= 0:
-            bulbasaur['PS now'] = 0
-            print(f'Vida Bulbasaur: {bulbasaur['PS now']}/{bulbasaur['PS máx']}.')
-            print("Bulbasaur ha sido debilitado.")
+        if pok_elegir[indice_rival]['PS now'] <= 0:
+            pok_elegir[indice_rival]['PS now'] = 0
+            print(f'Vida {pok_elegir[indice_rival]['Nombre']}: {pok_elegir[indice_rival]['PS now']}/{pok_elegir[indice_rival]['PS máx']}.')
+            print(f"{pok_elegir[indice_rival]['Nombre']} ha sido debilitado.")
             #Para acabar el while.
             juego = False
             print("¡Has ganado el combate!")
         #Pokemon vivo, se sigue combatiendo.
         else:
-            print(f"Charmander dañó a Bulbasaur {daño} puntos de salud.")
-            print(f'Vida Bulbasaur: {bulbasaur['PS now']}/{bulbasaur['PS máx']}.')
+            print(f"{pok_elegir[indice_usuario]['Nombre']} dañó a {pok_elegir[indice_rival]['Nombre']} {daño} puntos de salud.")
+            print(f'Vida {pok_elegir[indice_rival]['Nombre']}: {pok_elegir[indice_rival]['PS now']}/{pok_elegir[indice_rival]['PS máx']}.')
     #Excepciones.
-    except TypeError:
-        print("Movimiento sin PP.")
     except ValueError:
         print("Error. Elige uno de los ataques mostrados.")
     
