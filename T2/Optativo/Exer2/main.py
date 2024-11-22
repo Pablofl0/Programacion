@@ -22,6 +22,7 @@ from pokemons import charmander,bulbasaur,squirtle
 from xogo import dano_ataque
 from math import trunc
 import random
+from time import sleep
 
 
 #Función cálculo PS.
@@ -40,6 +41,11 @@ for pok in pok_elegir:
     print(f"{(pok_elegir.index(pok))+1} - {pok['Nombre']}")
 num_elegido = int(input("> "))
 indice_usuario = num_elegido - 1
+
+#Delay 1 segundo.
+sleep(1)
+
+#Usuario saca a su pokemon.
 print(f"Adelante {pok_elegir[indice_usuario]['Nombre']}.")
 indice_rival = None
 while (num_elegido - 1) == indice_rival or indice_rival == None:
@@ -52,17 +58,35 @@ pok_elegir[indice_usuario]['PS now'] = calculo_PS(pok_elegir[indice_usuario])
 pok_elegir[indice_usuario]['PS máx'] = calculo_PS(pok_elegir[indice_usuario])
 pok_elegir[indice_rival]['PS now'] = calculo_PS(pok_elegir[indice_rival])
 pok_elegir[indice_rival]['PS máx'] = calculo_PS(pok_elegir[indice_rival])
+
+#Delay 2 segundos.
+sleep(2)
+
+#Rival saca a su pokemon.
 print(f"El rival sacó a {pok_elegir[indice_rival]['Nombre']}.")
+#Delay 1 segundo.
+sleep(1)
 print(f"¡A por todas, {pok_elegir[indice_rival]['Nombre']}!")
+
+#Delay 2 segundos.
+sleep(2)
+
+#Comienzo del combate.
 juego = True
 while juego:
     try:
-        print(f"¿Qué ataque quieres que realice {pok_elegir[indice_usuario]['Nombre']}?")
+        print(f"¿Qué ataque quieres que realice {pok_elegir[indice_usuario]['Nombre']}(Nv.{pok_elegir[indice_usuario]['Nivel']}) a {pok_elegir[indice_rival]['Nombre']}(Nv.{pok_elegir[indice_rival]['Nivel']})?")
         reserva = {}
+        #Delay 1 segundo entre pregunta y muestra del primer movimiento.
+        sleep(1)
         for indice,ataque in enumerate(pok_elegir[indice_usuario]['Ataques']):
             reserva[f'{indice}'] = ataque['Nombre']
+            #Delay de 1 segundo entre muestra de movimientos.
+            sleep(1)
             print(f'{indice+1} - {ataque['Nombre']}')
         opcion = int(input('> '))
+        #Delay 2 segundos.
+        sleep(2)
         #Opción número que no se corresponde con ningún ataque mostrado.
         if not(opcion > 0 and opcion <= len(pok_elegir[indice_usuario]['Ataques'])):
             raise ValueError
@@ -74,38 +98,61 @@ while juego:
         opcion_rival = None
         while opcion_rival == None or pok_elegir[indice_rival]['Ataques'][opcion_rival - 1]['PP now'] == 0:
             opcion_rival = random.randint(1,len(pok_elegir[indice_rival]['Ataques']))   
+        
+        
         #Movimiento escogido ususario.
-        print(f"{pok_elegir[indice_usuario]['Nombre']} usó {reserva[str(opcion-1)]}.")
+        print(f"{pok_elegir[indice_usuario]['Nombre']}(Nv.{pok_elegir[indice_usuario]['Nivel']}) usó {reserva[str(opcion-1)]}.")
         daño = (dano_ataque(pok_elegir[indice_usuario],opcion,pok_elegir[indice_rival]))
         pok_elegir[indice_rival]['PS now'] -= daño
+        #Delay 2 segundos.
+        sleep(2)
         #Pokemon rival debilitado.
         if pok_elegir[indice_rival]['PS now'] <= 0:
             pok_elegir[indice_rival]['PS now'] = 0
-            print(f'Vida {pok_elegir[indice_rival]['Nombre']}: {pok_elegir[indice_rival]['PS now']}/{pok_elegir[indice_rival]['PS máx']}.')
-            print(f"{pok_elegir[indice_rival]['Nombre']} ha sido debilitado.")
-            #Para acabar el while.
-            juego = False
+            print(f'Vida {pok_elegir[indice_rival]['Nombre']}(Nv.{pok_elegir[indice_rival]['Nivel']}): {pok_elegir[indice_rival]['PS now']}/{pok_elegir[indice_rival]['PS máx']}.')
+            #Delay 1 segundo.
+            sleep(1)
+            print(f"{pok_elegir[indice_rival]['Nombre']} enemigo ha sido debilitado.")
+            #Delay 2 segundos.
+            sleep(2)
             print("¡Has ganado el combate!")
+            #Para acabar el while.
+            break
         #Pokemon rival vivo, se sigue combatiendo.
         else:
             print(f"{pok_elegir[indice_usuario]['Nombre']} dañó a {pok_elegir[indice_rival]['Nombre']} {daño} puntos de salud.")
-            print(f'Vida {pok_elegir[indice_rival]['Nombre']}: {pok_elegir[indice_rival]['PS now']}/{pok_elegir[indice_rival]['PS máx']}.')
+            #Delay 1 segundo.
+            sleep(1)
+            print(f'Vida {pok_elegir[indice_rival]['Nombre']}(Nv.{pok_elegir[indice_rival]['Nivel']}): {pok_elegir[indice_rival]['PS now']}/{pok_elegir[indice_rival]['PS máx']}.')
+        
+        
+        #Delay 2 segundos.
+        sleep(2)
         #Movimiento escogido rival.
-        print(f"{pok_elegir[indice_rival]['Nombre']} usó {pok_elegir[indice_rival]['Ataques'][opcion_rival - 1]['Nombre']}.")
+        print(f"{pok_elegir[indice_rival]['Nombre']}(Nv.{pok_elegir[indice_rival]['Nivel']}) usó {pok_elegir[indice_rival]['Ataques'][opcion_rival - 1]['Nombre']}.")
         daño = (dano_ataque(pok_elegir[indice_rival],opcion_rival,pok_elegir[indice_usuario]))
         pok_elegir[indice_usuario]['PS now'] -= daño
+        #Delay 2 segundos.
+        sleep(2)
         #Pokemon usuario debilitado.
         if pok_elegir[indice_usuario]['PS now'] <= 0:
             pok_elegir[indice_usuario]['PS now'] = 0
-            print(f'Vida {pok_elegir[indice_usuario]['Nombre']}: {pok_elegir[indice_usuario]['PS now']}/{pok_elegir[indice_usuario]['PS máx']}.')
+            print(f'Vida {pok_elegir[indice_usuario]['Nombre']}(Nv.{pok_elegir[indice_usuario]['Nivel']}): {pok_elegir[indice_usuario]['PS now']}/{pok_elegir[indice_usuario]['PS máx']}.')
+            #Delay 1 segundo.
+            sleep(1)
             print(f"{pok_elegir[indice_usuario]['Nombre']} ha sido debilitado.")
-            #Para acabar el while.
-            juego = False
+            #Delay 2 segundos.
+            sleep(2)
             print("¡Tu rival ha ganado el combate!")
+            #Para acabar el while.
+            break
         #Pokemon rival vivo, se sigue combatiendo.
         else:
             print(f"{pok_elegir[indice_rival]['Nombre']} dañó a {pok_elegir[indice_usuario]['Nombre']} {daño} puntos de salud.")
-            print(f'Vida {pok_elegir[indice_usuario]['Nombre']}: {pok_elegir[indice_usuario]['PS now']}/{pok_elegir[indice_usuario]['PS máx']}.')
+            #Delay 1 segundo.
+            sleep(1)
+            print(f'Vida {pok_elegir[indice_usuario]['Nombre']}(Nv.{pok_elegir[indice_usuario]['Nivel']}): {pok_elegir[indice_usuario]['PS now']}/{pok_elegir[indice_usuario]['PS máx']}.')
+    
     #Excepciones.
     except TypeError:
             print("Movimiento sin PP.")
