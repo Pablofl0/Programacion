@@ -83,7 +83,7 @@ while juego:
             reserva[f'{indice}'] = ataque['Nombre']
             #Delay de 1 segundo entre muestra de movimientos.
             sleep(1)
-            print(f'{indice+1} - {ataque['Nombre']}')
+            print(f'{indice+1} - {ataque['Nombre']} ({ataque['PP now']}/{ataque['PP máx']})')
         opcion = int(input('> '))
         #Delay 2 segundos.
         sleep(2)
