@@ -36,6 +36,21 @@ Para gardar a información de cada alumno utilizaremos unha lista.
 
 __author__ = "Pablo Fernández Lamas"
 
+
+#Def validación_lista.
+def validacion_lista(lista):
+    """Función que valida la lista entrante.
+
+    Args:
+        lista (list): lista.
+
+    Returns:
+        boolean: True o False.
+    """
+    if not(type(lista) == list):
+        return False
+    return True
+
 #Def validación_nota.
 def validacion_nota(nota):
     """Función que valida nota entrante.
@@ -114,7 +129,12 @@ def mostrar_alumnado(alumnado):
 
     Args:
         alumnado (list): lista con datos del alumnado.
+
+    Raises:
+        ValueError: si el tipo de dato no es correcto.
     """
+    if not(validacion_lista(alumnado)):
+        raise ValueError
     for indice, datos in enumerate(alumnado):
         print(f"{indice}. {datos['Apellidos']}, {datos['Nombre']}: {datos['Nota']}")
 
@@ -132,7 +152,7 @@ def eliminar_datos(alumnado,indice):
     Returns:
         alumnado: lista con datos del alumnado.
     """
-    if not validacion_indice(indice,alumnado):
+    if not(validacion_indice(indice,alumnado) or validacion_lista(alumnado)):
         raise ValueError
     alumnado.pop(indice)
     return alumnado
@@ -152,7 +172,7 @@ def modificar_nota(indice,new_nota,alumnado):
     Returns:
         alumnado: lista con datos del alumnado.
     """
-    if not (validacion_indice(indice,alumnado) or validacion_nota(new_nota)):
+    if not (validacion_indice(indice,alumnado) or validacion_nota(new_nota) or validacion_lista(alumnado)):
         raise ValueError
     alumnado[indice]['Nota'] = new_nota
     return alumnado
@@ -163,7 +183,15 @@ def ver_aprobados(alumnado):
 
     Args:
         alumnado (list): lista con datos del alumnado.
+
+    Raises:
+        ValueError: si el tipo de dato no es correcto.
+
+    Returns:
+        list: lista de alumnos aprobados.
     """
+    if not(validacion_lista(alumnado)):
+        raise ValueError
     lista = []
     aprobados = 0
     for alumno in alumnado:
@@ -183,7 +211,12 @@ def ver_notamedia(alumnado):
 
     Returns:
         int: nota media.
+
+    Raises:
+        ValueError: si el tipo de dato no es correcto.
     """
+    if not(validacion_lista(alumnado)):
+        raise ValueError
     suma = 0
     for alumno in alumnado:
         suma = suma + alumno['Nota']
@@ -199,10 +232,15 @@ def orden(alumnado):
 
     Args:
         alumnado (list): lista con datos del alumnado.
+    
+    Raises:
+        ValueError: si el tipo de dato no es correcto.
 
     Returns:
         list: lista con datos del alumnado ordenado alfabéticamente.
     """
+    if not(validacion_lista(alumnado)):
+        raise ValueError
     modificado=True
     while modificado:
         indice=0
