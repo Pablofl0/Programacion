@@ -25,10 +25,10 @@ def anagrama(palabra1,palabra2):
     Returns:
         boolean: True o False.
     """
-    if len(palabra2) == 0:
-        return True
-    elif not(len(palabra1) == len(palabra2)):
+    if not(len(palabra1) == len(palabra2)):
         return False
+    elif len(palabra2) == 0:
+        return True
     elif not(palabra1[0] in palabra2):
         return False
     else:

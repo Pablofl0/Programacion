@@ -132,7 +132,7 @@ def eliminar_datos(alumnado,indice):
     Returns:
         alumnado: lista con datos del alumnado.
     """
-    if not validacion_indice(indice):
+    if not validacion_indice(indice,alumnado):
         raise ValueError
     alumnado.pop(indice)
     return alumnado
@@ -152,7 +152,7 @@ def modificar_nota(indice,new_nota,alumnado):
     Returns:
         alumnado: lista con datos del alumnado.
     """
-    if not (validacion_indice(indice) or validacion_nota(new_nota)):
+    if not (validacion_indice(indice,alumnado) or validacion_nota(new_nota)):
         raise ValueError
     alumnado[indice]['Nota'] = new_nota
     return alumnado
@@ -164,9 +164,15 @@ def ver_aprobados(alumnado):
     Args:
         alumnado (list): lista con datos del alumnado.
     """
-    for indice,alumno in enumerate(alumnado):
+    lista = []
+    aprobados = 0
+    for alumno in alumnado:
         if alumno['Nota'] >= 5:
-            print(f"{indice}. {alumno['Apellidos']}, {alumno['Nombre']}: {alumno['Nota']}")
+            lista.append(alumno)
+            aprobados += 1
+    if aprobados == 0:
+        return False
+    return lista
 
 #Ver nota media.
 def ver_notamedia(alumnado):
@@ -202,22 +208,16 @@ def orden(alumnado):
         indice=0
         modificado=False
         while indice<(len(alumnado)-1):
-            if (alumnado[indice]['Apellidos']).lower() == (alumnado[indice+1]['Apellidos']).lower():
-                if (alumnado[indice]['Nombre']).lower() > (alumnado[indice+1]['Nombre']).lower():
-                    reemplazo_nom=alumnado[indice]['Nombre']
-                    alumnado[indice]['Nombre']=alumnado[indice+1]['Nombre']
-                    alumnado[indice+1]['Nombre']=reemplazo_nom
-                    indice+=1
-                    modificado = True
-                else:
-                    indice+=1
-            elif (alumnado[indice]['Apellidos']).lower() > (alumnado[indice+1]['Apellidos']).lower():
-                reemplazo_ape = alumnado[indice]['Apellidos']
-                reemplazo_nom = alumnado[indice]['Nombre']
-                alumnado[indice]['Apellidos']=alumnado[indice+1]['Apellidos']
-                alumnado[indice+1]['Apellidos']=reemplazo_ape
-                alumnado[indice]['Nombre']=alumnado[indice+1]['Nombre']
-                alumnado[indice+1]['Nombre']=reemplazo_nom
+
+            Nombre1 = (alumnado[indice]['Nombre']).lower()
+            Nombre2 = (alumnado[indice + 1]['Nombre']).lower()
+            Apellido1 = (alumnado[indice]['Apellidos']).lower()
+            Apellido2 = (alumnado[indice + 1]['Apellidos']).lower()
+
+            if (Apellido1 + " " + Nombre1) > (Apellido2 + " " + Nombre2):
+                reemplazo = alumnado[indice]
+                alumnado[indice] = alumnado[indice+1]
+                alumnado[indice+1] = reemplazo
                 indice+=1
                 modificado = True
             else: 
@@ -231,7 +231,6 @@ alumnado=[]
 
 #Estableciendo ejecución de programa según opción escogida.
 while True:
-    try:
         # Escogiendo el cambio que el usuario desea realizar.
         print("Elige una de las siguientes opciones:")
         print("\ta) Ingresar datos alumno.")
@@ -244,30 +243,53 @@ while True:
         opción = input("> ")
         opción.lower()
         if opción=='a':
-            new_nombre=str(input("Introduzca el nombre: "))
-            new_apellido=str(input("Introduzca los apellidos: "))
-            nota=float(input("Introduzca la nota: "))
-            alumno=datos_alumno(new_nombre,new_apellido,nota)
-            alumnado.append(alumno)
-            mostrar_alumnado(alumnado)
+            try:
+                new_nombre=str(input("Introduzca el nombre: "))
+                new_apellido=str(input("Introduzca los apellidos: "))
+                nota=float(input("Introduzca la nota: "))
+                alumno=datos_alumno(new_nombre,new_apellido,nota)
+                alumnado.append(alumno)
+                mostrar_alumnado(alumnado)
+            except ValueError:
+                print("Error. Entrada no válida.")
         elif opción=='b':
-            mostrar_alumnado(alumnado)
-            indice=int(input("Introduzca el índice correspondiente al alumno que desea eliminar: "))
-            eliminar_datos(alumnado,indice)
-            mostrar_alumnado(alumnado)
+            try:
+                mostrar_alumnado(alumnado)
+                indice=int(input("Introduzca el índice correspondiente al alumno que desea eliminar: "))
+                eliminar_datos(alumnado,indice)
+                mostrar_alumnado(alumnado)
+            except ValueError:
+                print("Error. Entrada no válida.")
         elif opción=='c':
-            mostrar_alumnado(alumnado)
-            indice=int(input("Introduzca el índice correspondiente al alumno cuya nota desea modificar: "))
-            new_nota=float(input("Introduzca la nota nueva: "))
-            modificar_nota(indice,new_nota,alumnado)
+            try:
+                mostrar_alumnado(alumnado)
+                indice=int(input("Introduzca el índice correspondiente al alumno cuya nota desea modificar: "))
+                new_nota=float(input("Introduzca la nota nueva: "))
+                modificar_nota(indice,new_nota,alumnado)
+                mostrar_alumnado(alumnado)
+            except ValueError:
+                print("Error. Entrada no válida.")
         elif opción=='d':
-            ver_aprobados(alumnado)
+            try:
+                if not ver_aprobados(alumnado):
+                    print("No hay alumnos aprobados.")
+                else:
+                    alumnos_aprobados = ver_aprobados(alumnado)
+                    mostrar_alumnado(alumnos_aprobados)
+            except ValueError:
+                print("Error. Entrada no válida.")
         elif opción=='e':
-            orden(alumnado)
-            mostrar_alumnado(alumnado)
+            try:
+                orden(alumnado)
+                mostrar_alumnado(alumnado)
+            except ValueError:
+                print("Error. Entrada no válida.")
         elif opción=='f':
-            print("La nota media es " + str(ver_notamedia(alumnado)) + ".")
+            try:
+                print("La nota media es " + str(ver_notamedia(alumnado)) + ".")
+            except ValueError:
+                print("Error. Entrada no válida.")
         elif opción=='g':
             break
-    except ValueError:
-        print("Error. Entrada no válida.") 
+        else:
+            print("Error. Entrada no válida.")
