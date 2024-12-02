@@ -93,7 +93,7 @@ else:
     print("Tú serás el jugador B y tu compañero el jugador A.")
 #Petición del primer número.
 nuevo_número_B = int(input("Introduzca su primer número, jugador B: "))  
-
+suma += nuevo_número_B
 
 while True:
     try:
@@ -108,6 +108,7 @@ while True:
             if nuevo_número_A in posibles:
                 incorrecto = False
         suma += nuevo_número_A
+        print(suma)
         #Mostrando ganador.
         if suma >= corte:
             print("Ganador jugador B.")
@@ -123,6 +124,7 @@ while True:
             if nuevo_número_B in posibles:
                 incorrecto = False
         suma += nuevo_número_B
+        print(suma)
         #Mostrando ganador.
         if suma >= corte:
             print("Ganador jugador A.")
