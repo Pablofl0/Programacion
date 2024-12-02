@@ -20,7 +20,6 @@ __author__ = "Pablo Fernández Lamas"
 #Importando módulos.
 from pokemons import charmander,bulbasaur,squirtle
 from xogo import dano_ataque
-from math import trunc
 import random
 from time import sleep
 
