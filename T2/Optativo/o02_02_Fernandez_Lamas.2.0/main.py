@@ -18,7 +18,8 @@ __author__ = "Pablo Fernández Lamas"
 
 
 #Importando módulos.
-from pokemons import charmander,bulbasaur,squirtle
+import datos
+#from pokemons import charmander,bulbasaur,squirtle
 from xogo import dano_ataque
 import random
 from time import sleep
@@ -30,10 +31,10 @@ def calculo_PS(pokemon):
     return vida
 
 #Lista de pokemon elegibles.
-pok_elegir = [charmander,bulbasaur,squirtle]
 indices = []
 
 #Programa principal.
+pok_elegir = datos.cargardatos()
 print("¿Con qué pokemon quieres combatir?")
 for pok in pok_elegir:
     indices.append(pok_elegir.index(pok))
