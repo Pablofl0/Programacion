@@ -10,9 +10,11 @@ public class App {
         double kilosMan = scanner.nextDouble();
         double kilosNar = scanner.nextDouble();
 
-
+        
 
 
         System.out.println((precioManzana * kilosMan) + (precioNaranja * kilosNar));
+
+        scanner.close();
     }
 }
