@@ -41,8 +41,9 @@ public class App {
                     int indiceModulo = scanner.nextInt();
                     int aprobados = 0;
                     for (int i = 0; i < numEstudiantes; i++) {
-                        if (notas[indiceModulo][i]>=5.0);
+                        if (notas[indiceModulo][i]>=5.0){
                             aprobados++;
+                        }
                     }
                     double porcentaje = (aprobados/numEstudiantes)*100;
                     System.out.println(porcentaje + "%");
