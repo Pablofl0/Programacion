@@ -6,6 +6,7 @@ public class App {
 
         boolean seguir = true;
         while (seguir) {
+            //Pidiendo número de pasajeros.
             System.out.println("Número de pasajeros en la parte superior: ");
             int arriba = Scanner.nextInt();
             System.out.println("Número de pasajeros en la parte inferior: ");
@@ -13,6 +14,7 @@ public class App {
 
             int datos[][] = new int[4][4];
 
+            //Creando matriz con los posibles códigos de resultado.
             int limite = 0;
             int variable = 1;
             while (limite < datos.length) {
@@ -27,6 +29,7 @@ public class App {
                 limite++;
             }
 
+            //Imprimiendo código.
             if (datos[arriba][abajo] == 0) {
                 System.out.println("Número de pasajeros incorrectos.");
             }
