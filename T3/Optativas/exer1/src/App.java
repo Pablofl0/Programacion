@@ -15,7 +15,7 @@ public class App {
         // Asignando las minas(tantas como el número de filas del tablero) de manera
         // aleatoria.
         Random random = new Random();
-        for (int i = 0; i < tablero.length; i++) {
+        for (int i = 0; i < tablero.length+1; i++) {
             int filaAleatoria = random.nextInt(0, tablero.length);
             int columnaAleatoria = random.nextInt(0, tablero.length);
             tablero[columnaAleatoria][filaAleatoria] = 1;
@@ -27,8 +27,14 @@ public class App {
         boolean ganar = true;
         while (enjuego) {
             while (pedir) {
+                //Pidiendo destapar celda o marcar bomba.
+                System.out.println("Elige una de las siguientes opciones: ");
+                System.out.println("\t1)Revelar celdas.");
+                System.out.println("\t2)Marcar bomba.");
                 // Pidiendo fila y columna al jugador.
+                System.out.println("F: ");
                 int filaJugador = scanner.nextInt();
+                System.out.println("C: ");
                 int columnaJugador = scanner.nextInt();
 
                 // Modificando tablero por "detrás".
@@ -58,11 +64,17 @@ public class App {
                     if (tablero[j][i] == 0) {
                         System.out.print("-  ");
                         ganar = false;
-                    } else if (tablero[j][i] == 1) {
+                    } 
+                    else if (tablero[j][i] == 1) {
                         System.out.print("-  ");
-                    } else if (tablero[j][i] == 2) {
+                    } 
+                    else if (tablero[j][i] == 2) {
                         System.out.print("X  ");
-                    } else if (tablero[j][i] == 3) {
+                    } 
+                    else if (tablero[j][i] == 4) {
+                        System.out.println("B  ");
+                    }
+                    else if (tablero[j][i] == 3) {
                         int bombas = 0;
                         // Evitando la fila -1.
                         int k = i - 1;
@@ -80,14 +92,16 @@ public class App {
                         } else if (l == tamaño - 2) {
                             lmax = tamaño;
                         }
+                        int auxiliar = l;
                         // Calculando el número de bombas alrededor de la celda.
                         while (k < kmax) {
                             while (l < lmax) {
-                                if (tablero[l][k] == 1) {
+                                if (tablero[l][k] == 1 || tablero[l][k] == 4) {
                                     bombas++;
                                 }
                                 l++;
                             }
+                            l = auxiliar;
                             k++;
                         }
                         System.out.print(bombas + "  ");
@@ -97,12 +111,20 @@ public class App {
             }
         }
 
+        for (int index = 0; index < tablero.length; index++) {
+            for (int i = 0; i < tablero.length; i++) {
+                System.out.print(tablero[i][index]);
+            }
+            System.out.println();
+        }
+
         if (!ganar) {
             // Derrota.
             if (!enjuego) {
                 System.out.println("¡Has perdido!");
             }
         }
+        //Victoria.
         else if (ganar) {
             System.out.println("¡Has ganado!");
         }
