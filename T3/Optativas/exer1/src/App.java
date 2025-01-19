@@ -15,7 +15,7 @@ public class App {
         // Asignando las minas(tantas como el número de filas del tablero) de manera
         // aleatoria.
         Random random = new Random();
-        for (int i = 0; i < tablero.length+1; i++) {
+        for (int i = 0; i < tablero.length + 1; i++) {
             int filaAleatoria = random.nextInt(0, tablero.length);
             int columnaAleatoria = random.nextInt(0, tablero.length);
             tablero[columnaAleatoria][filaAleatoria] = 1;
@@ -25,31 +25,43 @@ public class App {
         boolean enjuego = true;
         boolean pedir = false;
         boolean ganar = true;
+        boolean revelar = true;
         while (enjuego) {
             while (pedir) {
-                //Pidiendo destapar celda o marcar bomba.
+                // Pidiendo destapar celda o marcar bomba.
                 System.out.println("Elige una de las siguientes opciones: ");
                 System.out.println("\t1)Revelar celdas.");
                 System.out.println("\t2)Marcar bomba.");
+                int opcion = scanner.nextInt();
+                if (opcion == 1) {
+                    revelar = true;
+                }
+                else if (opcion == 2) {
+                    revelar = false;
+                }
                 // Pidiendo fila y columna al jugador.
                 System.out.println("F: ");
                 int filaJugador = scanner.nextInt();
                 System.out.println("C: ");
                 int columnaJugador = scanner.nextInt();
 
-                // Modificando tablero por "detrás".
-                if (tablero[columnaJugador][filaJugador] == 1) {
-                    tablero[columnaJugador][filaJugador] = 2;
-                    enjuego = false;
-                } else if (tablero[columnaJugador][filaJugador] == 0) {
-                    tablero[columnaJugador][filaJugador] = 3;
+                if (revelar) {
+                    // Modificando tablero por "detrás".
+                    if (tablero[columnaJugador][filaJugador] == 1) {
+                        tablero[columnaJugador][filaJugador] = 2;
+                        enjuego = false;
+                    } else if (tablero[columnaJugador][filaJugador] == 0) {
+                        tablero[columnaJugador][filaJugador] = 3;
+                    }
+                }
+                else if (!revelar) {
+                    tablero[columnaJugador][filaJugador] = 4;
                 }
                 pedir = false;
             }
 
             // Habilitando la petición al jugador.
             pedir = true;
-            
 
             // Mostrando tablero.
             System.out.print("   ");
@@ -64,17 +76,13 @@ public class App {
                     if (tablero[j][i] == 0) {
                         System.out.print("-  ");
                         ganar = false;
-                    } 
-                    else if (tablero[j][i] == 1) {
+                    } else if (tablero[j][i] == 1) {
                         System.out.print("-  ");
-                    } 
-                    else if (tablero[j][i] == 2) {
+                    } else if (tablero[j][i] == 2) {
                         System.out.print("X  ");
-                    } 
-                    else if (tablero[j][i] == 4) {
+                    } else if (tablero[j][i] == 4) {
                         System.out.println("B  ");
-                    }
-                    else if (tablero[j][i] == 3) {
+                    } else if (tablero[j][i] == 3) {
                         int bombas = 0;
                         // Evitando la fila -1.
                         int k = i - 1;
@@ -124,7 +132,7 @@ public class App {
                 System.out.println("¡Has perdido!");
             }
         }
-        //Victoria.
+        // Victoria.
         else if (ganar) {
             System.out.println("¡Has ganado!");
         }
