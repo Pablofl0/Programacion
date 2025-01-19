@@ -40,9 +40,9 @@ public class App {
                     revelar = false;
                 }
                 // Pidiendo fila y columna al jugador.
-                System.out.println("F: ");
+                System.out.print("F: ");
                 int filaJugador = scanner.nextInt();
-                System.out.println("C: ");
+                System.out.print("C: ");
                 int columnaJugador = scanner.nextInt();
 
                 if (revelar) {
@@ -81,7 +81,7 @@ public class App {
                     } else if (tablero[j][i] == 2) {
                         System.out.print("X  ");
                     } else if (tablero[j][i] == 4) {
-                        System.out.println("B  ");
+                        System.out.print("B  ");
                     } else if (tablero[j][i] == 3) {
                         int bombas = 0;
                         // Evitando la fila -1.
