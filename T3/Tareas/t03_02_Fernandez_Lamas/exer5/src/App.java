@@ -9,15 +9,18 @@ public class App {
 
         boolean enjuego = true;
         boolean jugador = true;
+        
 
 
             while (true) {
+                boolean empate = true;
                 System.out.println("   C1 C2 C3");
                 for (int i = 0; i < tablero.length; i++) {
                     System.out.print("F" + (i+1) + " ");
                     for (int j = 0; j < tablero.length; j++) {
                         if (tablero[j][i]==0) {
                             System.out.print("-  ");
+                            empate=false;
                         }
                         else if (tablero[j][i]==1) {
                             System.out.print("X  ");
@@ -27,6 +30,11 @@ public class App {
                         }
                     }
                     System.out.println();
+                }
+
+                if (empate) {
+                    System.out.println("¡Empate!");
+                    enjuego = false;
                 }
 
                 if (enjuego==false){
@@ -147,6 +155,9 @@ public class App {
                     }
                     break;
                 }
+
+
+                
         }
     scanner.close();
     }
