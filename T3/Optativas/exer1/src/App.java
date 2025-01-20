@@ -25,22 +25,26 @@ public class App {
         boolean enjuego = true;
         boolean pedir = false;
         boolean ganar = true;
+        boolean elegir = true;
         int revelar = 0;
         while (enjuego) {
             while (pedir) {
-                // Pidiendo destapar celda o marcar bomba.
-                System.out.println("Elige una de las siguientes opciones: ");
-                System.out.println("\t1)Revelar celdas.");
-                System.out.println("\t2)Marcar bomba.");
-                int opcion = scanner.nextInt();
-                switch (opcion) {
-                    case 1:
-                        revelar = 1;
-                        break;
-                    case 2:
-                        revelar = 2;
-                    default:
-                        break;
+                while (elegir) {
+                    // Pidiendo destapar celda o marcar bomba.
+                    System.out.println("Elige una de las siguientes opciones: ");
+                    System.out.println("\t1)Revelar celdas.");
+                    System.out.println("\t2)Marcar bomba.");
+                    int opcion = scanner.nextInt();
+                    switch (opcion) {
+                        case 1:
+                            revelar = 1;
+                            elegir = false;
+                        case 2:
+                            revelar = 2;
+                            elegir = false;
+                        default:
+                            break;
+                    }
                 }
 
                 // Pidiendo fila y columna al jugador.
