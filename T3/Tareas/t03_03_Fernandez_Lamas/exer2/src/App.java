@@ -5,36 +5,33 @@ public class App {
         Scanner Scanner = new Scanner(System.in);
 
         boolean seguir = true;
+        boolean activo = true;
         while (seguir) {
-            //Pidiendo número de pasajeros.
+            // Pidiendo número de pasajeros.
             System.out.println("Número de pasajeros en la parte superior: ");
             int arriba = Scanner.nextInt();
+            //Número negativo arriba.
+            if (arriba<0) {
+                activo = false;
+            }
             System.out.println("Número de pasajeros en la parte inferior: ");
             int abajo = Scanner.nextInt();
+            //Número negativo abajo.
+            if (abajo<0) {
+                activo = false;
+            }
 
-            int datos[][] = new int[4][4];
-
-            //Creando matriz con los posibles códigos de resultado.
-            int limite = 0;
-            int variable = 1;
-            while (limite < datos.length) {
-                for (int i = 0; i < datos.length; i++) {
-                    for (int j = 0; j < datos.length; j++) {
-                        if (i + j == limite) {
-                            datos[i][j] = variable;
-                            variable++;
-                        }
-                    }
+            //Calculando código.
+            while (activo) {
+                int codigo = 0;
+                int numeroBase = 1;
+                int totalP = arriba + abajo;
+                for (int i = 1; i <= totalP; i++) {
+                    numeroBase += i;
                 }
-                limite++;
-            }
-
-            //Imprimiendo código.
-            if (datos[arriba][abajo] == 0) {
-                System.out.println("Número de pasajeros incorrectos.");
-            }
-            else{
-                System.out.println("Código:" + datos[arriba][abajo]);
+                codigo = numeroBase + arriba;
+                System.out.println("Código:" + codigo);
+                activo = false;
                 seguir = false;
             }
         }
