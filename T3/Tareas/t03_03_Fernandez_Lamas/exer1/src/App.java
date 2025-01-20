@@ -4,18 +4,25 @@ public class App {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
 
+        int cteKaprekar = 6174;
+        boolean seguir = true;
+        boolean mostrar = true;
+        boolean cte = false;
         int num = 0;
         while (num <= 0 || num >= 10000) {
             System.out.println("Introduce un número de 4 cifras: ");
             num = scanner.nextInt();
+            if (num == cteKaprekar) {
+                seguir = false;
+                cte = true;
+                mostrar = false;
+            }
         }
         int numeroEscribir = num;
 
-
-        //Bucle buscando el número de iteraciones.
+        // Bucle buscando el número de iteraciones.
         int iteraciones = 0;
-        int cteKaprekar = 6174;
-        while (num != cteKaprekar) {
+        while (seguir) {
             // Obteniendo cifras del número en un vector.
             int cifras[] = new int[4];
             for (int i = 0; i < cifras.length; i++) {
@@ -67,18 +74,32 @@ public class App {
             }
 
             // Comparando números.
-            int resto = 0;
-            if (numascendente < numdescendente) {
-                resto = numdescendente - numascendente;
+            if (numascendente == numdescendente) {
+                seguir = false;
+                mostrar = false;
             } else {
-                resto = numascendente - numdescendente;
+                int resto = 0;
+                resto = numdescendente - numascendente;
+                num = resto;
+                iteraciones++;
+                if (resto == cteKaprekar) {
+                    seguir = false;
+                }
             }
-            num = resto;
-            iteraciones++;
+
         }
 
-        System.out.println("Número de iteraciones de " + numeroEscribir + ": " + iteraciones);
-
+        if (mostrar) {
+            System.out.println("Número de iteraciones de " + numeroEscribir + ": " + iteraciones);
+        }
+        else{
+            if (cte) {
+                System.out.println("0");
+            }
+            else{
+                System.out.println("-1");
+            }
+        }
         scanner.close();
     }
 }
