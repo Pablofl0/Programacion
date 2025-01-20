@@ -25,7 +25,7 @@ public class App {
         boolean enjuego = true;
         boolean pedir = false;
         boolean ganar = true;
-        boolean revelar = true;
+        int revelar = 0;
         while (enjuego) {
             while (pedir) {
                 // Pidiendo destapar celda o marcar bomba.
@@ -33,19 +33,23 @@ public class App {
                 System.out.println("\t1)Revelar celdas.");
                 System.out.println("\t2)Marcar bomba.");
                 int opcion = scanner.nextInt();
-                if (opcion == 1) {
-                    revelar = true;
+                switch (opcion) {
+                    case 1:
+                        revelar = 1;
+                        break;
+                    case 2:
+                        revelar = 2;
+                    default:
+                        break;
                 }
-                else if (opcion == 2) {
-                    revelar = false;
-                }
+
                 // Pidiendo fila y columna al jugador.
                 System.out.print("F: ");
                 int filaJugador = scanner.nextInt();
                 System.out.print("C: ");
                 int columnaJugador = scanner.nextInt();
 
-                if (revelar) {
+                if (revelar == 1) {
                     // Modificando tablero por "detrás".
                     if (tablero[columnaJugador][filaJugador] == 1) {
                         tablero[columnaJugador][filaJugador] = 2;
@@ -53,8 +57,7 @@ public class App {
                     } else if (tablero[columnaJugador][filaJugador] == 0) {
                         tablero[columnaJugador][filaJugador] = 3;
                     }
-                }
-                else if (!revelar) {
+                } else if (revelar == 2) {
                     tablero[columnaJugador][filaJugador] = 4;
                 }
                 pedir = false;
