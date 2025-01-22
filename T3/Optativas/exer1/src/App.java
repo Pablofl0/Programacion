@@ -5,12 +5,15 @@ public class App {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
 
+
         // Estableciendo el tamaño del tablero.
         System.out.println("Indica el tamaño del tablero: ");
         int tamaño = scanner.nextInt();
 
+
         // Creando tablero.
         int tablero[][] = new int[tamaño][tamaño];
+
 
         // Asignando las minas(tantas como el número de filas del tablero) de manera
         // aleatoria.
@@ -20,6 +23,31 @@ public class App {
             int columnaAleatoria = random.nextInt(0, tablero.length);
             tablero[columnaAleatoria][filaAleatoria] = 1;
         }
+
+
+        // Creando tabla auxiliar.
+        int taux[][] = new int[tamaño][tamaño];
+        for (int i = 0; i < tablero.length; i++) {
+            for (int j = 0; j < tablero.length; j++) {
+                taux[j][i] = tablero[j][i];
+            }
+        }
+
+        for (int index = 0; index < tablero.length; index++) {
+            for (int i = 0; i < tablero.length; i++) {
+                System.out.print(taux[i][index]);
+            }
+            System.out.println();
+        }
+
+        for (int index = 0; index < tablero.length; index++) {
+            for (int i = 0; i < tablero.length; i++) {
+                System.out.print(tablero[i][index]);
+            }
+            System.out.println();
+        }
+
+
 
         // Creando bucle de juego.
         boolean enjuego = true;
@@ -39,30 +67,52 @@ public class App {
                         case 1:
                             revelar = 1;
                             elegir = false;
+                            break;
                         case 2:
                             revelar = 2;
                             elegir = false;
+                            break;
                         default:
                             break;
                     }
                 }
+                elegir = true;
+
 
                 // Pidiendo fila y columna al jugador.
-                System.out.print("F: ");
-                int filaJugador = scanner.nextInt();
-                System.out.print("C: ");
-                int columnaJugador = scanner.nextInt();
+                int filaJugador = -1;
+                int columnaJugador = -1;
+                // Mientras los valores no sean válidos sigue pidiendo la fila y la columna.
+                while (filaJugador < 0 || filaJugador >= tablero.length || columnaJugador < 0 || filaJugador >= tablero.length) {
+                    System.out.print("F: ");
+                    filaJugador = scanner.nextInt();
+                    System.out.print("C: ");
+                    columnaJugador = scanner.nextInt();
+                }
 
+
+                // Modificando tablero por "detrás".
                 if (revelar == 1) {
-                    // Modificando tablero por "detrás".
+                    // Revelas en una bomba; te explota y pierdes.
                     if (tablero[columnaJugador][filaJugador] == 1) {
                         tablero[columnaJugador][filaJugador] = 2;
                         enjuego = false;
-                    } else if (tablero[columnaJugador][filaJugador] == 0) {
+                    } 
+                    // Revelas una casilla vacía, te indica cuantas bombas hay alrededor.
+                    else if (tablero[columnaJugador][filaJugador] == 0 || tablero[columnaJugador][filaJugador] == 4) {
                         tablero[columnaJugador][filaJugador] = 3;
                     }
-                } else if (revelar == 2) {
-                    tablero[columnaJugador][filaJugador] = 4;
+                } 
+                //Marcando una bomba.
+                else if (revelar == 2) {
+                    if (tablero[columnaJugador][filaJugador] == 4){
+                        tablero[columnaJugador][filaJugador] = taux[columnaJugador][filaJugador];
+                    }                
+                    else{
+                        if (tablero[columnaJugador][filaJugador] != 3){
+                            tablero[columnaJugador][filaJugador] = 4;
+                        }
+                    }
                 }
                 pedir = false;
             }
@@ -126,12 +176,7 @@ public class App {
             }
         }
 
-        for (int index = 0; index < tablero.length; index++) {
-            for (int i = 0; i < tablero.length; i++) {
-                System.out.print(tablero[i][index]);
-            }
-            System.out.println();
-        }
+        
 
         if (!ganar) {
             // Derrota.
