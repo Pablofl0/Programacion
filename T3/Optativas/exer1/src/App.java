@@ -12,7 +12,7 @@ public class App {
         // Creando tablero.
         int tablero[][] = new int[tamaño][tamaño];
 
-        //Inicializando variables para el reparto de minas.
+        // Inicializando variables para el reparto de minas.
         Random random = new Random();
         int minasPuestas = 0;
 
@@ -94,14 +94,43 @@ public class App {
                     // Revelas una casilla vacía(0), te indica cuantas bombas hay alrededor(3).
                     else if (tablero[columnaJugador][filaJugador] == 0) {
                         tablero[columnaJugador][filaJugador] = 3;
-                        // Asignando las minas(tantas como el número de filas del tablero) de manera aleatoria después de revelar la primera casilla.
+                        // Asignando las minas(tantas como el número de filas del tablero) de manera
+                        // aleatoria después de revelar la primera casilla.
                         while (minasPuestas < tablero.length) {
                             int filaAleatoria = random.nextInt(0, tablero.length);
                             int columnaAleatoria = random.nextInt(0, tablero.length);
                             if (tablero[columnaAleatoria][filaAleatoria] != 1
-                                    && tablero[columnaAleatoria][filaAleatoria] != 3) {
+                                    && columnaAleatoria != columnaJugador && filaAleatoria != filaJugador) {
                                 tablero[columnaAleatoria][filaAleatoria] = 1;
                                 minasPuestas++;
+                            }
+                        }
+                        boolean check = true;
+                        while (check) {
+                            check = false;
+                            // Evitando la fila -1.
+                            int k = i - 1;
+                            int kmax = i + 2;
+                            if (k < 0) {
+                                k = 0;
+                            } else if (k == tamaño - 2) {
+                                kmax = tamaño;
+                            }
+                            // Evitando la columna tamaño+1.
+                            int l = j - 1;
+                            int lmax = j + 2;
+                            if (l < 0) {
+                                l = 0;
+                            } else if (l == tamaño - 2) {
+                                lmax = tamaño;
+                            }
+                            int auxiliar = l;
+                            for (int i = 0; i < tablero.length; i++) {
+                                for (int index = 0; index < tablero.length; index++) {
+                                    if (tablero[index][i] == 5) {
+
+                                    }
+                                }
                             }
                         }
                     }
