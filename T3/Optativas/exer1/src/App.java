@@ -5,25 +5,16 @@ public class App {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
 
-
         // Estableciendo el tamaño del tablero.
         System.out.println("Indica el tamaño del tablero: ");
         int tamaño = scanner.nextInt();
 
-
         // Creando tablero.
         int tablero[][] = new int[tamaño][tamaño];
 
-
-        // Asignando las minas(tantas como el número de filas del tablero) de manera
-        // aleatoria.
+        //Inicializando variables para el reparto de minas.
         Random random = new Random();
-        for (int i = 0; i < tablero.length + 1; i++) {
-            int filaAleatoria = random.nextInt(0, tablero.length);
-            int columnaAleatoria = random.nextInt(0, tablero.length);
-            tablero[columnaAleatoria][filaAleatoria] = 1;
-        }
-
+        int minasPuestas = 0;
 
         // Creando tabla auxiliar.
         int taux[][] = new int[tamaño][tamaño];
@@ -33,6 +24,7 @@ public class App {
             }
         }
 
+        // Mostrando tabla auxiliar.
         for (int index = 0; index < tablero.length; index++) {
             for (int i = 0; i < tablero.length; i++) {
                 System.out.print(taux[i][index]);
@@ -40,14 +32,13 @@ public class App {
             System.out.println();
         }
 
+        // Mostrando tabla de "detrás".
         for (int index = 0; index < tablero.length; index++) {
             for (int i = 0; i < tablero.length; i++) {
                 System.out.print(tablero[i][index]);
             }
             System.out.println();
         }
-
-
 
         // Creando bucle de juego.
         boolean enjuego = true;
@@ -78,47 +69,66 @@ public class App {
                 }
                 elegir = true;
 
-
                 // Pidiendo fila y columna al jugador.
                 int filaJugador = -1;
                 int columnaJugador = -1;
-                // Mientras los valores no sean válidos sigue pidiendo la fila y la columna.
-                while (filaJugador < 0 || filaJugador >= tablero.length || columnaJugador < 0 || filaJugador >= tablero.length) {
+                // Mientras el valor no sea válido sigue pidiendo la fila.
+                while (filaJugador < 0 || filaJugador >= tablero.length) {
                     System.out.print("F: ");
                     filaJugador = scanner.nextInt();
+                }
+                // Mientras el valor no sea válido sigue pidiendo la columna.
+                while (columnaJugador < 0 || filaJugador >= tablero.length) {
                     System.out.print("C: ");
                     columnaJugador = scanner.nextInt();
                 }
 
-
                 // Modificando tablero por "detrás".
                 if (revelar == 1) {
-                    // Revelas en una bomba; te explota y pierdes.
+                    // Revelas en una bomba(1); te explota(2) y pierdes.
                     if (tablero[columnaJugador][filaJugador] == 1) {
                         tablero[columnaJugador][filaJugador] = 2;
                         enjuego = false;
-                    } 
-                    // Revelas una casilla vacía, te indica cuantas bombas hay alrededor.
-                    else if (tablero[columnaJugador][filaJugador] == 0 || tablero[columnaJugador][filaJugador] == 4) {
-                        tablero[columnaJugador][filaJugador] = 3;
+                        ganar = false;
                     }
-                } 
-                //Marcando una bomba.
+                    // Revelas una casilla vacía(0), te indica cuantas bombas hay alrededor(3).
+                    else if (tablero[columnaJugador][filaJugador] == 0) {
+                        tablero[columnaJugador][filaJugador] = 3;
+                        // Asignando las minas(tantas como el número de filas del tablero) de manera aleatoria después de revelar la primera casilla.
+                        while (minasPuestas < tablero.length) {
+                            int filaAleatoria = random.nextInt(0, tablero.length);
+                            int columnaAleatoria = random.nextInt(0, tablero.length);
+                            if (tablero[columnaAleatoria][filaAleatoria] != 1
+                                    && tablero[columnaAleatoria][filaAleatoria] != 3) {
+                                tablero[columnaAleatoria][filaAleatoria] = 1;
+                                minasPuestas++;
+                            }
+                        }
+                    }
+                }
+                // Marcando una bomba.
                 else if (revelar == 2) {
-                    if (tablero[columnaJugador][filaJugador] == 4){
+                    // Desmarcando bomba(quitando B) y recuperando valor primitivo con tablero
+                    // auxiliar.
+                    if (tablero[columnaJugador][filaJugador] == 4) {
                         tablero[columnaJugador][filaJugador] = taux[columnaJugador][filaJugador];
-                    }                
-                    else{
-                        if (tablero[columnaJugador][filaJugador] != 3){
+                    }
+                    // Marcando bomba(B).
+                    else {
+                        if (tablero[columnaJugador][filaJugador] != 3) {
                             tablero[columnaJugador][filaJugador] = 4;
                         }
                     }
                 }
+                // El jugador escoge una casilla válida y se para el bucle.
                 pedir = false;
             }
 
             // Habilitando la petición al jugador.
             pedir = true;
+
+            // Preparando variable.
+            enjuego = false;
 
             // Mostrando tablero.
             System.out.print("   ");
@@ -132,7 +142,9 @@ public class App {
                 for (int j = 0; j < tamaño; j++) {
                     if (tablero[j][i] == 0) {
                         System.out.print("-  ");
-                        ganar = false;
+                        // En caso de que haya alguna casilla sin mina que aún no ha sido revelada, se
+                        // sigue jugando.
+                        enjuego = true;
                     } else if (tablero[j][i] == 1) {
                         System.out.print("-  ");
                     } else if (tablero[j][i] == 2) {
@@ -174,9 +186,14 @@ public class App {
                 }
                 System.out.println();
             }
+            // Mostrando tabla de "detrás".
+            for (int index = 0; index < tablero.length; index++) {
+                for (int i = 0; i < tablero.length; i++) {
+                    System.out.print(tablero[i][index]);
+                }
+                System.out.println();
+            }
         }
-
-        
 
         if (!ganar) {
             // Derrota.
