@@ -6,8 +6,11 @@ public class App {
         Scanner scanner = new Scanner(System.in);
 
         // Estableciendo el tamaño del tablero.
-        System.out.println("Indica el tamaño del tablero: ");
-        int tamaño = scanner.nextInt();
+        int tamaño = 1;
+        while (tamaño <= 1) {
+            System.out.println("Indica el tamaño del tablero: ");
+            tamaño = scanner.nextInt();
+        }
 
         // Creando tablero.
         int tablero[][] = new int[tamaño][tamaño];
@@ -78,7 +81,7 @@ public class App {
                     filaJugador = scanner.nextInt();
                 }
                 // Mientras el valor no sea válido sigue pidiendo la columna.
-                while (columnaJugador < 0 || filaJugador >= tablero.length) {
+                while (columnaJugador < 0 || columnaJugador >= tablero.length) {
                     System.out.print("C: ");
                     columnaJugador = scanner.nextInt();
                 }
@@ -88,7 +91,6 @@ public class App {
                     // Revelas en una bomba(1); te explota(2) y pierdes.
                     if (tablero[columnaJugador][filaJugador] == 1) {
                         tablero[columnaJugador][filaJugador] = 2;
-                        enjuego = false;
                         ganar = false;
                     }
                     // Revelas una casilla vacía(0), te indica cuantas bombas hay alrededor(3).
@@ -100,7 +102,7 @@ public class App {
                             int filaAleatoria = random.nextInt(0, tablero.length);
                             int columnaAleatoria = random.nextInt(0, tablero.length);
                             if (tablero[columnaAleatoria][filaAleatoria] != 1
-                                    && columnaAleatoria != columnaJugador && filaAleatoria != filaJugador) {
+                                    && (columnaAleatoria != columnaJugador || filaAleatoria != filaJugador)) {
                                 tablero[columnaAleatoria][filaAleatoria] = 1;
                                 minasPuestas++;
                             }
@@ -174,7 +176,7 @@ public class App {
                         // Calculando el número de bombas alrededor de la celda.
                         while (k < kmax) {
                             while (l < lmax) {
-                                if (tablero[l][k] == 1 || tablero[l][k] == 4) {
+                                if (taux[l][k] == 1) {
                                     bombas++;
                                 }
                                 l++;
@@ -184,16 +186,19 @@ public class App {
                         }
                         System.out.print(bombas + "  ");
                     }
+                    if (ganar == false) {
+                        enjuego = false;
+                    }
                 }
                 System.out.println();
             }
-            // Mostrando tabla de "detrás".
+            /*  Mostrando tabla de "detrás".
             for (int index = 0; index < tablero.length; index++) {
                 for (int i = 0; i < tablero.length; i++) {
                     System.out.print(tablero[i][index]);
                 }
                 System.out.println();
-            }
+            } */
         }
 
         if (!ganar) {
