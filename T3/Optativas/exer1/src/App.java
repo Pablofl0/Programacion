@@ -105,34 +105,6 @@ public class App {
                                 minasPuestas++;
                             }
                         }
-                        boolean check = true;
-                        while (check) {
-                            check = false;
-                            // Evitando la fila -1.
-                            int k = i - 1;
-                            int kmax = i + 2;
-                            if (k < 0) {
-                                k = 0;
-                            } else if (k == tamaño - 2) {
-                                kmax = tamaño;
-                            }
-                            // Evitando la columna tamaño+1.
-                            int l = j - 1;
-                            int lmax = j + 2;
-                            if (l < 0) {
-                                l = 0;
-                            } else if (l == tamaño - 2) {
-                                lmax = tamaño;
-                            }
-                            int auxiliar = l;
-                            for (int i = 0; i < tablero.length; i++) {
-                                for (int index = 0; index < tablero.length; index++) {
-                                    if (tablero[index][i] == 5) {
-
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
                 // Marcando una bomba.
