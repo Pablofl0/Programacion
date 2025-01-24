@@ -33,15 +33,8 @@ public class App {
          * }
          */
 
-        // Mostrando tabla de "detrás".
-        for (int index = 0; index < tablero.length; index++) {
-            for (int i = 0; i < tablero.length; i++) {
-                System.out.print(tablero[i][index]);
-            }
-            System.out.println();
-        }
-
         // Creando bucle de juego.
+        boolean leer = false;
         boolean crear = false;
         boolean enjuego = true;
         boolean pedir = false;
@@ -98,21 +91,33 @@ public class App {
                     crear = true;
                 }
 
-
-                //Rellenando tablero por detrás y creando tablero auxiliar.
-                while (crear) {
-                    // Creando tabla auxiliar.
+                // Mostrando tabla de "detrás".
+                for (int index = 0; index < tablero.length; index++) {
                     for (int i = 0; i < tablero.length; i++) {
-                        for (int j = 0; j < tablero.length; j++) {
-                            taux[j][i] = tablero[j][i];
-                        }
+                        System.out.print(tablero[i][index]);
                     }
-                    // Creando tabla de muestra.
-                    for (int i = 0; i < taux.length; i++) {
-                        for (int j = 0; j < taux.length; j++) {
-                            tmuestra[j][i] = taux[j][i];
-                        }
+                    System.out.println();
+                }
+                //
+                // Mostrando tabla de muestra.
+                for (int index = 0; index < tmuestra.length; index++) {
+                    for (int i = 0; i < tmuestra.length; i++) {
+                        System.out.print(tmuestra[i][index]);
                     }
+                    System.out.println();
+                }
+                //
+                // Rellenando tablero por detrás y creando tablero auxiliar.
+                while (crear) {
+                    /*
+                     * Creando tabla auxiliar.
+                     * for (int i = 0; i < tablero.length; i++) {
+                     * for (int j = 0; j < tablero.length; j++) {
+                     * taux[j][i] = tablero[j][i];
+                     * }
+                     * }
+                     */
+
                     // Construyendo tablero de detrás con las minas y las bombas que tiene cada
                     // casilla alrededor.
                     for (int i = 0; i < tablero.length; i++) {
@@ -139,7 +144,7 @@ public class App {
                                 // Calculando el número de bombas alrededor de la celda.
                                 while (k < kmax) {
                                     while (l < lmax) {
-                                        if (taux[l][k] == 1) {
+                                        if (tablero[l][k] == -2) {
                                             bombas++;
                                         }
                                         l++;
@@ -147,28 +152,30 @@ public class App {
                                     l = auxiliar;
                                     k++;
                                 }
-                                tablero[j][i] = bombas;
-                            }
-                            else if (tablero[j][i] == 1) {
-                                tablero[j][i] = 9;
+                                if (bombas == 0) {
+                                    tablero[j][i] = -3;
+                                } else {
+                                    tablero[j][i] = bombas;
+                                }
                             }
                         }
                     }
                     crear = false;
                 }
 
-
-
                 // Modificando tablero por "detrás".
                 if (revelar == 1) {
                     // Revelas en una bomba(1); te explota(2) y pierdes.
-                    if (taux[columnaJugador][filaJugador] == -2) {
+                    if (tablero[columnaJugador][filaJugador] == -2) {
                         tmuestra[columnaJugador][filaJugador] = tablero[columnaJugador][filaJugador];
                         ganar = false;
                         enjuego = false;
                     }
                     // Revelas una casilla vacía(0), te indica cuantas bombas hay alrededor(3).
-                    else if (taux[columnaJugador][filaJugador] == 0) {
+                    else if (tablero[columnaJugador][filaJugador] == -3) {
+                        leer = true;
+                        tmuestra[columnaJugador][filaJugador] = tablero[columnaJugador][filaJugador];
+                    } else {
                         tmuestra[columnaJugador][filaJugador] = tablero[columnaJugador][filaJugador];
                     }
                 }
@@ -176,10 +183,9 @@ public class App {
                 else if (revelar == 2) {
                     // Desmarcando bomba(quitando B) y recuperando valor primitivo con tablero
                     // auxiliar.
-                    if (tmuestra[columnaJugador][filaJugador] == -1){
+                    if (tmuestra[columnaJugador][filaJugador] == -1) {
                         tmuestra[columnaJugador][filaJugador] = 0;
-                    }
-                    else if (tmuestra[columnaJugador][filaJugador] == 0) {
+                    } else if (tmuestra[columnaJugador][filaJugador] == 0) {
                         tmuestra[columnaJugador][filaJugador] = -1;
                     }
                 }
@@ -187,9 +193,54 @@ public class App {
                 pedir = false;
             }
 
+            while (leer) {
+                leer = false;
+                for (int i = 0; i < tmuestra.length; i++) {
+                    for (int j = 0; j < tmuestra.length; j++) {
+                        if (tmuestra[j][i] == -3) {
+                            tmuestra[j][i] = -5;
+                            // Evitando la fila -1.
+                            int k = i - 1;
+                            int kmax = i + 2;
+                            if (k < 0) {
+                                k = 0;
+                            } else if (k == tamaño - 2) {
+                                kmax = tamaño;
+                            }
+                            // Evitando la columna tamaño+1.
+                            int l = j - 1;
+                            int lmax = j + 2;
+                            if (l < 0) {
+                                l = 0;
+                            } else if (l == tamaño - 2) {
+                                lmax = tamaño;
+                            }
+                            int auxiliar = l;
+                            // Calculando el número de bombas alrededor de la celda.
+                            while (k < kmax) {
+                                while (l < lmax) {
+                                    if (tablero[l][k] == -3) {
+                                        leer = true;
+                                        tmuestra[l][k] = tablero[l][k];
+                                    }
+                                    else{
+                                        tmuestra[l][k] = tablero[l][k];
+                                    }
+                                    l++;
+                                }
+                                l = auxiliar;
+                                k++;
+                            }
+                        }
+                        else{
+                            tmuestra[j][i] = tablero[j][i];
+                        }
+                    }
+                }
+            }
+
             // Habilitando la petición al jugador.
             pedir = true;
-
 
             // Mostrando tablero.
             System.out.print("   ");
@@ -203,18 +254,14 @@ public class App {
                 for (int j = 0; j < tamaño; j++) {
                     if (tmuestra[j][i] == 0) {
                         System.out.print("-  ");
-                    } 
-                    else if (tmuestra[j][i] == -2) {
-                        System.out.print("-  ");
-                    }
-                    else if (tmuestra[j][i] == 9) {
+                    } else if (tmuestra[j][i] == -5) {
+                        System.out.print("0  ");
+                    } else if (tmuestra[j][i] == -2) {
                         System.out.print("X  ");
-                    } 
-                    else if (tmuestra[j][i] == -1) {
+                    } else if (tmuestra[j][i] == -1) {
                         System.out.print("B  ");
-                    } 
-                    else {
-                        System.out.println(tmuestra[j][i] + "  ");
+                    } else {
+                        System.out.print(tmuestra[j][i] + "  ");
                     }
                 }
                 System.out.println();
