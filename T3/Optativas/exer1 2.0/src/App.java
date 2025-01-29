@@ -232,9 +232,6 @@ public class App {
                                 k++;
                             }
                         }
-                        else{
-                            tmuestra[j][i] = tablero[j][i];
-                        }
                     }
                 }
             }
