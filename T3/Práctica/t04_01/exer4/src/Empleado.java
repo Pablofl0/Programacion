@@ -9,14 +9,71 @@ public class Empleado {
     private boolean tieneDNI;
     final static int IRPF = 15;
 
-    private boolean comprobarDNI(String DNI) {
-        if (DNI.length() == 9) {
-            return true;
-        } else {
-            return false;
-        }
+    
+    public Empleado(String nombre, String apellido, double salario) {
+        Nombre = nombre;
+        Apellido = apellido;
+        Salario = salario;
+        
     }
 
+    public Empleado(String dNI, String nombre, String apellido, double salario) {
+        DNI = dNI;
+        Nombre = nombre;
+        Apellido = apellido;
+        Salario = salario;
+        
+    }
+
+    public Empleado(String dNI, String nombre, String apellido, String apellido2, double salario) {
+        DNI = dNI;
+        Nombre = nombre;
+        Apellido = apellido;
+        Apellido2 = apellido2;
+        Salario = salario;
+        
+    }
+
+    private boolean comprobarDNI(String DNI){
+        if (DNI.length() != 9) {
+            return false;
+        }
+
+        // Collemos os números é a letra
+        String numeros = DNI.substring(0, 8);
+        char letra = DNI.charAt(8);
+
+        // Comprobamos que todolos dixitos son números
+        for(int i=0; i< numeros.length(); i++){
+            if (!((int)numeros.charAt(i) >= (int)'0' && (int)numeros.charAt(i) <= (int)'9')) {
+                return false;
+            }
+        }
+
+        // Comprobamos que a letra sexa minúcula
+        if (!((int)letra >= (int)'A' && (int)letra <= (int)'Z')) {
+            return false;
+        }
+
+        // Collemos os numeros como un enteiro
+        int numero = Integer.valueOf(numeros);
+
+        // Calculamos o resto
+        String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+        int resto = numero % letras.length();
+
+        // Collemos a letra real
+        char letraReal = letras.charAt(resto);
+
+        // Se as letras son diferentes
+        if (letra != letraReal) {
+            return false;
+        }
+
+        // Todo está en orde
+        return true;
+
+    }
 
     public void setDNI(String DNI) {
         if (comprobarDNI(DNI)) {
@@ -54,7 +111,7 @@ public class Empleado {
     }
 
     public String getApellidos(){
-        return Apellido + Apellido2;
+        return Apellido + " " +  Apellido2;
     }
 
     public double getSalario() {
