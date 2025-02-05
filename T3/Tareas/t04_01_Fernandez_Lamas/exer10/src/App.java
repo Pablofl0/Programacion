@@ -4,7 +4,26 @@ public class App {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
 
-        int tablero[][] = new int[3][3];
+        Tablero tableroJuego = new Tablero();
+
+        while (true) {
+            tableroJuego.mostrar();
+
+            int fila = scanner.nextInt();
+            int columna = scanner.nextInt();
+    
+            tableroJuego.modificar(fila, columna);
+
+            tableroJuego.comprobar();
+
+            if (!tableroJuego.isEnjuego()) {
+                break;
+            }
+        }
+       
+
+        /**
+         * int tablero[][] = new int[3][3];
         
 
         boolean enjuego = true;
@@ -159,6 +178,8 @@ public class App {
 
                 
         }
+         */
+        
     scanner.close();
     }
 }
