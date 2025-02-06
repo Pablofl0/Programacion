@@ -151,11 +151,11 @@ public class Vehiculo {
 
         // Cogemos los números y las letras.
         String numeros = matricula.substring(0, 4);
-        String letras = matricula.substring(4, 7);
+        String letras = matricula.substring(4);
 
         // Comprobar que son 4 números.
         for (int i = 0; i < numeros.length(); i++) {
-            if ((int)numeros.charAt(i) < 0 || (int)numeros.charAt(i) > 9) {
+            if ((int)numeros.charAt(i) < (int)'0' || (int)numeros.charAt(i) > (int)'9') {
                 return false;
             }
         }
