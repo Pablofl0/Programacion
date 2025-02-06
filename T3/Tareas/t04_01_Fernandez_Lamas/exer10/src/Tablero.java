@@ -1,20 +1,58 @@
+import java.util.Scanner;
+
 public class Tablero {
+    Scanner scanner = new Scanner(System.in);
     private int[][] tablero;
     private boolean jugador;
     private boolean enjuego = true;
+    private int fila;
+    private int columna;
+    private int estado = 0;
+
 
     public Tablero() {
         tablero = new int[3][3];
+    }
+
+    public int getFila() {
+        return fila;
+    }
+
+    public void setFila(int fila) {
+        this.fila = fila;
+    }
+
+    public int getColumna() {
+        return columna;
+    }
+
+    public void setColumna(int columna) {
+        this.columna = columna;
     }
 
     public boolean isEnjuego() {
         return enjuego;
     }
 
+    public void pedir() {
+        while (true) {
+            System.out.print("Fila: ");
+            fila = scanner.nextInt();
+            System.out.print("Columna: ");
+            columna = scanner.nextInt();
+            if (fila < tablero.length && fila >= 0 && columna < tablero.length && columna >= 0) {
+                if (tablero[columna][fila]  == 0) {
+                    modificar(fila, columna);
+                    break;
+                }              
+            }         
+        }
+    }
+
     public void mostrar() {
-        System.out.println("   C1 C2 C3");
+        System.out.println("   C0 C1 C2");
         for (int i = 0; i < tablero.length; i++) {
-            System.out.print("F" + (i + 1) + " ");
+            System.out.print("F" + (i) + " ");
             for (int j = 0; j < tablero.length; j++) {
                 if (tablero[j][i] == 0) {
                     System.out.print("-  ");
@@ -39,6 +77,17 @@ public class Tablero {
 
     public void comprobar() {
 
+
+        for (int i = 0; i < tablero.length; i++) {
+            int multi = 1;
+            for (int j = 0; j < tablero.length; j++) {
+                multi *= tablero[j][i];
+            }
+            if (multi == 0) {
+                estado = -1;
+            }
+        }
+
         for (int i = 0; i < tablero.length; i++) {
             int sumafila = 0;
             for (int j = 0; j < tablero.length; j++) {
@@ -48,11 +97,11 @@ public class Tablero {
                     sumafila += tablero[j][i];
                 }
                 if (sumafila == 3) {
-                    System.out.println("Ganador jugador 1(X).");
+                    estado = 1;
                     enjuego = !enjuego;
                     break;
                 } else if (sumafila == -3) {
-                    System.out.println("Ganador jugador 2(O).");
+                    estado = 2;
                     enjuego = !enjuego;
                     break;
                 }
@@ -67,11 +116,11 @@ public class Tablero {
                     sumacol += tablero[j][i];
                 }
                 if (sumacol == 3) {
-                    System.out.println("Ganador jugador 1(X).");
+                    estado = 1;
                     enjuego = !enjuego;
                     break;
                 } else if (sumacol == -3) {
-                    System.out.println("Ganador jugador 2(O).");
+                    estado = 2;
                     enjuego = !enjuego;
                     break;
                 }
@@ -88,10 +137,10 @@ public class Tablero {
             i++;
         }
         if (sumadiagonal == 3) {
-            System.out.println("Ganador jugador 1(X).");
+            estado = 1;
             enjuego = !enjuego;
         } else if (sumadiagonal == -3) {
-            System.out.println("Ganador jugador 2(O).");
+            estado = 2;
             enjuego = !enjuego;
         }
         int a = 0;
@@ -107,12 +156,25 @@ public class Tablero {
             b--;
         }
         if (sumadiagonal2 == 3) {
-            System.out.println("Ganador jugador 1(X).");
+            estado = 1;
             enjuego = !enjuego;
         } else if (sumadiagonal2 == -3) {
-            System.out.println("Ganador jugador 2(O).");
+            estado = 2;
             enjuego = !enjuego;
         }
 
     }
+
+    public void estado(){
+        if (estado == 0) {
+            System.out.println("¡Empate!");
+        }
+        else if (estado == 1) {
+            System.out.println("Ha ganado el jugador 1(X).");
+        }
+        else if (estado == 2) {
+            System.out.println("Ha ganado el jugador 2(O).");
+        }
+    }
+
 }
