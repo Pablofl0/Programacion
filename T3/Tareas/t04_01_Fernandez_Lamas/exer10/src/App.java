@@ -13,13 +13,23 @@ public class App {
                 break;
             }
 
-            tableroJuego.pedir();
+            while (tableroJuego.isPeticion()) {
+                System.out.print("Fila: ");
+                int fila = scanner.nextInt();
+                System.out.print("Columna: ");
+                int columna = scanner.nextInt();
+                tableroJuego.pedir(fila, columna);
+            }
+            
 
             tableroJuego.comprobar();
 
-            tableroJuego.estado();   
+            tableroJuego.estado();
+
+            tableroJuego.setPeticion();
+
             
-            scanner.close();
         }
+        scanner.close();
     }
 }

@@ -5,47 +5,34 @@ public class Tablero {
     private int[][] tablero;
     private boolean jugador;
     private boolean enjuego = true;
-    private int fila;
-    private int columna;
+    private boolean peticion = true;
     private int estado = 0;
 
+
+    
 
     public Tablero() {
         tablero = new int[3][3];
     }
 
-    public int getFila() {
-        return fila;
+    public boolean isPeticion() {
+        return peticion;
     }
 
-    public void setFila(int fila) {
-        this.fila = fila;
-    }
-
-    public int getColumna() {
-        return columna;
-    }
-
-    public void setColumna(int columna) {
-        this.columna = columna;
+    public void setPeticion() {
+        this.peticion = !peticion;
     }
 
     public boolean isEnjuego() {
         return enjuego;
     }
 
-    public void pedir() {
-        while (true) {
-            System.out.print("Fila: ");
-            fila = scanner.nextInt();
-            System.out.print("Columna: ");
-            columna = scanner.nextInt();
+    public void pedir(int fila, int columna) {
             if (fila < tablero.length && fila >= 0 && columna < tablero.length && columna >= 0) {
                 if (tablero[columna][fila]  == 0) {
                     modificar(fila, columna);
-                    break;
-                }              
-            }         
+                    peticion = false;
+                }                    
         }
     }
 
