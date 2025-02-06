@@ -22,12 +22,7 @@ public class Vehiculo {
      * @param tipoCombustible tipo de combustible
      */
     public Vehiculo(String matricula, String marca, String modelo) {
-        if (validarMatricula(matricula)) {
-            this.setMatricula(matricula);
-        }
-        else{
-            this.setMatricula("0000XXX");
-        }
+        this.setMatricula(matricula);
         this.setMarca(marca);
         this.setModelo(modelo);
         this.setVelocidad(0);
@@ -43,16 +38,8 @@ public class Vehiculo {
      * @param tipoCombustible tipo de combustible
      */
     public Vehiculo(String matricula, String marca, String modelo, TipoCombustible tipoCombustible) {
-        if (validarMatricula(matricula)) {
-            this.setMatricula(matricula);
-        }
-        else{
-            this.setMatricula("0000XXX");
-        }
-        this.setMarca(marca);
-        this.setModelo(modelo);
+        this(matricula, marca, modelo);
         this.setTipoCombustible(tipoCombustible);
-        Vehiculo.sumNumero();
     }
 
 
@@ -88,10 +75,6 @@ public class Vehiculo {
         return númeroObjetos;
     }
 
-    public static void setNúmeroObjetos(int númeroObjetos) {
-        Vehiculo.númeroObjetos = númeroObjetos;
-    }
-
     public static void sumNumero(){
         Vehiculo.númeroObjetos += 1;
     }
@@ -109,7 +92,12 @@ public class Vehiculo {
     }
 
     public void setMatricula(String matricula) {
-            this.matricula = matricula;   
+        if (validarMatricula(matricula)) {
+            this.matricula = matricula;
+        }
+        else{
+            this.matricula = "0000XXX";
+        } 
     }
 
     public String getMarca() {
@@ -132,7 +120,7 @@ public class Vehiculo {
         return velocidad;
     }
 
-    public void setVelocidad(int velocidad) {
+    private void setVelocidad(int velocidad) {
         this.velocidad = velocidad;
     }
 
