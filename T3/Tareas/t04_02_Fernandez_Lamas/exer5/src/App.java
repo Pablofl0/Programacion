@@ -1,4 +1,5 @@
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -13,6 +14,7 @@ public class App {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
         DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         DateTimeFormatter formato3 = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter formato4 = DateTimeFormatter.ofPattern("HH:mm");
 
         ArrayList<String> nombres = new ArrayList<>();
         ArrayList<LocalDateTime> citas = new ArrayList<>();
@@ -43,7 +45,8 @@ public class App {
             
                         
                         for (LocalDateTime localDateTime : citas) {
-                            if (ChronoUnit.MINUTES.between(citafh, localDateTime) <= 30) {
+                            if (ChronoUnit.MINUTES.between(citafh, localDateTime) <= 30 && (ChronoUnit.MINUTES.between(citafh, localDateTime) >= -30)) {
+                                System.out.println(ChronoUnit.MINUTES.between(citafh, localDateTime));
                                 pedir = true;
                                 System.out.println("No se pudo realizar la cita.");
                             }
@@ -78,13 +81,13 @@ public class App {
                 
                 case "c":
                     System.out.println("Introduzca su cita (formato, dd-MM-yyyy): ");
-                    String cita = sc.nextLine();
+                    String cita2 = sc.nextLine();
 
-                    LocalDateTime citaf = LocalDateTime.parse(cita, formato3);
+                    LocalDate citaf = LocalDate.parse(cita2, formato3);
 
                     for (LocalDateTime localDateTime : citas) {
                         if (localDateTime.toLocalDate().equals(citaf)) {
-                            System.out.println(localDateTime.toLocalTime().format(formato));
+                            System.out.println(localDateTime.toLocalTime().format(formato4));
                         }
                     }
 
