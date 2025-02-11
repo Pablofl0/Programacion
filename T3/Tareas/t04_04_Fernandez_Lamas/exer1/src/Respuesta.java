@@ -1,6 +1,6 @@
 public class Respuesta {
     private String contenido;
-    private int veces;
+    private double veces = 0;
 
     public String getContenido() {
         return contenido;
@@ -10,12 +10,13 @@ public class Respuesta {
         this.contenido = contenido;
     }
 
-    public int getVeces() {
+    public double getVeces() {
         return veces;
     }
 
-    public void setVeces(int veces) {
-        this.veces = veces;
+
+    public void sumar1vez(){
+        this.veces += 1;
     }
 
 }
