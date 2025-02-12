@@ -7,7 +7,9 @@ public class Respuesta {
     }
 
     public void setContenido(String contenido) {
-        this.contenido = contenido;
+        if (contenido.length() > 0) {
+            this.contenido = contenido;
+        }
     }
 
     public double getVeces() {

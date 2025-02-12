@@ -9,6 +9,7 @@ public class App {
         boolean activo = true;
 
 
+
         //Bucle que imprime el menú.
         while (activo) {
             System.out.println("Selecciona una opción: ");
@@ -69,6 +70,7 @@ public class App {
                         //Sumar 1 a la respuesta.
                         System.out.print("\nSelecciona una opción: ");
                         int opc = sc.nextInt();
+                        sc.nextLine();
                         cuestionario.sumar1vezCuestionario(clave, opc);
                     }
 
@@ -109,6 +111,8 @@ public class App {
                     */
                 case "z":
                     activo = false;
+                    break;
+                default:
                     break;
             }
         }
