@@ -10,7 +10,7 @@ public class Usuario {
     public Usuario(String usuario, String nombrePila, String contrasenha) {
         this.usuario = usuario;
         this.nombrePila = nombrePila;
-        this.contrasenha = contrasenha;
+        this.contrasenha = HashPassword.hashPassword(contrasenha);
         this.listaTareas = new ArrayList<Tarea>();
     }
 
