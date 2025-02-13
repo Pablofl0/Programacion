@@ -88,6 +88,7 @@ public class App {
                 String accion = sc.nextLine();
                 ArrayList<Tarea> listaTareaUsu = usuNow.getListaTareas();
                 int i = 0;
+                boolean vacio = true;
 
                 switch (accion) {
                     case "a":
@@ -100,23 +101,29 @@ public class App {
                         String tit = sc.nextLine();
                         System.out.print("Introduzca la descripción de la tarea: ");
                         String desc = sc.nextLine();
-                        System.out.print("Introduzca la fecha y hora límite de la tarea: ");
+                        System.out.print("Introduzca la fecha y hora límite de la tarea (dd/MM/yyyy HH:mm): ");
                         String fchlim = sc.nextLine();
                         Tarea newTarea = new Tarea(tit, desc, fchlim);
                         usuNow.getListaTareas().add(newTarea);
                         break;
                     case "c":
+                        vacio = true;
                         i = 0;
                         boolean select = true;
                         Tarea tareaEsc = null;
                         for (Tarea tarea : listaTareaUsu) {
                             if (tarea.isPendiente()) {
                                 System.out.println((i + 1) + ": " + tarea.getTitulo());
+                                vacio = false;
                             }
+                        }
+                        if (vacio) {
+                            System.out.println("No hay tareas pendientes.");
                         }
                         while (select) {
                             System.out.println("¿Qué tarea quieres ver?");
                             int indice = sc.nextInt();
+                            sc.nextLine();
                             if (indice > 0 && indice <= listaTareaUsu.size()) {
                                 tareaEsc = listaTareaUsu.get(indice - 1);
                                 select = false;
@@ -129,16 +136,22 @@ public class App {
                         System.out.println("\tFecha ingreso: " + tareaEsc.getFechaIngresoStr());
                         break;
                     case "d":
+                        vacio = true;
                         i = 0;
                         boolean select2 = true;
                         for (Tarea tarea : listaTareaUsu) {
                             if (tarea.isPendiente()) {
                                 System.out.println((i + 1) + ": " + tarea.getTitulo());
+                                vacio = false;
                             }
+                        }
+                        if (vacio) {
+                            System.out.println("No hay tareas.");
                         }
                         while (select2) {
                             System.out.println("¿Qué tarea quieres marcar como realizada?");
                             int indice = sc.nextInt();
+                            sc.nextLine();
                             if (indice > 0 && indice <= listaTareaUsu.size()) {
                                 tareaEsc = listaTareaUsu.get(indice - 1);
                                 tareaEsc.marcarTarea();
@@ -149,28 +162,43 @@ public class App {
                         }
                         break;
                     case "e":
+                        vacio = true;
                         i = 0;
                         for (Tarea tarea : listaTareaUsu) {
                             if (tarea.isPendiente()
                                     && tarea.getFechaLimite().until(LocalDateTime.now(), ChronoUnit.HOURS) <= 48) {
                                 System.out.println((i + 1) + ": " + tarea.getTitulo());
+                                vacio = false;
                             }
+                        }
+                        if (vacio) {
+                            System.out.println("No hay tareas pendientes en las proximas 48 horas.");
                         }
                         break;
                     case "f":
+                        vacio = true;
                         i = 0;
                         for (Tarea tarea : listaTareaUsu) {
                             if (!tarea.isPendiente()) {
                                 System.out.println((i + 1) + ": " + tarea.getTitulo());
+                                vacio = false;
                             }
+                        }
+                        if (vacio) {
+                            System.out.println("No hay tareas realizadas.");
                         }
                         break;
                     case "g":
+                        vacio = true;
                         i = 0;
                         for (Tarea tarea : listaTareaUsu) {
                             if (tarea.isPendiente() && LocalDateTime.now().isBefore(tarea.getFechaLimite())) {
                                 System.out.println((i + 1) + ": " + tarea.getTitulo());
+                                vacio = false;
                             }
+                        }
+                        if (vacio) {
+                            System.out.println("No hay tareas pendientes fuera de entrega.");
                         }
                         break;
                     case "z":
