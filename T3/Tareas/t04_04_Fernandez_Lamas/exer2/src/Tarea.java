@@ -11,6 +11,36 @@ public class Tarea {
 
     DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
+    
+    public LocalDateTime getFechaLimite() {
+        return fechaLimite;
+    }
+
+    public LocalDateTime getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public boolean isPendiente() {
+        return pendiente;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getFechaLimiteStr() {
+        return fechaLimiteStr;
+    }
+
+    public String getFechaIngresoStr() {
+        String fechaIngresoStr = fechaIngreso.format(formato);
+        return fechaIngresoStr;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
     //Cambiar de string a localdatetime con formato.
     private LocalDateTime formatDateTime(String fch){
         return LocalDateTime.parse(fch, formato);
