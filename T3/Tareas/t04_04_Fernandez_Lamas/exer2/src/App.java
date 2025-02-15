@@ -1,6 +1,5 @@
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class App {
@@ -8,7 +7,7 @@ public class App {
         Scanner sc = new Scanner(System.in);
 
         boolean encendido = true;
-        ArrayList<Usuario> personal = new ArrayList<Usuario>();
+        HashMap<String, Usuario> personal = new HashMap<String, Usuario>();
 
         while (encendido) {
             // Menú de inicio.
@@ -24,23 +23,25 @@ public class App {
             String con1;
             String con2;
             String nomP;
+            boolean inicio = true;
             boolean registro = true;
             boolean dentro = false;
             Usuario usuNow = null;
             switch (opcion) {
                 // Iniciar sesión
                 case "a":
-                    System.out.println("Usuario: ");
-                    usu = sc.nextLine();
-                    System.out.println("Contraseña: ");
-                    con1 = sc.nextLine();
-                    for (Usuario usuario : personal) {
-                        if (usuario.getUsuario().equals(usu)
-                                && usuario.getContrasenha().equals(HashPassword.hashPassword(con1))) {
-                            usuNow = usuario;
+                    while (inicio) {
+                        System.out.println("Usuario: ");
+                        usu = sc.nextLine();
+                        System.out.println("Contraseña: ");
+                        con1 = sc.nextLine();
+                        if (personal.containsKey(usu) && personal.get(usu).getContrasenha().equals(con1)) {
+                            usuNow = personal.get(usu);
                             System.out.println("¡Bienvenido " + usuNow.getNombrePila() + "!");
                             dentro = true;
-                            break;
+                            inicio = false;
+                        } else {
+                            System.out.println("Usuario o contraseña no válidos.");
                         }
                     }
                     break;
@@ -56,9 +57,9 @@ public class App {
                         con1 = sc.nextLine();
                         System.out.println("Introduzca la contraseña de nuevo: ");
                         con2 = sc.nextLine();
-                        if (con1.equals(con2)) {
+                        if (con1.equals(con2) && !personal.containsKey(usu)) {
                             Usuario usuEntrada = new Usuario(usu, nomP, con1);
-                            personal.add(usuEntrada);
+                            personal.put(usu, usuEntrada);
                             usuNow = usuEntrada;
                             registro = false;
                             dentro = true;
@@ -86,16 +87,18 @@ public class App {
                 System.out.println("\tz) Cerrar sesión.");
                 System.out.print("\t> ");
                 String accion = sc.nextLine();
-                ArrayList<Tarea> listaTareaUsu = usuNow.getListaTareas();
-                int i = 0;
-                boolean vacio = true;
+
+                boolean select = true;
+                Tarea tareaEsc = null;
 
                 switch (accion) {
+                    // Modificar nombre.
                     case "a":
                         System.out.print("Indica el nuevo nombre: ");
                         String newNombre = sc.nextLine();
                         usuNow.modificarNombre(newNombre);
                         break;
+                    // Ingresar tarea pendiente.
                     case "b":
                         System.out.print("Introduzca el título de la tarea: ");
                         String tit = sc.nextLine();
@@ -104,101 +107,75 @@ public class App {
                         System.out.print("Introduzca la fecha y hora límite de la tarea (dd/MM/yyyy HH:mm): ");
                         String fchlim = sc.nextLine();
                         Tarea newTarea = new Tarea(tit, desc, fchlim);
-                        usuNow.getListaTareas().add(newTarea);
+                        usuNow.getListaTareasP().add(newTarea);
                         break;
+                    // Mostrar tareas pendientes
                     case "c":
-                        vacio = true;
-                        i = 0;
-                        boolean select = true;
-                        Tarea tareaEsc = null;
-                        for (Tarea tarea : listaTareaUsu) {
-                            if (tarea.isPendiente()) {
-                                System.out.println((i + 1) + ": " + tarea.getTitulo());
-                                vacio = false;
-                            }
-                        }
-                        if (vacio) {
+                        if (usuNow.getListaTareasP().size() == 0) {
                             System.out.println("No hay tareas pendientes.");
-                        }
-                        while (select) {
-                            System.out.println("¿Qué tarea quieres ver?");
-                            int indice = sc.nextInt();
-                            sc.nextLine();
-                            if (indice > 0 && indice <= listaTareaUsu.size()) {
-                                tareaEsc = listaTareaUsu.get(indice - 1);
-                                select = false;
-                            } else {
-                                System.out.println("Introduzca un índice válido.");
+                        } else {
+                            imprimirTareas(usuNow.getListaTareasP());
+                            select = true;
+                            while (select) {
+                                System.out.println("¿Qué tarea quieres ver?");
+                                int indice = sc.nextInt();
+                                sc.nextLine();
+                                if (indice > 0 && indice <= usuNow.getListaTareasP().size()) {
+                                    tareaEsc = usuNow.getListaTareasP().get(indice - 1);
+                                    select = false;
+                                } else {
+                                    System.out.println("Introduzca un índice válido.");
+                                }
                             }
+                            System.out.println("\tDescripción: " + tareaEsc.getDescripcion());
+                            System.out.println("\tFecha límite: " + tareaEsc.getFechaLimiteStr());
+                            System.out.println("\tFecha ingreso: " + tareaEsc.getFechaIngresoStr());
                         }
-                        System.out.println("\tDescripción: " + tareaEsc.getDescripcion());
-                        System.out.println("\tFecha límite: " + tareaEsc.getFechaLimiteStr());
-                        System.out.println("\tFecha ingreso: " + tareaEsc.getFechaIngresoStr());
+
                         break;
+                    // Marcar tarea como realizada.
                     case "d":
-                        vacio = true;
-                        i = 0;
-                        boolean select2 = true;
-                        for (Tarea tarea : listaTareaUsu) {
-                            if (tarea.isPendiente()) {
-                                System.out.println((i + 1) + ": " + tarea.getTitulo());
-                                vacio = false;
-                            }
-                        }
-                        if (vacio) {
-                            System.out.println("No hay tareas.");
-                        }
-                        while (select2) {
-                            System.out.println("¿Qué tarea quieres marcar como realizada?");
-                            int indice = sc.nextInt();
-                            sc.nextLine();
-                            if (indice > 0 && indice <= listaTareaUsu.size()) {
-                                tareaEsc = listaTareaUsu.get(indice - 1);
-                                tareaEsc.marcarTarea();
-                                select2 = false;
-                            } else {
-                                System.out.println("Introduzca un índice válido.");
+                        if (usuNow.getListaTareasP().size() == 0) {
+                            System.out.println("No hay tareas pendientes.");
+                        } else {
+                            imprimirTareas(usuNow.getListaTareasP());
+                            select = true;
+                            while (select) {
+                                System.out.println("¿Qué tarea quieres marcar como realizada?");
+                                int indice = sc.nextInt();
+                                sc.nextLine();
+                                if (indice > 0 && indice <= usuNow.getListaTareasP().size()) {
+                                    tareaEsc = usuNow.getListaTareasP().get(indice - 1);
+                                    tareaEsc.marcarTarea();
+                                    select = false;
+                                } else {
+                                    System.out.println("Introduzca un índice válido.");
+                                }
                             }
                         }
                         break;
+                    // Mostrar tareas pendientes en las próximas 48 horas.
                     case "e":
-                        vacio = true;
-                        i = 0;
-                        for (Tarea tarea : listaTareaUsu) {
-                            if (tarea.isPendiente()
-                                    && tarea.getFechaLimite().until(LocalDateTime.now(), ChronoUnit.HOURS) <= 48) {
-                                System.out.println((i + 1) + ": " + tarea.getTitulo());
-                                vacio = false;
-                            }
-                        }
-                        if (vacio) {
-                            System.out.println("No hay tareas pendientes en las proximas 48 horas.");
+                        if (usuNow.getListaTareasP48().size() == 0) {
+                            System.out.println("No hay tareas pendientes en las próximas 48 horas.");
+                        } else {
+                            imprimirTareas(usuNow.getListaTareasP48());
                         }
                         break;
+                    // Mostrar tareas realizadas.
                     case "f":
-                        vacio = true;
-                        i = 0;
-                        for (Tarea tarea : listaTareaUsu) {
-                            if (!tarea.isPendiente()) {
-                                System.out.println((i + 1) + ": " + tarea.getTitulo());
-                                vacio = false;
-                            }
-                        }
-                        if (vacio) {
+                        if (usuNow.getListaTareasM().size() == 0) {
                             System.out.println("No hay tareas realizadas.");
+                        } else {
+                            imprimirTareas(usuNow.getListaTareasM());
                         }
                         break;
+                    // Mostrar tareas pendientes fuera de entrega.
                     case "g":
-                        vacio = true;
-                        i = 0;
-                        for (Tarea tarea : listaTareaUsu) {
-                            if (tarea.isPendiente() && LocalDateTime.now().isBefore(tarea.getFechaLimite())) {
-                                System.out.println((i + 1) + ": " + tarea.getTitulo());
-                                vacio = false;
-                            }
-                        }
-                        if (vacio) {
+                        if (usuNow.getListaTareasPF().size() == 0) {
                             System.out.println("No hay tareas pendientes fuera de entrega.");
+                        } else {
+                            imprimirTareas(usuNow.getListaTareasPF());
                         }
                         break;
                     case "z":
@@ -211,5 +188,13 @@ public class App {
         }
 
         sc.close();
+    }
+
+    // Método para imprimir tareas.
+    public static void imprimirTareas(ArrayList<Tarea> lista) {
+        int i = 1;
+        for (Tarea tarea : lista) {
+            System.out.println(i + ": " + tarea.getTitulo());
+        }
     }
 }
