@@ -1,5 +1,3 @@
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
@@ -8,7 +6,6 @@ public class App {
 
         Cuestionario cuestionario = new Cuestionario();
         boolean activo = true;
-        DecimalFormat dosDecimales = new DecimalFormat("#.00");
 
         // Bucle que imprime el menú.
         while (activo) {
@@ -25,12 +22,14 @@ public class App {
                     // Se introduce la pregunta.
                     System.out.println("Introduce una pregunta:");
                     String enunciado = sc.nextLine();
+
                     // Se preparan las variables.
-                    ArrayList<Respuesta> colaRespuestas = new ArrayList<>();
+                    Pregunta newPregunta = new Pregunta(enunciado);
                     boolean pedir = true;
                     int i = 0;
-                    System.out.println("Introduce al menos dos posibles respuestas (pulsa fin para salir):");
+
                     // Se piden respuestas hasta que se tengan dos o más.
+                    System.out.println("Introduce al menos dos posibles respuestas (pulsa fin para salir):");
                     while (pedir) {
                         i++;
                         System.out.print(i + ": ");
@@ -39,8 +38,7 @@ public class App {
                         switch (respuesta) {
                             case "fin":
                                 // Si es fin y hay 2 respuestas o más, el programa sale al menú principal.
-                                if (colaRespuestas.size() >= 2) {
-                                    Pregunta newPregunta = new Pregunta(enunciado, colaRespuestas);
+                                if (newPregunta.minRespuestas()) {
                                     cuestionario.añadir1preg(newPregunta);
                                     pedir = false;
                                 }
@@ -51,9 +49,7 @@ public class App {
                                 break;
                             // En caso de ser una respuesta, esta se añade a la cola de respuestas.
                             default:
-                                Respuesta resp = new Respuesta();
-                                resp.setContenido(respuesta);
-                                colaRespuestas.add(resp);
+                                newPregunta.crearRespuesta(respuesta);
                                 break;
                         }
                     }
@@ -64,7 +60,7 @@ public class App {
                     for (int j = 0; j < cuestionario.getCuestionario().size(); j++) {
                         mostrar1preg(j, cuestionario);
                         int opc = 0;
-                        while (opc <= 0 || opc > cuestionario.getCuestionario().get(j).getResps().size() ) {
+                        while (cuestionario.getCuestionario().get(j).indiceCorrecto(opc)) {
                             System.out.print("Selecciona una opción: ");
                             opc = sc.nextInt();
                             sc.nextLine();
@@ -83,7 +79,7 @@ public class App {
                         int l = 0;
                         for (Respuesta respuesta : pregunta.getResps()) {
                             System.out.print((l + 1) + ": "
-                                    + dosDecimales.format((respuesta.getVeces() / pregunta.getRespTotales()) * 100)
+                                    + pregunta.Porcentaje2decimales(respuesta)
                                     + "%\t");
                             l++;
                         }

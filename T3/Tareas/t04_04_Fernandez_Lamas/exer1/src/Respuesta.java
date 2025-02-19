@@ -1,6 +1,14 @@
 public class Respuesta {
     private String contenido;
-    private double veces = 0;
+    private double veces;
+    private final double zero = 0;
+
+
+    
+    public Respuesta(String contenido) {
+        setContenido(contenido);
+        this.veces = zero;
+    }
 
     public String getContenido() {
         return contenido;
