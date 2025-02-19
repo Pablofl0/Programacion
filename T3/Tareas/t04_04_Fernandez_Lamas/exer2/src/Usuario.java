@@ -18,6 +18,49 @@ public class Usuario {
         this.listaTareasM = new ArrayList<Tarea>();
     }
 
+    public void marcarTUsuario(int i) {
+        escogerTarea(i).marcarTarea();
+        for (Tarea tarea : this.listaTareasP) {
+            if (!tarea.isPendiente()) {
+                Tarea auxiliar = tarea;
+                this.listaTareasP.remove(tarea);
+                this.listaTareasM.add(auxiliar);
+            }
+        }
+    }
+
+    public Tarea escogerTarea(int i) {
+        return this.listaTareasP.get(i - 1);
+    }
+
+    public int sizeTareasM() {
+        return getListaTareasM().size();
+    }
+
+    public int sizeTareasPF() {
+        return getListaTareasPF().size();
+    }
+
+    public int sizeTareasP48() {
+        return getListaTareasP48().size();
+    }
+
+    public int sizeTareasP() {
+        return this.listaTareasP.size();
+    }
+
+    public void añadirTareaP(String tit, String desc, String fchlim) {
+        Tarea newTarea = new Tarea(tit, desc, fchlim);
+        this.listaTareasP.add(newTarea);
+    }
+
+    public boolean comprobarContrasenha(String con) {
+        if (this.contrasenha.equals(HashPassword.hashPassword(con))) {
+            return true;
+        }
+        return false;
+    }
+
     // Añadir tarea a pendiente.
     public void añadirP(Tarea tarea) {
         this.listaTareasP.add(tarea);
@@ -49,21 +92,21 @@ public class Usuario {
         return listaTareasP;
     }
 
-    public ArrayList<Tarea> getListaTareasP48(){
+    public ArrayList<Tarea> getListaTareasP48() {
         ArrayList<Tarea> listaTareasP48 = new ArrayList<Tarea>();
         for (Tarea tarea : getListaTareasP()) {
-            if (tarea.getFechaLimite().until(LocalDateTime.now(), ChronoUnit.HOURS) <= 48) {
-                listaTareasP48.add(tarea);   
+            if (tarea.getFechaLimite().until(LocalDateTime.now(), ChronoUnit.HOURS) <= 48 && tarea.getFechaLimite().until(LocalDateTime.now(), ChronoUnit.HOURS) >= -48) {
+                listaTareasP48.add(tarea);
             }
         }
         return listaTareasP48;
     }
 
-    public ArrayList<Tarea> getListaTareasPF(){
+    public ArrayList<Tarea> getListaTareasPF() {
         ArrayList<Tarea> listaTareasPF = new ArrayList<Tarea>();
         for (Tarea tarea : getListaTareasP()) {
             if (tarea.getFechaLimite().isBefore(LocalDateTime.now())) {
-                listaTareasPF.add(tarea);   
+                listaTareasPF.add(tarea);
             }
         }
         return listaTareasPF;

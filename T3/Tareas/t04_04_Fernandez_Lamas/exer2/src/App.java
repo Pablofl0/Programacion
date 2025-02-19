@@ -35,7 +35,7 @@ public class App {
                         usu = sc.nextLine();
                         System.out.println("Contraseña: ");
                         con1 = sc.nextLine();
-                        if (personal.containsKey(usu) && personal.get(usu).getContrasenha().equals(con1)) {
+                        if (personal.containsKey(usu) && personal.get(usu).comprobarContrasenha(con1)) {
                             usuNow = personal.get(usu);
                             System.out.println("¡Bienvenido " + usuNow.getNombrePila() + "!");
                             dentro = true;
@@ -57,7 +57,7 @@ public class App {
                         con1 = sc.nextLine();
                         System.out.println("Introduzca la contraseña de nuevo: ");
                         con2 = sc.nextLine();
-                        if (con1.equals(con2) && !personal.containsKey(usu)) {
+                        if (!personal.containsKey(usu) && con1.equals(con2) && comprobarContrasenhaRegistro(con1)) {
                             Usuario usuEntrada = new Usuario(usu, nomP, con1);
                             personal.put(usu, usuEntrada);
                             usuNow = usuEntrada;
@@ -106,12 +106,11 @@ public class App {
                         String desc = sc.nextLine();
                         System.out.print("Introduzca la fecha y hora límite de la tarea (dd/MM/yyyy HH:mm): ");
                         String fchlim = sc.nextLine();
-                        Tarea newTarea = new Tarea(tit, desc, fchlim);
-                        usuNow.getListaTareasP().add(newTarea);
+                        usuNow.añadirTareaP(tit, desc, fchlim);
                         break;
                     // Mostrar tareas pendientes
                     case "c":
-                        if (usuNow.getListaTareasP().size() == 0) {
+                        if (usuNow.sizeTareasP() == 0) {
                             System.out.println("No hay tareas pendientes.");
                         } else {
                             imprimirTareas(usuNow.getListaTareasP());
@@ -120,8 +119,8 @@ public class App {
                                 System.out.println("¿Qué tarea quieres ver?");
                                 int indice = sc.nextInt();
                                 sc.nextLine();
-                                if (indice > 0 && indice <= usuNow.getListaTareasP().size()) {
-                                    tareaEsc = usuNow.getListaTareasP().get(indice - 1);
+                                if (indice > 0 && indice <= usuNow.sizeTareasP()) {
+                                    tareaEsc = usuNow.escogerTarea(indice);
                                     select = false;
                                 } else {
                                     System.out.println("Introduzca un índice válido.");
@@ -135,7 +134,7 @@ public class App {
                         break;
                     // Marcar tarea como realizada.
                     case "d":
-                        if (usuNow.getListaTareasP().size() == 0) {
+                        if (usuNow.sizeTareasP() == 0) {
                             System.out.println("No hay tareas pendientes.");
                         } else {
                             imprimirTareas(usuNow.getListaTareasP());
@@ -144,9 +143,8 @@ public class App {
                                 System.out.println("¿Qué tarea quieres marcar como realizada?");
                                 int indice = sc.nextInt();
                                 sc.nextLine();
-                                if (indice > 0 && indice <= usuNow.getListaTareasP().size()) {
-                                    tareaEsc = usuNow.getListaTareasP().get(indice - 1);
-                                    tareaEsc.marcarTarea();
+                                if (indice > 0 && indice <= usuNow.sizeTareasP()) {
+                                    usuNow.marcarTUsuario(indice);
                                     select = false;
                                 } else {
                                     System.out.println("Introduzca un índice válido.");
@@ -156,7 +154,7 @@ public class App {
                         break;
                     // Mostrar tareas pendientes en las próximas 48 horas.
                     case "e":
-                        if (usuNow.getListaTareasP48().size() == 0) {
+                        if (usuNow.sizeTareasP48() == 0) {
                             System.out.println("No hay tareas pendientes en las próximas 48 horas.");
                         } else {
                             imprimirTareas(usuNow.getListaTareasP48());
@@ -164,7 +162,7 @@ public class App {
                         break;
                     // Mostrar tareas realizadas.
                     case "f":
-                        if (usuNow.getListaTareasM().size() == 0) {
+                        if (usuNow.sizeTareasM() == 0) {
                             System.out.println("No hay tareas realizadas.");
                         } else {
                             imprimirTareas(usuNow.getListaTareasM());
@@ -172,7 +170,7 @@ public class App {
                         break;
                     // Mostrar tareas pendientes fuera de entrega.
                     case "g":
-                        if (usuNow.getListaTareasPF().size() == 0) {
+                        if (usuNow.sizeTareasPF() == 0) {
                             System.out.println("No hay tareas pendientes fuera de entrega.");
                         } else {
                             imprimirTareas(usuNow.getListaTareasPF());
@@ -196,5 +194,19 @@ public class App {
         for (Tarea tarea : lista) {
             System.out.println(i + ": " + tarea.getTitulo());
         }
+    }
+
+    public static boolean comprobarContrasenhaRegistro(String con1) {
+        boolean valida = true;
+        for (char c : con1.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                valida = false;
+            } else if (Character.isLowerCase(c)) {
+                valida = false;
+            } else if (Character.isDigit(c)) {
+                valida = false;
+            }
+        }
+        return valida;
     }
 }
