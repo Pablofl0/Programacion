@@ -21,6 +21,7 @@ public class Usuario {
     public void marcarTUsuario(Tarea tarea) {
         this.listaTareasP.remove(tarea);
         this.listaTareasM.add(tarea);
+        tarea.marcarTarea();
     }
 
     public Tarea escogerTarea(int i) {
