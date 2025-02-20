@@ -17,7 +17,7 @@ public class App {
         // Creando tabla de muestra.
         int tmuestra[][] = new int[tamaño][tamaño];
         // Creando tabla auxiliar.
-        int taux[][] = new int[tamaño][tamaño];
+        // int taux[][] = new int[tamaño][tamaño];
 
         // Inicializando variables para el reparto de minas.
         Random random = new Random();
@@ -195,10 +195,12 @@ public class App {
 
             while (leer) {
                 leer = false;
+                enjuego = false;
                 for (int i = 0; i < tmuestra.length; i++) {
                     for (int j = 0; j < tmuestra.length; j++) {
                         if (tmuestra[j][i] == -3) {
                             tmuestra[j][i] = -5;
+                            tablero[j][i] = -5;
                             // Evitando la fila -1.
                             int k = i - 1;
                             int kmax = i + 2;
@@ -222,8 +224,7 @@ public class App {
                                     if (tablero[l][k] == -3) {
                                         leer = true;
                                         tmuestra[l][k] = tablero[l][k];
-                                    }
-                                    else{
+                                    } else {
                                         tmuestra[l][k] = tablero[l][k];
                                     }
                                     l++;
@@ -238,6 +239,7 @@ public class App {
 
             // Habilitando la petición al jugador.
             pedir = true;
+            enjuego = false;
 
             // Mostrando tablero.
             System.out.print("   ");
@@ -251,6 +253,10 @@ public class App {
                 for (int j = 0; j < tamaño; j++) {
                     if (tmuestra[j][i] == 0) {
                         System.out.print("-  ");
+                        // Comprobando si hay ganador.
+                        if (tablero[j][i] == -2) {
+                            enjuego = true;
+                        }
                     } else if (tmuestra[j][i] == -5) {
                         System.out.print("0  ");
                     } else if (tmuestra[j][i] == -2) {
