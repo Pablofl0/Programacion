@@ -16,22 +16,10 @@ public class App {
         int tablero[][] = new int[tamaño][tamaño];
         // Creando tabla de muestra.
         int tmuestra[][] = new int[tamaño][tamaño];
-        // Creando tabla auxiliar.
-        // int taux[][] = new int[tamaño][tamaño];
 
         // Inicializando variables para el reparto de minas.
         Random random = new Random();
         int minasPuestas = 0;
-
-        /*
-         * Mostrando tabla auxiliar.
-         * for (int index = 0; index < tablero.length; index++) {
-         * for (int i = 0; i < tablero.length; i++) {
-         * System.out.print(taux[i][index]);
-         * }
-         * System.out.println();
-         * }
-         */
 
         // Creando bucle de juego.
         boolean leer = false;
@@ -106,18 +94,9 @@ public class App {
                     }
                     System.out.println();
                 }
-                //
+
                 // Rellenando tablero por detrás y creando tablero auxiliar.
                 while (crear) {
-                    /*
-                     * Creando tabla auxiliar.
-                     * for (int i = 0; i < tablero.length; i++) {
-                     * for (int j = 0; j < tablero.length; j++) {
-                     * taux[j][i] = tablero[j][i];
-                     * }
-                     * }
-                     */
-
                     // Construyendo tablero de detrás con las minas y las bombas que tiene cada
                     // casilla alrededor.
                     for (int i = 0; i < tablero.length; i++) {
@@ -170,12 +149,14 @@ public class App {
                         tmuestra[columnaJugador][filaJugador] = tablero[columnaJugador][filaJugador];
                         ganar = false;
                         enjuego = false;
+                        leer = false;
                     }
                     // Revelas una casilla vacía(0), te indica cuantas bombas hay alrededor(3).
                     else if (tablero[columnaJugador][filaJugador] == -3) {
                         leer = true;
                         tmuestra[columnaJugador][filaJugador] = tablero[columnaJugador][filaJugador];
                     } else {
+                        leer = true;
                         tmuestra[columnaJugador][filaJugador] = tablero[columnaJugador][filaJugador];
                     }
                 }
@@ -193,6 +174,8 @@ public class App {
                 pedir = false;
             }
 
+            // Comprobando si ya no hay más huecos sin bomba por abrir y desvelando casillas
+            // en cadena.
             while (leer) {
                 leer = false;
                 enjuego = false;
@@ -233,13 +216,16 @@ public class App {
                                 k++;
                             }
                         }
+                        // Comprobando si hay ganador.
+                        if (tmuestra[j][i] == 0 && tablero[j][i] != -2) {
+                            enjuego = true;
+                        }
                     }
                 }
             }
 
             // Habilitando la petición al jugador.
             pedir = true;
-            enjuego = false;
 
             // Mostrando tablero.
             System.out.print("   ");
@@ -253,10 +239,6 @@ public class App {
                 for (int j = 0; j < tamaño; j++) {
                     if (tmuestra[j][i] == 0) {
                         System.out.print("-  ");
-                        // Comprobando si hay ganador.
-                        if (tablero[j][i] == -2) {
-                            enjuego = true;
-                        }
                     } else if (tmuestra[j][i] == -5) {
                         System.out.print("0  ");
                     } else if (tmuestra[j][i] == -2) {
@@ -269,15 +251,6 @@ public class App {
                 }
                 System.out.println();
             }
-            /*
-             * Mostrando tabla de "detrás".
-             * for (int index = 0; index < tablero.length; index++) {
-             * for (int i = 0; i < tablero.length; i++) {
-             * System.out.print(tablero[i][index]);
-             * }
-             * System.out.println();
-             * }
-             */
         }
 
         if (!ganar) {
