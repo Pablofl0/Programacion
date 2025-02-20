@@ -18,15 +18,9 @@ public class Usuario {
         this.listaTareasM = new ArrayList<Tarea>();
     }
 
-    public void marcarTUsuario(int i) {
-        escogerTarea(i).marcarTarea();
-        for (Tarea tarea : this.listaTareasP) {
-            if (!tarea.isPendiente()) {
-                Tarea auxiliar = tarea;
-                this.listaTareasP.remove(tarea);
-                this.listaTareasM.add(auxiliar);
-            }
-        }
+    public void marcarTUsuario(Tarea tarea) {
+        this.listaTareasP.remove(tarea);
+        this.listaTareasM.add(tarea);
     }
 
     public Tarea escogerTarea(int i) {
@@ -95,7 +89,7 @@ public class Usuario {
     public ArrayList<Tarea> getListaTareasP48() {
         ArrayList<Tarea> listaTareasP48 = new ArrayList<Tarea>();
         for (Tarea tarea : getListaTareasP()) {
-            if (tarea.getFechaLimite().until(LocalDateTime.now(), ChronoUnit.HOURS) <= 48 && tarea.getFechaLimite().until(LocalDateTime.now(), ChronoUnit.HOURS) >= -48) {
+            if (LocalDateTime.now().until(tarea.getFechaLimite(), ChronoUnit.HOURS) <= 48 && LocalDateTime.now().until(tarea.getFechaLimite(), ChronoUnit.HOURS) > 0) {
                 listaTareasP48.add(tarea);
             }
         }

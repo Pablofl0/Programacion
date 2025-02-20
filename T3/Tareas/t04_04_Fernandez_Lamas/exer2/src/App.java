@@ -142,9 +142,10 @@ public class App {
                             while (select) {
                                 System.out.println("¿Qué tarea quieres marcar como realizada?");
                                 int indice = sc.nextInt();
+                                Tarea tarea = usuNow.getListaTareasP().get(indice);
                                 sc.nextLine();
                                 if (indice > 0 && indice <= usuNow.sizeTareasP()) {
-                                    usuNow.marcarTUsuario(indice);
+                                    usuNow.marcarTUsuario(tarea);
                                     select = false;
                                 } else {
                                     System.out.println("Introduzca un índice válido.");
