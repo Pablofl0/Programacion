@@ -1,6 +1,6 @@
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -42,21 +42,28 @@ public class App {
             System.out.println(elemento);
         }
         System.out.println("-----------");
+        pilotos.sort(new OrdenarPilotos());
         for(Piloto elemento: pilotos ){
             System.out.println(elemento);
         }
         System.out.println("-----------");
+        Collections.sort(tenistas, new Comparator<Tenista>(){
+            public int compare(Tenista ob1, Tenista ob2) {
+                return ((ob1.getRanking()) - (ob2.getRanking()));
+            }
+        });
         for(Tenista elemento: tenistas ){
             System.out.println(elemento);
         }
         System.out.println("-----------");
+        pilotosCoches.sort(new OrdenarPilotos());
         for(PilotoF1 elemento: pilotosCoches ){
             System.out.println(elemento);
         }
         System.out.println("-----------");
+        pilotosMotos.sort(Collections.reverseOrder(new OrdenarPilotos()));
         for(PilotoMotoGP elemento: pilotosMotos ){
             System.out.println(elemento);
         }
-
     }
 }

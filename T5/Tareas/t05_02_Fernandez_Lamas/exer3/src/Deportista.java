@@ -33,6 +33,7 @@ public abstract class Deportista implements Comparable<Deportista>{
         return this.nomeDeportivo + " : " + this.getIdade() + " anos.";
     }
 
+    @Override
     public int compareTo(Deportista ob) {
         return this.getDataNacemento().compareTo(ob.getDataNacemento());
     }

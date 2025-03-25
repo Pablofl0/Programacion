@@ -1,4 +1,4 @@
-public abstract class Piloto extends Deportista {
+public abstract class Piloto extends Deportista{
     private String nomeEquipo;
 
     /**
@@ -23,6 +23,7 @@ public abstract class Piloto extends Deportista {
     public String toString(){
         return super.toString() + " Equipo: " + this.nomeEquipo + " Puntos: " + this.getPuntos() + ".";
     }
+
 
     public String getNomeEquipo() {
         return nomeEquipo;
