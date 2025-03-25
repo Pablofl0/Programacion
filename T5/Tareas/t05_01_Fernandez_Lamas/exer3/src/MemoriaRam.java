@@ -4,18 +4,18 @@ public class MemoriaRam extends Componente{
 
     
 
-    public MemoriaRam(String marca, String modelo, double precio, long memoriaBytesLong, long velocidadMemoriaHzLong) {
+    public MemoriaRam(String marca, String modelo, double precio, double velocidadMemoriaGz, double memoriaGB) {
         super(marca, modelo, precio);
-        this.memoriaBytesLong = memoriaBytesLong;
-        this.velocidadMemoriaHzLong = velocidadMemoriaHzLong;
+        this.memoriaBytesLong = gigaBytesToBytes(memoriaGB);
+        this.velocidadMemoriaHzLong = gigaHzToHz(velocidadMemoriaGz);
     }
 
-    public long getMemoriaBytesLong() {
-        return memoriaBytesLong;
+    public double getMemoriaBytesLong() {
+        return bytesToGigaBytes(memoriaBytesLong);
     }
 
-    public long getVelocidadMemoriaHzLong() {
-        return velocidadMemoriaHzLong;
+    public double getVelocidadMemoriaHzLong() {
+        return hzToMhz(velocidadMemoriaHzLong);
     }
 
     @Override
