@@ -27,22 +27,10 @@ public abstract class Producto {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+        Producto other = (Producto) obj;
+        if (this.marca.equals(other.marca)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Producto other = (Producto) obj;
-        if (Double.doubleToLongBits(this.precio) != Double.doubleToLongBits(other.precio)) {
-            return false;
-        }
-        if (!Objects.equals(this.marca, other.marca)) {
-            return false;
-        }
-        return Objects.equals(this.modelo, other.modelo);
+        return this.modelo.equals(other.modelo);
     }    
 }

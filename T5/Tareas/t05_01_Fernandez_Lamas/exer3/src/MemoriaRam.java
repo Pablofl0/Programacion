@@ -20,7 +20,7 @@ public class MemoriaRam extends Componente{
 
     @Override
     public String toString() {
-        return "Memoria RAM " + super.toString() + " con " + this.memoriaBytesLong + " GB y velocidad " + this.velocidadMemoriaHzLong + " MHz";
+        return "Memoria RAM " + super.toString() + " con " + this.getMemoriaBytesLong() + " GB y velocidad " + this.getVelocidadMemoriaHzLong() + " MHz";
     }
 
     
