@@ -5,14 +5,16 @@ import java.util.regex.Pattern;
 public abstract class Usuario {
     private String nombreUsuario;
     private String contrasenhaUsuario;
+    private TipoUsuario tipoUsuario;
 
 
     public Usuario() {
     }
 
-    public Usuario(String nombreUsuario, String contrasenhaUsuario) throws ExcepcionGeneral{
+    public Usuario(String nombreUsuario, String contrasenhaUsuario, int opcionUsuario) throws ExcepcionGeneral{
         this.setNombreUsuario(nombreUsuario);
         this.setContrasenhaUsuario(contrasenhaUsuario);
+        this.setTipoUsuario(opcionUsuario);
     }
 
 
@@ -50,5 +52,26 @@ public abstract class Usuario {
     public boolean coincideContrasenha(String contrasenha){
         return contrasenha.equals(this.contrasenhaUsuario);
     }
+
+    public TipoUsuario getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    private void setTipoUsuario(int opcionUsuario) {
+        switch (opcionUsuario) {
+            case 1:
+                this.tipoUsuario = TipoUsuario.Administrador;
+                break;
+            case 2:
+                this.tipoUsuario = TipoUsuario.Cliente;
+                break;
+        }
+    }
+
+    public boolean opcionTipoUsuarioValida(int opcionUsuario){
+        return (opcionUsuario > 0 && opcionUsuario < 3);
+    }
+
+    
     
 }

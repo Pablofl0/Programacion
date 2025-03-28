@@ -23,7 +23,7 @@ public class Flauta extends InstrumentoMusical {
         return pieDeSI;
     }
 
-    public void setPieDeSI(int opcionPieDeSI) {
+    private void setPieDeSI(int opcionPieDeSI) {
         if (opcionPieDeSI == 1) {
             this.pieDeSI = true;
         }
