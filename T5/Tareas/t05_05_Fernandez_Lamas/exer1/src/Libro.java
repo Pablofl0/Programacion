@@ -4,8 +4,8 @@ public class Libro extends Complemento{
     private String ISBN;
 
 
-    public Libro(int idProducto, double precio, int stock, String descripcion, String titulo, String autor, String ISBN) throws ExcepcionGeneral {
-        this.setIdProducto(idProducto);
+    public Libro(double precio, int stock, String descripcion, String titulo, String autor, String ISBN) throws ExcepcionGeneral {
+        this.setIdProducto();
         this.setPrecioSinIVE(precio);
         this.setPrecioConIVE();
         this.setStock(stock);
@@ -13,6 +13,7 @@ public class Libro extends Complemento{
         this.setTitulo(titulo);
         this.setAutor(autor);
         this.setISBN(ISBN);
+        this.setTipoProducto(TipoProducto.libro);
     }
 
     @Override

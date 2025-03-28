@@ -3,8 +3,8 @@ public class Trombon extends InstrumentoMusical {
 
     private boolean transpositor;
 
-    public Trombon(int idProducto, double precio, int stock, String descripcion, String marca, String modelo, int opcionTranspositor) throws ExcepcionGeneral {
-        this.setIdProducto(idProducto);
+    public Trombon(double precio, int stock, String descripcion, String marca, String modelo, boolean  opcionTranspositor) throws ExcepcionGeneral {
+        this.setIdProducto();
         this.setPrecioSinIVE(precio);
         this.setPrecioConIVE();
         this.setStock(stock);
@@ -12,6 +12,7 @@ public class Trombon extends InstrumentoMusical {
         this.setMarca(marca);
         this.setModelo(modelo);
         this.setTranspositor(opcionTranspositor);
+        this.setTipoProducto(TipoProducto.trombon);
     }
 
     @Override
@@ -23,17 +24,8 @@ public class Trombon extends InstrumentoMusical {
         return transpositor;
     }
 
-    public void setTranspositor(int opcionTranspositor) {
-        if (opcionTranspositor == 1) {
-            this.transpositor = true;
-        }
-        else if (opcionTranspositor == 2) {
-            this.transpositor = false;
-        }
-    }
-
-    public boolean opcionTranspositorValida(int opcionTranspositor){
-        return (opcionTranspositor > 0 && opcionTranspositor < 3);
+    public void setTranspositor(boolean  opcionTranspositor) {
+        this.transpositor = opcionTranspositor;
     }
 
 }

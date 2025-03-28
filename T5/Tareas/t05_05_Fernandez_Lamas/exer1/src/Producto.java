@@ -6,6 +6,7 @@ public abstract class Producto {
     private double precioSinIVE;
     private int stock;
     private String descripcion;
+    private TipoProducto tipoProducto;
 
     private final static double IVE = 21;
     private final static double IVEcalculado = 0.21;
@@ -26,7 +27,7 @@ public abstract class Producto {
         return idProducto;
     }
 
-    public void setIdProducto(int idProducto) {
+    public void setIdProducto() {
         this.idProducto = contadorID;
         contadorID++;
     }
@@ -68,5 +69,15 @@ public abstract class Producto {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public TipoProducto getTipoProducto() {
+        return tipoProducto;
+    }
+
+    public void setTipoProducto(TipoProducto tipoProducto) {
+        this.tipoProducto = tipoProducto;
+    }
+
+    
 
 }

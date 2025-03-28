@@ -11,10 +11,10 @@ public abstract class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nombreUsuario, String contrasenhaUsuario, int opcionUsuario) throws ExcepcionGeneral{
+    public Usuario(String nombreUsuario, String contrasenhaUsuario, TipoUsuario tipoUsuario) throws ExcepcionGeneral{
         this.setNombreUsuario(nombreUsuario);
         this.setContrasenhaUsuario(contrasenhaUsuario);
-        this.setTipoUsuario(opcionUsuario);
+        this.setTipoUsuario(tipoUsuario);
     }
 
 
@@ -57,16 +57,9 @@ public abstract class Usuario {
         return tipoUsuario;
     }
 
-    private void setTipoUsuario(int opcionUsuario) {
-        switch (opcionUsuario) {
-            case 1:
-                this.tipoUsuario = TipoUsuario.Administrador;
-                break;
-            case 2:
-                this.tipoUsuario = TipoUsuario.Cliente;
-                break;
-        }
-    }
+    public void setTipoUsuario(TipoUsuario tipoUsuario){
+        this.tipoUsuario = tipoUsuario;
+    };
 
     public boolean opcionTipoUsuarioValida(int opcionUsuario){
         return (opcionUsuario > 0 && opcionUsuario < 3);

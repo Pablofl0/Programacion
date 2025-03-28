@@ -3,8 +3,8 @@ public class Flauta extends InstrumentoMusical {
 
     private boolean pieDeSI;
 
-    public Flauta(int idProducto, double precio, int stock, String descripcion, String marca, String modelo, int opcionPieDeSI) throws ExcepcionGeneral {
-        this.setIdProducto(idProducto);
+    public Flauta(double precio, int stock, String descripcion, String marca, String modelo, boolean  opcionPieDeSI) throws ExcepcionGeneral {
+        this.setIdProducto();
         this.setPrecioSinIVE(precio);
         this.setPrecioConIVE();
         this.setStock(stock);
@@ -12,6 +12,7 @@ public class Flauta extends InstrumentoMusical {
         this.setMarca(marca);
         this.setModelo(modelo);
         this.setPieDeSI(opcionPieDeSI);
+        this.setTipoProducto(TipoProducto.flauta);
     }
 
     @Override
@@ -23,17 +24,8 @@ public class Flauta extends InstrumentoMusical {
         return pieDeSI;
     }
 
-    private void setPieDeSI(int opcionPieDeSI) {
-        if (opcionPieDeSI == 1) {
-            this.pieDeSI = true;
-        }
-        else if (opcionPieDeSI == 2) {
-            this.pieDeSI = false;
-        }
-    }
-
-    public boolean opcionPieDeSIValida(int opcionPieDeSI){
-        return (opcionPieDeSI > 0 && opcionPieDeSI < 3);
+    private void setPieDeSI(boolean  opcionPieDeSI) {
+        this.pieDeSI = opcionPieDeSI;
     }
 
 }

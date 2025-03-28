@@ -11,10 +11,24 @@ public class GestionUsuarios {
         usuarios = new HashMap<>();
     }
 
-    public void engadirUsuario(String nombreUsuario, String contrasenhaUsuario){
+    //Añade el usuario, sea cliente o admin, a la tabla de usuarios.
+    public void anhadirUsuario(Usuario newUsuario){
+        usuarios.put(newUsuario.getNombreUsuario(), newUsuario);
+    }
+
+    public void anhadirCliente(String nombreUsuario, String contrasenhaUsuario){
         try {
-            Usuario newUsuario = new Cliente(nombreUsuario, contrasenhaUsuario);
-            usuarios.put(nombreUsuario, newUsuario);
+            Usuario newCliente = new Cliente(nombreUsuario, contrasenhaUsuario);
+            usuarios.put(nombreUsuario, newCliente);
+        } catch (ExcepcionGeneral e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void anhadirAdministrador(String nombreUsuario, String contrasenhaUsuario){
+        try {
+            Usuario newAdmin = new Administrador(nombreUsuario, contrasenhaUsuario);
+            usuarios.put(nombreUsuario, newAdmin);
         } catch (ExcepcionGeneral e) {
             System.out.println(e.getMessage());
         }
