@@ -21,18 +21,24 @@ public class GestionProductos {
         productos.put(newProducto.getIdProducto(), newProducto);
     }
 
-    // public void anhadirProducto(String nombreUsuario, String contrasenhaUsuario) {
-    //     try {
-    //         Usuario newUsuario = new Cliente(nombreUsuario, contrasenhaUsuario);
-    //         usuarios.put(nombreUsuario, newUsuario);
-    //     } catch (ExcepcionGeneral e) {
-    //         System.out.println(e.getMessage());
-    //     }
-    // }
+    public static Producto verProductoSegunID(int idProducto) throws ExcepcionGeneral{
+        if (!productos.keySet().contains(idProducto)) {
+            throw new ExcepcionGeneral("Identificador único no válido.");
+        }
+        return productos.get(idProducto);
+    }
 
-    // public boolean existeUsuarioRegistrado(String nombre, String contrasenha) {
-    //     return (usuarios.containsKey(nombre) && usuarios.get(nombre).coincideContrasenha(contrasenha));
-    // }
+    public static void anhadirStockAUnProducto(int idProducto, int newStock) throws ExcepcionGeneral{
+        verProductoSegunID(idProducto).anhadirStock(newStock);
+    }
+
+    public static void eliminarStockDeUnProducto(int idProducto, int stockAEliminar) throws ExcepcionGeneral{
+        verProductoSegunID(idProducto).eliminarStock(stockAEliminar);
+    }
+
+    public static void comprarUnaUnidadDeUnProducto(int idProducto) throws ExcepcionGeneral{
+        verProductoSegunID(idProducto).comprarUnaUnidad();
+    }
 
     public Set<Integer> obtenerIdProductos() {
         return productos.keySet();

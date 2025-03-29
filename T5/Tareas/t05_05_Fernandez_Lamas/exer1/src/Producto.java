@@ -62,6 +62,24 @@ public abstract class Producto {
         this.stock = stock;
     }
 
+    public void anhadirStock(int stock) {
+        this.stock += stock;
+    }
+
+    public void eliminarStock(int stock) throws ExcepcionGeneral{
+        if (this.stock < stock) {
+            throw new ExcepcionGeneral("Error. Cantidad a eliminar superior al stock actual.");
+        }
+        this.stock -= stock;
+    }
+
+    public void comprarUnaUnidad() throws ExcepcionGeneral{
+        if (this.stock == 0) {
+            throw new ExcepcionGeneral("No queda stock del producto seleccionado.");
+        }
+        this.stock -= 1;
+    }
+
     public String getDescripcion() {
         return descripcion;
     }

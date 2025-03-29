@@ -54,6 +54,9 @@ public class MenuVerProductos extends Menu {
                     ArrayList<Producto> listaEstuches = GestionProductos.getEstuches();
                     printList(listaEstuches);
                     break;
+                case "s":
+                    eligiendoQueVer = false;
+                    break;
                 default:
                     printMessage("Opción no válida.");
             }

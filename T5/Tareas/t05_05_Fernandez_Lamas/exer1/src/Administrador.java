@@ -1,11 +1,8 @@
 public class Administrador extends Usuario{
 
 
-    public Administrador(String nombreUsuario, String contrasenhaUsuario) throws ExcepcionGeneral{
-        super(nombreUsuario, contrasenhaUsuario, TipoUsuario.Administrador);
+    public Administrador(String nombreUsuario, String contrasenhaUsuario, String contrasenhaUsuarioConfirmación) throws ExcepcionGeneral{
+        super(nombreUsuario, contrasenhaUsuario, contrasenhaUsuarioConfirmación, TipoUsuario.Administrador);
     }
-    
-    public void anhadirProducto(){
-    
-    }
+
 }
