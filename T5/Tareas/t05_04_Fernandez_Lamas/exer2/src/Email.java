@@ -26,9 +26,9 @@ public class Email {
     public String getDominio(String correo){
         Pattern pattern = Pattern.compile("^([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\\.[A-Za-z]{2,6})$");
         Matcher matcherDominio = pattern.matcher(correo);
-        String dominio = matcherDominio.group(2);
-        if (!matcherDominio.find()) {
-            throw new IllegalStateException();
+        String dominio = null;
+        if (matcherDominio.matches()) {
+            dominio = matcherDominio.group(2);
         }
         // String dominio = correo.substring(correo.indexOf("@") + 1);
         return dominio;
@@ -37,10 +37,17 @@ public class Email {
     public String getConta(String correo){
         Pattern pattern = Pattern.compile("^([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\\.[A-Za-z]{2,6})$");
         Matcher matcherConta = pattern.matcher(correo);
-        String conta = matcherConta.group(1);
+        String conta = null;
+        if (matcherConta.matches()) {
+            conta = matcherConta.group(1);
+        } 
         return conta;
     }
 
+
+    public String getMessageError(String correo){
+        return ("Esta cadena no es un correo: " + correo + ".");
+    }
     // public String getConta(String correo){
     //     String conta = correo.substring(0, correo.indexOf("@"));
     //     return conta;
@@ -48,7 +55,7 @@ public class Email {
 
     public void setCorreo(String correo) throws ExcepcionEmailInvalido{
         if (!comprobarEmail(correo)) {
-            throw new ExcepcionEmailInvalido("El email no es válido.");
+            throw new ExcepcionEmailInvalido(getMessageError(correo));
         }
         this.correo = correo;
     }

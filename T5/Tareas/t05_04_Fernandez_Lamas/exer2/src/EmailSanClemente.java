@@ -16,4 +16,9 @@ public class EmailSanClemente extends Email{
         }
         return false;
     }
+
+    @Override
+    public String getMessageError(String correo){
+        return ("Esta cadena no es un correo de San Clemente: " + correo + ".");
+    }
 }
