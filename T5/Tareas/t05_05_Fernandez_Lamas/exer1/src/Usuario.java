@@ -44,9 +44,14 @@ public abstract class Usuario {
     }
 
     private boolean contrasenhaValida(String contrasenhaUsuario) {
-        Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$");
-        Matcher matcher = pattern.matcher(contrasenhaUsuario);
-        return matcher.matches();
+        // Expresión regular para validar la contraseña
+        String regex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z0-9]{8,}$";
+
+        // Verificar si la contraseña coincide con el patrón
+        return Pattern.matches(regex, contrasenhaUsuario);
+        // Pattern pattern = Pattern.compile("(?=.*[a-z])(?=.*[A-Z])(?=.*0-9)[a-zA-Z0-9]{8,}");
+        // Matcher matcher = pattern.matcher(contrasenhaUsuario);
+        // return matcher.matches();
     }
 
     private static boolean coincidenCon1YCon2(String con1, String con2) {

@@ -3,11 +3,13 @@ public class MenuPrincipal extends Menu {
 
     @Override
     public void mostrar() {
+        printMessage("¡Bienvenido!");
+
         //Eligiendo qué acción tomar.
         boolean eligiendoQueHacer = true;
 
         while (eligiendoQueHacer) {
-            printMessage("¡Bienvenido!");
+            printMessage("¿Qué acción quieres realizar?");
             printMessage("a) Registrarse.");
             printMessage("b) Iniciar sesión.");
             printMessage("s) Salir.");

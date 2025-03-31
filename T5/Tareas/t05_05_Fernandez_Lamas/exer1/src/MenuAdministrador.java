@@ -28,7 +28,7 @@ public class MenuAdministrador extends Menu {
                     printMessage("Viendo información de un producto.");
                     int idProductoAVer = this.getInt("Introduce el identificador del producto: ");
                     try {
-                        GestionProductos.verProductoSegunID(idProductoAVer);
+                        System.out.println(GestionProductos.verProductoSegunID(idProductoAVer));
                     } catch (ExcepcionGeneral e) {
                         System.out.println(e.getMessage());
                     }

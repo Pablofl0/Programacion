@@ -7,7 +7,7 @@ public class MenuCliente extends Menu{
         boolean eligiendoQueHacer = true;
 
         while (eligiendoQueHacer) {
-            printMessage("¿Qué quiere hacer el administrador?");
+            printMessage("¿Qué desea hacer el cliente?");
             printMessage("a) Ver productos.");
             printMessage("b) Comprar una unidad de un producto.");
             printMessage("s) Salir.");

@@ -37,7 +37,7 @@ public class MenuAnhadirProducto extends Menu {
                                 String marca = this.getString("Introduce la marca: ");
                                 String modelo = this.getString("Introduce el modelo: ");
                                 printMessage("¿Tiene pie de Si?");
-                                int opcionPieDeSI = this.getInt("1. Sí.\n2. No.");
+                                int opcionPieDeSI = this.getInt("1. Sí.\n2. No.\n");
                                 boolean booleanPieDeSi = false;
                                 switch (opcionPieDeSI) {
                                     case 1:
