@@ -1,7 +1,8 @@
 package Vista;
 
 import Controlador.GestionGeneral;
-import Excepciones.ExcepcionGeneral;
+import Excepciones.ExcepcionEliminarStockDeMas;
+import Excepciones.ExcepcionIdNoValido;
 
 public class MenuAdministrador extends Menu {
 
@@ -32,8 +33,8 @@ public class MenuAdministrador extends Menu {
                     int idProductoAVer = this.getInt("Introduce el identificador del producto: ");
                     try {
                         System.out.println(GestionGeneral.getInstance().verProductoSegunID(idProductoAVer));
-                    } catch (ExcepcionGeneral e) {
-                        System.out.println(e.getMessage());
+                    } catch (ExcepcionIdNoValido e) {
+                        printMessage(e.getMessage());;
                     }
                     break;
                 case "d":
@@ -45,9 +46,9 @@ public class MenuAdministrador extends Menu {
                     }
                     try {
                         GestionGeneral.getInstance().anhadirStockAUnProducto(idProductoAnhadirStock, stockAAnhadir);
-                    } catch (ExcepcionGeneral e) {
-                        System.out.println(e.getMessage());
-                    }
+                    } catch (ExcepcionIdNoValido e) {
+                        printMessage(e.getMessage());
+                    } 
                     break;
                 case "e":
                     printMessage("Eliminando stock de un producto.");
@@ -55,8 +56,10 @@ public class MenuAdministrador extends Menu {
                     int cantidadStockAEliminar = this.getInt("Introduce la cantidad de stock a eliminar: ");
                     try {
                         GestionGeneral.getInstance().eliminarStockDeUnProducto(idProductoEliminarStock, cantidadStockAEliminar);
-                    } catch (ExcepcionGeneral e) {
-                        System.out.println(e.getMessage());
+                    } catch (ExcepcionIdNoValido e) {
+                        printMessage(e.getMessage());
+                    } catch (ExcepcionEliminarStockDeMas e) {
+                        printMessage(e.getMessage());
                     }
                     break;
                 case "s":

@@ -1,24 +1,27 @@
 package Controlador;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.Set;
-
+import Excepciones.ExcepcionComprarProductoSinStock;
+import Excepciones.ExcepcionEliminarStockDeMas;
 import Excepciones.ExcepcionGeneral;
+import Excepciones.ExcepcionIdNoValido;
+import Excepciones.ExcepcionRegistroUsuario;
 import Modelos.Administrador;
 import Modelos.Cliente;
 import Modelos.Producto;
 import Modelos.TipoProducto;
 import Modelos.TipoUsuario;
 import Modelos.Usuario;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.Set;
 
 public class GestionGeneral {
 
     private static GestionGeneral INSTANCE; // Singleton
 
     private HashMap<String, Usuario> usuarios = new HashMap<>();
-    private HashMap<Integer, Producto> productos;
+    private HashMap<Integer, Producto> productos = new HashMap<>();
 
     private GestionGeneral() {
         usuarios = new HashMap<>();
@@ -29,19 +32,19 @@ public class GestionGeneral {
         this.usuarios.put(newUsuario.getNombreUsuario(), newUsuario);
     }
 
-    public void anhadirCliente(String nombreUsuario, String contrasenhaUsuario) throws ExcepcionGeneral{
+    public void anhadirCliente(String nombreUsuario, String contrasenhaUsuario) throws ExcepcionRegistroUsuario,ExcepcionGeneral{
         if (existeNombreUsuario(nombreUsuario)) {
-            throw new ExcepcionGeneral("El nombre de usuario ya existe.");
+            throw new ExcepcionRegistroUsuario();
         }
         Cliente newCliente = new Cliente(nombreUsuario, contrasenhaUsuario);
-        usuarios.put(nombreUsuario, newCliente);
+        this.usuarios.put(nombreUsuario, newCliente);
     }
-    public void anhadirAdministrador(String nombreUsuario, String contrasenhaUsuario) throws ExcepcionGeneral{
+    public void anhadirAdministrador(String nombreUsuario, String contrasenhaUsuario) throws ExcepcionRegistroUsuario,ExcepcionGeneral{
         if (existeNombreUsuario(nombreUsuario)) {
-            throw new ExcepcionGeneral("El nombre de usuario ya existe.");
+            throw new ExcepcionRegistroUsuario();
         }
         Administrador newAdmin = new Administrador(nombreUsuario, contrasenhaUsuario);
-        usuarios.put(nombreUsuario, newAdmin);
+        this.usuarios.put(nombreUsuario, newAdmin);
     }
     
     public void InicioDeSesionValido(String nombre, String contrasenha) throws ExcepcionGeneral {
@@ -85,7 +88,7 @@ public class GestionGeneral {
     }
 
     public Set<String> obtenerNombreUsuarios() {
-        return usuarios.keySet();
+        return this.usuarios.keySet();
     }
 
     public Optional<Usuario> obterUsuarioPorNome(String nombre) {
@@ -101,27 +104,27 @@ public class GestionGeneral {
         this.productos.put(newProducto.getIdProducto(), newProducto);
     }
 
-    public Producto verProductoSegunID(int idProducto) throws ExcepcionGeneral{
+    public Producto verProductoSegunID(int idProducto) throws ExcepcionIdNoValido{
         if (!this.productos.keySet().contains(idProducto)) {
-            throw new ExcepcionGeneral("Identificador único no válido.");
+            throw new ExcepcionIdNoValido();
         }
         return this.productos.get(idProducto);
     }
 
-    public void anhadirStockAUnProducto(int idProducto, int newStock) throws ExcepcionGeneral{
+    public void anhadirStockAUnProducto(int idProducto, int newStock) throws ExcepcionIdNoValido{
         verProductoSegunID(idProducto).anhadirStock(newStock);
     }
 
-    public void eliminarStockDeUnProducto(int idProducto, int stockAEliminar) throws ExcepcionGeneral{
+    public void eliminarStockDeUnProducto(int idProducto, int stockAEliminar) throws ExcepcionEliminarStockDeMas,ExcepcionIdNoValido{
         verProductoSegunID(idProducto).eliminarStock(stockAEliminar);
     }
 
-    public void comprarUnaUnidadDeUnProducto(int idProducto) throws ExcepcionGeneral{
+    public void comprarUnaUnidadDeUnProducto(int idProducto) throws ExcepcionComprarProductoSinStock,ExcepcionIdNoValido{
         verProductoSegunID(idProducto).comprarUnaUnidad();
     }
 
     public Set<Integer> obtenerIdProductos() {
-        return productos.keySet();
+        return this.productos.keySet();
     }
 
     public ArrayList<Producto> getProductos(){

@@ -2,6 +2,7 @@ package Vista;
 
 import Controlador.GestionGeneral;
 import Excepciones.ExcepcionGeneral;
+import Excepciones.ExcepcionRegistroUsuario;
 import Modelos.TipoUsuario;
 
 public class MenuPrincipal extends Menu {
@@ -20,40 +21,60 @@ public class MenuPrincipal extends Menu {
             printMessage("s) Salir.");
             String opcionHacer = this.getString("> ");
 
-            
             switch (opcionHacer) {
                 case "a":
-                    
                     printMessage("Registro.");
-                    String nombreUsuarioRegistro = this.getString("Introduce el nombre de usuario: ");
-                    String contrasenhaUsuarioRegistro = this.getString("Introduce la contrasenha: ");
-                    String contrasenhaUsuarioRegistroConfirmacion = this
-                            .getString("Introduce nuevamente la contraseña: ");
+                    boolean registroNombre = true;
+                    boolean registroContrasenhas = true;
+                    String nombreUsuarioRegistro = null;
+                    String contrasenhaUsuarioRegistro = null;
+                    String contrasenhaUsuarioRegistroConfirmacion = null;
+                    while (registroNombre) {
+                        nombreUsuarioRegistro = this.getString("Introduce el nombre de usuario: ");
+                        if (GestionGeneral.getInstance().existeNombreUsuario(nombreUsuarioRegistro)) {
+                            printMessage("El nombre de usuario ya está siendo utilizado.");
+                        } else {
+                            registroNombre = false;
+                        }
+                    }
+                    while (registroContrasenhas) {
+                        contrasenhaUsuarioRegistro = this.getString("Introduce la contrasenha: ");
+                        contrasenhaUsuarioRegistroConfirmacion = this
+                                .getString("Introduce nuevamente la contraseña: ");
+                        if (!GestionGeneral.getInstance().coincidenCon1YCon2(contrasenhaUsuarioRegistro, contrasenhaUsuarioRegistroConfirmacion)) {
+                            printMessage("Las contraseñas no coincide.");
+                        }
+                        else{
+                            registroContrasenhas = false;
+                        }
+                    }
                     printMessage("¿Rol?\n1. Administrador.\n2. Cliente.");
-                    int opcionUsuario = 0; 
+                    int opcionUsuario = 0;
                     opcionUsuario = this.getInt(">");
                     while (opcionUsuario < 1 || opcionUsuario > 2) {
                         opcionUsuario = this.getInt(">");
                     }
-                    if (GestionGeneral.getInstance().existeNombreUsuario(nombreUsuarioRegistro)|| !GestionGeneral.getInstance().coincidenCon1YCon2(contrasenhaUsuarioRegistro,contrasenhaUsuarioRegistroConfirmacion)) {
-                        printMessage("Credenciales no válidas.");
-                    }
-                    
+                    // if (GestionGeneral.getInstance().existeNombreUsuario(nombreUsuarioRegistro) || !GestionGeneral.getInstance().coincidenCon1YCon2(contrasenhaUsuarioRegistro, contrasenhaUsuarioRegistroConfirmacion)) {
+                    //     printMessage("Credenciales no válidas.");
+                    // }
+
                     try {
                         switch (opcionUsuario) {
                             case 1:
-                                GestionGeneral.getInstance().anhadirAdministrador(nombreUsuarioRegistro, contrasenhaUsuarioRegistroConfirmacion);
+                                GestionGeneral.getInstance().anhadirAdministrador(nombreUsuarioRegistro, contrasenhaUsuarioRegistro);
                                 new MenuAdministrador().mostrar();
                                 break;
                             case 2:
-                                GestionGeneral.getInstance().anhadirCliente(nombreUsuarioRegistro, contrasenhaUsuarioRegistroConfirmacion);
+                                GestionGeneral.getInstance().anhadirCliente(nombreUsuarioRegistro, contrasenhaUsuarioRegistro);
                                 new MenuCliente().mostrar();
                                 break;
                             default:
                                 printMessage("Elige un rol válido.");
                         }
                     } catch (ExcepcionGeneral e) {
-                        System.out.println(e.getMessage());
+                        printMessage(e.getMessage());
+                    } catch (ExcepcionRegistroUsuario e) {
+                        printMessage(e.getMessage());
                     }
                     break;
                 case "b":
@@ -74,8 +95,8 @@ public class MenuPrincipal extends Menu {
                                 throw new AssertionError();
                         }
                     } catch (ExcepcionGeneral e) {
-                        System.out.println(e.getMessage());
-                    }
+                        printMessage(e.getMessage());
+                    } 
                     break;
                 case "s":
                     eligiendoQueHacer = false;

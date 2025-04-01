@@ -1,7 +1,8 @@
 package Vista;
 
 import Controlador.GestionGeneral;
-import Excepciones.ExcepcionGeneral;
+import Excepciones.ExcepcionComprarProductoSinStock;
+import Excepciones.ExcepcionIdNoValido;
 
 public class MenuCliente extends Menu{
 
@@ -26,8 +27,10 @@ public class MenuCliente extends Menu{
                     int idProductoAComprar = this.getInt("Introduce el identificador del producto: ");
                     try {
                         GestionGeneral.getInstance().comprarUnaUnidadDeUnProducto(idProductoAComprar);
-                    } catch (ExcepcionGeneral e) {
-                        System.out.println(e.getMessage());
+                    } catch (ExcepcionIdNoValido e) {
+                        printMessage(e.getMessage());
+                    } catch (ExcepcionComprarProductoSinStock e) {
+                        printMessage(e.getMessage());
                     }
                     break;
                 case "s":
