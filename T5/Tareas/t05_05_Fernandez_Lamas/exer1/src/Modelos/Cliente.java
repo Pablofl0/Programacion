@@ -1,10 +1,10 @@
+package Modelos;
 import Excepciones.ExcepcionGeneral;
 
-package Modelos;
 public class Cliente extends Usuario{
     
 
-    public Cliente(String nombreUsuario, String contrasenhaUsuario, String contrasenhaUsuarioConfirmacion) throws ExcepcionGeneral{
-        super(nombreUsuario, contrasenhaUsuario, contrasenhaUsuarioConfirmacion, TipoUsuario.Cliente);
+    public Cliente(String nombreUsuario, String contrasenhaUsuario) throws ExcepcionGeneral{
+        super(nombreUsuario, contrasenhaUsuario, TipoUsuario.Cliente);
     }
 }

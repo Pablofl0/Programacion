@@ -1,3 +1,5 @@
+package Vista;
+import Controlador.GestionGeneral;
 import Modelos.Estuche;
 import Modelos.Flauta;
 import Modelos.Libro;
@@ -5,6 +7,9 @@ import Modelos.Saxofon;
 import Modelos.TipoInstrumento;
 import Modelos.TipoSaxo;
 import Modelos.Trombon;
+import Excepciones.ExcepcionISBNNoValido;
+import Excepciones.ExcepcionPrecioNegativo;
+import Excepciones.ExcepcionStockNegativo;
 
 public class MenuAnhadirProducto extends Menu {
 
@@ -59,9 +64,11 @@ public class MenuAnhadirProducto extends Menu {
                                 }
                                 try {
                                     Flauta newFlauta = new Flauta(precio, stock, descripcion, marca, modelo, booleanPieDeSi);
-                                    GestionProductos.anhadirProducto(newFlauta);
-                                } catch (ExcepcionGeneral e) {
-                                    System.out.println(e.getMessage());
+                                    GestionGeneral.getInstance().anhadirProducto(newFlauta);
+                                } catch (ExcepcionPrecioNegativo e) {
+                                    printMessage(e.getMessage());
+                                } catch (ExcepcionStockNegativo e) {
+                                    printMessage(e.getMessage());
                                 }
                                 break;
                             }
@@ -94,9 +101,11 @@ public class MenuAnhadirProducto extends Menu {
                                 }
                                 try {
                                     Saxofon newSaxo = new Saxofon(precio, stock, descripcion, marca, modelo, tipoSaxo);
-                                    GestionProductos.anhadirProducto(newSaxo);
-                                } catch (ExcepcionGeneral e) {
-                                    System.out.println(e.getMessage());
+                                    GestionGeneral.getInstance().anhadirProducto(newSaxo);
+                                } catch (ExcepcionPrecioNegativo e) {
+                                    printMessage(e.getMessage());
+                                } catch (ExcepcionStockNegativo e) {
+                                    printMessage(e.getMessage());
                                 }
                                 break;
                             }
@@ -123,9 +132,11 @@ public class MenuAnhadirProducto extends Menu {
                                 }
                                 try {
                                     Trombon newTrombon = new Trombon(precio, stock, descripcion, marca, modelo, booleanTranspositor);
-                                    GestionProductos.anhadirProducto(newTrombon);
-                                } catch (ExcepcionGeneral e) {
-                                    System.out.println(e.getMessage());
+                                    GestionGeneral.getInstance().anhadirProducto(newTrombon);
+                                } catch (ExcepcionPrecioNegativo e) {
+                                    printMessage(e.getMessage());
+                                } catch (ExcepcionStockNegativo e) {
+                                    printMessage(e.getMessage());
                                 }
                                 break;
                             }
@@ -164,10 +175,14 @@ public class MenuAnhadirProducto extends Menu {
                                 String isbn = this.getString("Introduce el ISBN: ");
                                 try {
                                     Libro newLibro = new Libro(precio, stock, descripcion, titulo, autor, isbn);
-                                    GestionProductos.anhadirProducto(newLibro);
-                                } catch (ExcepcionGeneral e) {
-                                    System.out.println(e.getMessage());
-                                }
+                                    GestionGeneral.getInstance().anhadirProducto(newLibro);
+                                } catch (ExcepcionPrecioNegativo e) {
+                                    printMessage(e.getMessage());
+                                } catch (ExcepcionStockNegativo e) {
+                                    printMessage(e.getMessage());
+                                } catch (ExcepcionISBNNoValido e) {
+                                    printMessage(e.getMessage());
+                                } 
                                 break;
                             }
                             case "b" -> {
@@ -195,10 +210,12 @@ public class MenuAnhadirProducto extends Menu {
                                 }
                                 try {
                                     Estuche newEstuche = new Estuche(precio, stock, descripcion, marca, tipoInstrumento);
-                                    GestionProductos.anhadirProducto(newEstuche);
-                                } catch (ExcepcionGeneral e) {
-                                    System.out.println(e.getMessage());
-                                }
+                                    GestionGeneral.getInstance().anhadirProducto(newEstuche);
+                                } catch (ExcepcionPrecioNegativo e) {
+                                    printMessage(e.getMessage());
+                                } catch (ExcepcionStockNegativo e) {
+                                    printMessage(e.getMessage());
+                                } 
                                 break;
                             }
                             case "s" -> {

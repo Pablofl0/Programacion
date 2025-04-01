@@ -1,6 +1,7 @@
-
+package Vista;
 import java.util.ArrayList;
 
+import Controlador.GestionGeneral;
 import Modelos.Producto;
 
 public class MenuVerProductos extends Menu {
@@ -25,35 +26,35 @@ public class MenuVerProductos extends Menu {
 
             switch (opcionVer) {
                 case "a":
-                    ArrayList<Producto> lista = GestionProductos.getProductos();
+                    ArrayList<Producto> lista = GestionGeneral.getInstance().getProductos();
                     printList(lista);
                     break;
                 case "b":
-                    ArrayList<Producto> listaInstrumentos = GestionProductos.getInstrumentos();
+                    ArrayList<Producto> listaInstrumentos = GestionGeneral.getInstance().getInstrumentos();
                     printList(listaInstrumentos);
                     break;
                 case "c":
-                    ArrayList<Producto> listaComplementos = GestionProductos.getComplementos();
+                    ArrayList<Producto> listaComplementos = GestionGeneral.getInstance().getComplementos();
                     printList(listaComplementos);
                     break;
                 case "d":
-                    ArrayList<Producto> listaFlautas = GestionProductos.getFlautas();
+                    ArrayList<Producto> listaFlautas = GestionGeneral.getInstance().getFlautas();
                     printList(listaFlautas);
                     break;
                 case "e":
-                    ArrayList<Producto> listaSaxofones = GestionProductos.getSaxofones();
+                    ArrayList<Producto> listaSaxofones = GestionGeneral.getInstance().getSaxofones();
                     printList(listaSaxofones);
                     break;
                 case "f":
-                    ArrayList<Producto> listaTrombones = GestionProductos.getTrombones();
+                    ArrayList<Producto> listaTrombones = GestionGeneral.getInstance().getTrombones();
                     printList(listaTrombones);
                     break;
                 case "g":
-                    ArrayList<Producto> listaLibros = GestionProductos.getLibros();
+                    ArrayList<Producto> listaLibros = GestionGeneral.getInstance().getLibros();
                     printList(listaLibros);
                     break;
                 case "h":
-                    ArrayList<Producto> listaEstuches = GestionProductos.getEstuches();
+                    ArrayList<Producto> listaEstuches = GestionGeneral.getInstance().getEstuches();
                     printList(listaEstuches);
                     break;
                 case "s":

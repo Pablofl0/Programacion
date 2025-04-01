@@ -1,16 +1,14 @@
-import Excepciones.ExcepcionGeneral;
-
 package Modelos;
+import Excepciones.ExcepcionPrecioNegativo;
+import Excepciones.ExcepcionStockNegativo;
+
+
 public class Estuche extends Complemento{
     private String marca;
     private TipoInstrumento instrumento;
 
-    public Estuche(double precio, int stock, String descripcion, String marca, TipoInstrumento instrumento) throws ExcepcionGeneral {
-        this.setIdProducto();
-        this.setPrecioSinIVE(precio);
-        this.setPrecioConIVE();
-        this.setStock(stock);
-        this.setDescripcion(descripcion);
+    public Estuche(double precio, int stock, String descripcion, String marca, TipoInstrumento instrumento) throws ExcepcionStockNegativo,ExcepcionPrecioNegativo {
+        super(precio, stock, descripcion);
         this.setMarca(marca);
         this.setInstrumento(instrumento);
         this.setTipoProducto(TipoProducto.estuche);

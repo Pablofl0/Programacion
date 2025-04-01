@@ -1,18 +1,16 @@
-import Excepciones.ExcepcionGeneral;
-
 package Modelos;
+import Excepciones.ExcepcionISBNNoValido;
+import Excepciones.ExcepcionPrecioNegativo;
+import Excepciones.ExcepcionStockNegativo;
+
 public class Libro extends Complemento{
     private String titulo;
     private String autor;
     private String ISBN;
 
 
-    public Libro(double precio, int stock, String descripcion, String titulo, String autor, String ISBN) throws ExcepcionGeneral {
-        this.setIdProducto();
-        this.setPrecioSinIVE(precio);
-        this.setPrecioConIVE();
-        this.setStock(stock);
-        this.setDescripcion(descripcion);
+    public Libro(double precio, int stock, String descripcion, String titulo, String autor, String ISBN) throws ExcepcionStockNegativo,ExcepcionPrecioNegativo,ExcepcionISBNNoValido {
+        super(precio,stock,descripcion);
         this.setTitulo(titulo);
         this.setAutor(autor);
         this.setISBN(ISBN);
@@ -44,9 +42,9 @@ public class Libro extends Complemento{
         return ISBN;
     }
 
-    private void setISBN(String ISBN) throws ExcepcionGeneral{
+    private void setISBN(String ISBN) throws ExcepcionISBNNoValido{
         if (!ISBNValido(ISBN)) {
-            throw new ExcepcionGeneral("ISBN no válido.");
+            throw new ExcepcionISBNNoValido();
         }
         this.ISBN = ISBN;
     }

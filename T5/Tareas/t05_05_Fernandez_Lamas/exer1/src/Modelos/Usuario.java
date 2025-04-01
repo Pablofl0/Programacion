@@ -1,6 +1,5 @@
 package Modelos;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import Excepciones.ExcepcionGeneral;
@@ -14,9 +13,9 @@ public abstract class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nombreUsuario, String contrasenhaUsuario, String contrasenhaUsuarioConfirmación, TipoUsuario tipoUsuario) throws ExcepcionGeneral {
+    public Usuario(String nombreUsuario, String contrasenhaUsuario, TipoUsuario tipoUsuario) throws ExcepcionGeneral {
         this.setNombreUsuario(nombreUsuario);
-        this.setContrasenhaUsuario(contrasenhaUsuario, contrasenhaUsuarioConfirmación);
+        this.setContrasenhaUsuario(contrasenhaUsuario);
         this.setTipoUsuario(tipoUsuario);
     }
 
@@ -24,23 +23,23 @@ public abstract class Usuario {
         return nombreUsuario;
     }
 
-    public void setNombreUsuario(String nombreUsuario) throws ExcepcionGeneral {
-        if (existeNombreUsuario(nombreUsuario)) {
-            throw new ExcepcionGeneral("El nombre de Usuario ya está en uso.");
-        }
+    private void setNombreUsuario(String nombreUsuario){
         this.nombreUsuario = nombreUsuario;
     }
 
-    public  boolean existeNombreUsuario(String nombreUsuario) {
-        return (GestionUsuarios.getInstance().obtenerNombreUsuarios().contains(nombreUsuario));
-    }
+    // public void setNombreUsuario(String nombreUsuario) throws ExcepcionGeneral {
+    //     if (existeNombreUsuario(nombreUsuario)) {
+    //         throw new ExcepcionGeneral("El nombre de Usuario ya está en uso.");
+    //     }
+    //     this.nombreUsuario = nombreUsuario;
+    // }
 
     public String getContrasenhaUsuario() {
         return contrasenhaUsuario;
     }
 
-    public void setContrasenhaUsuario(String contrasenhaUsuario, String contrasenhaUsuarioConfirmación) throws ExcepcionGeneral {
-        if (!contrasenhaValida(contrasenhaUsuario) || !coincidenCon1YCon2(contrasenhaUsuario, contrasenhaUsuarioConfirmación)) {
+    private void setContrasenhaUsuario(String contrasenhaUsuario) throws ExcepcionGeneral {
+        if (!contrasenhaValida(contrasenhaUsuario)) {
             throw new ExcepcionGeneral("La contraseña no es válida.");
         }
         this.contrasenhaUsuario = contrasenhaUsuario;
@@ -57,9 +56,7 @@ public abstract class Usuario {
         // return matcher.matches();
     }
 
-    private static boolean coincidenCon1YCon2(String con1, String con2) {
-        return (con1.equals(con2));
-    }
+    
 
     public boolean coincideContrasenha(String contrasenha) {
         return contrasenha.equals(this.contrasenhaUsuario);
@@ -69,7 +66,7 @@ public abstract class Usuario {
         return tipoUsuario;
     }
 
-    public void setTipoUsuario(TipoUsuario tipoUsuario) {
+    private void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
 ;

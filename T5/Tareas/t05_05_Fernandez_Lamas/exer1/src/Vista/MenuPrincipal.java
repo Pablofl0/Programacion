@@ -1,6 +1,7 @@
-import Modelos.Administrador;
-import Modelos.Cliente;
-import Modelos.GestionUsuarios;
+package Vista;
+
+import Controlador.GestionGeneral;
+import Excepciones.ExcepcionGeneral;
 import Modelos.TipoUsuario;
 
 public class MenuPrincipal extends Menu {
@@ -9,7 +10,7 @@ public class MenuPrincipal extends Menu {
     public void mostrar() {
         printMessage("¡Bienvenido!");
 
-        //Eligiendo qué acción tomar.
+        // Eligiendo qué acción tomar.
         boolean eligiendoQueHacer = true;
 
         while (eligiendoQueHacer) {
@@ -19,28 +20,33 @@ public class MenuPrincipal extends Menu {
             printMessage("s) Salir.");
             String opcionHacer = this.getString("> ");
 
+            
             switch (opcionHacer) {
                 case "a":
+                    
                     printMessage("Registro.");
                     String nombreUsuarioRegistro = this.getString("Introduce el nombre de usuario: ");
                     String contrasenhaUsuarioRegistro = this.getString("Introduce la contrasenha: ");
-                    String contrasenhaUsuarioRegistroConfirmacion = this.getString("Introduce nuevamente la contraseña: ");
+                    String contrasenhaUsuarioRegistroConfirmacion = this
+                            .getString("Introduce nuevamente la contraseña: ");
                     printMessage("¿Rol?\n1. Administrador.\n2. Cliente.");
-                    int opcionUsuario = this.getInt(">");
-                    // int opcionUsuario = 0;
-                    // while (opcionUsuario < 1 || opcionUsuario > 2) {
-                    //     opcionUsuario = this.getInt(">");
-                    // }
+                    int opcionUsuario = 0; 
+                    opcionUsuario = this.getInt(">");
+                    while (opcionUsuario < 1 || opcionUsuario > 2) {
+                        opcionUsuario = this.getInt(">");
+                    }
+                    if (GestionGeneral.getInstance().existeNombreUsuario(nombreUsuarioRegistro)|| !GestionGeneral.getInstance().coincidenCon1YCon2(contrasenhaUsuarioRegistro,contrasenhaUsuarioRegistroConfirmacion)) {
+                        printMessage("Credenciales no válidas.");
+                    }
+                    
                     try {
                         switch (opcionUsuario) {
                             case 1:
-                                Administrador newAdministrador = new Administrador(nombreUsuarioRegistro, contrasenhaUsuarioRegistro, contrasenhaUsuarioRegistroConfirmacion);
-                                GestionUsuarios.anhadirUsuario(newAdministrador);
+                                GestionGeneral.getInstance().anhadirAdministrador(nombreUsuarioRegistro, contrasenhaUsuarioRegistroConfirmacion);
                                 new MenuAdministrador().mostrar();
                                 break;
                             case 2:
-                                Cliente newCliente = new Cliente(nombreUsuarioRegistro, contrasenhaUsuarioRegistro, contrasenhaUsuarioRegistroConfirmacion);
-                                GestionUsuarios.anhadirUsuario(newCliente);
+                                GestionGeneral.getInstance().anhadirCliente(nombreUsuarioRegistro, contrasenhaUsuarioRegistroConfirmacion);
                                 new MenuCliente().mostrar();
                                 break;
                             default:
@@ -55,8 +61,8 @@ public class MenuPrincipal extends Menu {
                     String nombreUsuarioInicio = this.getString("Introduce el nombre de usuario: ");
                     String contrasenhaUsuarioInicio = this.getString("Introduce la contrasenha: ");
                     try {
-                        GestionUsuarios.InicioDeSesionValido(nombreUsuarioInicio, contrasenhaUsuarioInicio);
-                        TipoUsuario tipoUsuarioIniciandoSesion = GestionUsuarios.getTipoUsuario(nombreUsuarioInicio);
+                        GestionGeneral.getInstance().InicioDeSesionValido(nombreUsuarioInicio, contrasenhaUsuarioInicio);
+                        TipoUsuario tipoUsuarioIniciandoSesion = GestionGeneral.getInstance().getTipoUsuario(nombreUsuarioInicio);
                         switch (tipoUsuarioIniciandoSesion) {
                             case TipoUsuario.Administrador:
                                 new MenuAdministrador().mostrar();

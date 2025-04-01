@@ -1,18 +1,13 @@
 package Modelos;
-import Excepciones.ExcepcionGeneral;
+import Excepciones.ExcepcionPrecioNegativo;
+import Excepciones.ExcepcionStockNegativo;
 
 public class Saxofon extends InstrumentoMusical {
 
     private TipoSaxo tipoSaxo;
 
-    public Saxofon(double precio, int stock, String descripcion, String marca, String modelo, TipoSaxo tipoSaxo) throws ExcepcionGeneral {
-        this.setIdProducto();
-        this.setPrecioSinIVE(precio);
-        this.setPrecioConIVE();
-        this.setStock(stock);
-        this.setDescripcion(descripcion);
-        this.setMarca(marca);
-        this.setModelo(modelo);
+    public Saxofon(double precio, int stock, String descripcion, String marca, String modelo, TipoSaxo tipoSaxo) throws ExcepcionStockNegativo,ExcepcionPrecioNegativo {
+        super(precio, stock, descripcion, marca, modelo);
         this.setTipoSaxo(tipoSaxo);
         this.setTipoProducto(TipoProducto.saxofon);
     }

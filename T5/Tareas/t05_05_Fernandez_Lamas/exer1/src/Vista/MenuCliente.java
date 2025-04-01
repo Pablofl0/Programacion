@@ -1,3 +1,7 @@
+package Vista;
+
+import Controlador.GestionGeneral;
+import Excepciones.ExcepcionGeneral;
 
 public class MenuCliente extends Menu{
 
@@ -21,7 +25,7 @@ public class MenuCliente extends Menu{
                     printMessage("Comprando una unidad de un producto.");
                     int idProductoAComprar = this.getInt("Introduce el identificador del producto: ");
                     try {
-                        GestionProductos.comprarUnaUnidadDeUnProducto(idProductoAComprar);
+                        GestionGeneral.getInstance().comprarUnaUnidadDeUnProducto(idProductoAComprar);
                     } catch (ExcepcionGeneral e) {
                         System.out.println(e.getMessage());
                     }

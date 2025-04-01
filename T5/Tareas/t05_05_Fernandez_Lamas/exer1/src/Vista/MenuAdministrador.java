@@ -1,4 +1,7 @@
+package Vista;
 
+import Controlador.GestionGeneral;
+import Excepciones.ExcepcionGeneral;
 
 public class MenuAdministrador extends Menu {
 
@@ -28,7 +31,7 @@ public class MenuAdministrador extends Menu {
                     printMessage("Viendo información de un producto.");
                     int idProductoAVer = this.getInt("Introduce el identificador del producto: ");
                     try {
-                        System.out.println(GestionProductos.verProductoSegunID(idProductoAVer));
+                        System.out.println(GestionGeneral.getInstance().verProductoSegunID(idProductoAVer));
                     } catch (ExcepcionGeneral e) {
                         System.out.println(e.getMessage());
                     }
@@ -41,7 +44,7 @@ public class MenuAdministrador extends Menu {
                         stockAAnhadir = this.getInt("Introduce la cantidad (mayor que 0) de stock a añadir: ");
                     }
                     try {
-                        GestionProductos.anhadirStockAUnProducto(idProductoAnhadirStock, stockAAnhadir);
+                        GestionGeneral.getInstance().anhadirStockAUnProducto(idProductoAnhadirStock, stockAAnhadir);
                     } catch (ExcepcionGeneral e) {
                         System.out.println(e.getMessage());
                     }
@@ -51,7 +54,7 @@ public class MenuAdministrador extends Menu {
                     int idProductoEliminarStock = this.getInt("Introduce el identificador del producto: ");
                     int cantidadStockAEliminar = this.getInt("Introduce la cantidad de stock a eliminar: ");
                     try {
-                        GestionProductos.eliminarStockDeUnProducto(idProductoEliminarStock, cantidadStockAEliminar);
+                        GestionGeneral.getInstance().eliminarStockDeUnProducto(idProductoEliminarStock, cantidadStockAEliminar);
                     } catch (ExcepcionGeneral e) {
                         System.out.println(e.getMessage());
                     }
