@@ -20,6 +20,8 @@ public class Festival {
         this.setHoraFinal(horaFinal);
     }
 
+    
+
     public String getNombre() {
         return nombre;
     }
@@ -58,6 +60,11 @@ public class Festival {
 
     public void setHoraFinal(String horaFinal) {
         this.horaFinal = LocalDate.parse(horaFinal);
+    }
+
+    @Override
+    public String toString() {
+        return this.nombre + " en " + this.poblacion + ", " + this.nombreProvincia + ". Desde " + this.horaInicio + " hasta " + this.horaFinal + ".";
     }
 
 }
