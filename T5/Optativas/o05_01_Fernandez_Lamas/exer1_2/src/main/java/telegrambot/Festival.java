@@ -10,7 +10,7 @@ public class Festival {
     private LocalDate horaInicio;
     private LocalDate horaFinal;
 
-    private final static DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
+    private  DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
 
     public Festival(String nombre, String poblacion, NombreProvincia nombreProvincia, String horaInicio, String horaFinal) {
         this.setNombre(nombre);
@@ -51,7 +51,7 @@ public class Festival {
     }
 
     public void setHoraInicio(String horaInicio) {
-        this.horaInicio = LocalDate.parse(horaInicio);
+        this.horaInicio = LocalDate.parse(horaInicio, formato);
     }
 
     public LocalDate getHoraFinal() {
@@ -59,7 +59,7 @@ public class Festival {
     }
 
     public void setHoraFinal(String horaFinal) {
-        this.horaFinal = LocalDate.parse(horaFinal);
+        this.horaFinal = LocalDate.parse(horaFinal, formato);
     }
 
     @Override

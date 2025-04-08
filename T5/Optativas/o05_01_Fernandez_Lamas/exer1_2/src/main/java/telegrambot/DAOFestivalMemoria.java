@@ -8,7 +8,7 @@ import java.util.List;
 import telegrambot.DAO.DAOFestival;
 
 public class DAOFestivalMemoria implements DAOFestival{
-    ArrayList<Festival> listaFestivales = AnhadirDatos.crearDatos();
+    public ArrayList<Festival> listaFestivales = AnhadirDatos.crearDatos();
    
 
     public List<Festival> getFestivales() {
