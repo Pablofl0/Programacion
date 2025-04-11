@@ -5,17 +5,20 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+// import java.time.LocalDate;
+// import java.time.ZoneId;
+// import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import telegrambot.DAO.DAOFestival;
 
-public class DAOFestivalDB //implements DAOFestival 
-{
+public class DAOFestivalDB implements DAOFestival {
 
     // Aquí é onde está o ficheiro da base de datos
     private static final String URL_DB = "jdbc:sqlite:festivais.db";
@@ -100,8 +103,11 @@ public class DAOFestivalDB //implements DAOFestival
                 psFestival.setString(2, festival.getPoblacion());
                 String getProvincia = "Select id from Provincias where nome='" + festival.getProvincia().getProvincia() + "'";
                 psFestival.setString(3, getProvincia);
-                psFestival.setString(4, festival.getHoraInicio().format(formato));
-                psFestival.setString(5, festival.getHoraFinal().format(formato));
+                psFestival.setDate(4, java.sql.Date.valueOf(festival.getHoraInicio()));
+                psFestival.setDate(5, java.sql.Date.valueOf(festival.getHoraFinal()));
+                psFestival.executeUpdate();
+                // psFestival.setDate(4, new java.sql.Date(Date.from(festival.getHoraInicio().atStartOfDay(ZoneId.systemDefault()).toInstant())));
+                // psFestival.setString(4, new Java.sql.Date(Date.from(festival.getHoraInicio().format(formato).atStartOfDay(defaultZoneId).toInstant()).getTime()));
             }
             // TODO: Inserir Festivais
         } catch (SQLException e) {
@@ -111,34 +117,40 @@ public class DAOFestivalDB //implements DAOFestival
 
     // TODO: Implementar os métodos que faltan
 
-    // public List<Festival> getFestivales() {
-    //     ArrayList<Festival> listaDevolver = new ArrayList<>();
-    //     for (Festival festival : listaFestivales) {
-    //         listaDevolver.add(festival);
-    //     }
-    //     return listaDevolver;
-    // }
+    public List<Festival> getFestivales() {
+        ArrayList<Festival> listaDevolver = new ArrayList<>();
+        for (Festival festival : listaFestivales) {
+            listaDevolver.add(festival);
+        }
+        return listaDevolver;
+    }
 
-    // public Festival getProximoFestival() {
-    //     Festival festivalFinal = null;
-    //     int diff = -1;
-    //     for (Festival festival : listaFestivales) {
-    //         int diffNow = (int) ChronoUnit.DAYS.between(LocalDate.now(), festival.getHoraInicio());
-    //         if (diff == -1 || diff > diffNow) {
-    //             diff = diffNow;
-    //             festivalFinal = festival;
-    //         }
-    //     }
-    //     return festivalFinal;
-    // }
+    public Festival getProximoFestival() {
+        Festival festivalFinal = null;
+        int diff = -1;
+        for (Festival festival : listaFestivales) {
+            int diffNow = (int) ChronoUnit.DAYS.between(LocalDate.now(), festival.getHoraInicio());
+            if (diff == -1 || diff > diffNow) {
+                diff = diffNow;
+                festivalFinal = festival;
+            }
+        }
+        return festivalFinal;
+    }
 
-    // public List<Festival> getFestivaisProvincia(NombreProvincia nombreProvincia) {
-    //     ArrayList<Festival> festivalesPorProvincia = new ArrayList<>();
-    //     for (Festival festival : listaFestivales) {
-    //         if (nombreProvincia == festival.getProvincia()) {
-    //             festivalesPorProvincia.add(festival);
-    //         }
-    //     }
-    //     return festivalesPorProvincia;
-    // }
+    public List<Festival> getFestivaisProvincia(NombreProvincia nombreProvincia) {
+        ArrayList<Festival> festivalesPorProvincia = new ArrayList<>();
+        for (Festival festival : listaFestivales) {
+            if (nombreProvincia == festival.getProvincia()) {
+                festivalesPorProvincia.add(festival);
+            }
+        }
+        return festivalesPorProvincia;
+    }
+
+    private List<Festival> transformarDeSQliteAMemoria(ResultSet rs) throws SQLException {
+        while (rs.next()) {
+            int
+        }
+    }
 }
