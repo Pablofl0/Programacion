@@ -1,20 +1,51 @@
 package telegrambot;
 
+import java.io.File;
+
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import telegrambot.DAO.DAOFestival;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class BotFestivales extends TelegramLongPollingBot {
 
     private final String botUsername = "MusicFestiBot";
     private final String botToken = "7844286221:AAGYW3H6Uh0OSCCy9vM-ujiCT0g__MhLW5k";
-    private DAOFestival daoFest = new DAOFestivalMemoria();
+    private DAOFestival daoFest;
 
     public BotFestivales(String botToken) {
         super(botToken); // Pass the bot token to the superclass constructor
-        this.daoFest = new DAOFestivalMemoria();
+        this.daoFest = configurarFuenteDeDatos();
+    }
+
+    // Método para decidir la fuente de datos según config.json
+    private DAOFestival configurarFuenteDeDatos() {
+        try {
+
+            // Leer el archivo de configuración
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(new File("C:/Clase/NOUNI/Programacion/T5/Optativas/o05_01_Fernandez_Lamas/exer1_2/src/main/java/telegrambot/config.json"));
+
+            String dataSource = rootNode.path("data_source").asText();
+
+            // Decidir la fuente de datos
+            if ("memory".equals(dataSource)) {
+                // Implementación en memoria
+                System.out.println("Cargando datos desde memoria...");
+                return new DAOFestivalMemoria(); 
+            } else if ("db".equals(dataSource)) {
+                // Implementación de base de datos
+                System.out.println("Cargando datos desde la base de datos...");
+                return new DAOFestivalDB();
+            } else {
+                throw new IllegalArgumentException("Fuente de datos desconocida: " + dataSource);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al configurar la fuente de datos.");
+        }
     }
 
     public void onUpdateReceived(Update update) {

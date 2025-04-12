@@ -1,9 +1,6 @@
-package telegrambot.DAO;
+package telegrambot;
 
 import java.util.List;
-
-import telegrambot.Festival;
-import telegrambot.NombreProvincia;
 
 public interface DAOFestival {
     List<Festival> getFestivales();

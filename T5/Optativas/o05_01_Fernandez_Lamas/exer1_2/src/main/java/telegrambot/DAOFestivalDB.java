@@ -1,29 +1,26 @@
 package telegrambot;
 
-import java.sql.Statement;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-// import java.time.LocalDate;
-// import java.time.ZoneId;
-// import java.time.ZoneOffset;
+import java.sql.Statement;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import telegrambot.DAO.DAOFestival;
 
 public class DAOFestivalDB implements DAOFestival {
 
     // Aquí é onde está o ficheiro da base de datos
     private static final String URL_DB = "jdbc:sqlite:festivais.db";
 
-    DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    // DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     /**
      * Construtor da clase
      */
@@ -43,7 +40,7 @@ public class DAOFestivalDB implements DAOFestival {
 
     /**
      * Comproba que existe a base de datos
-     * 
+     *
      * @return
      */
     private boolean existeBaseDeDatos() {
@@ -83,7 +80,7 @@ public class DAOFestivalDB implements DAOFestival {
      */
     private void insertarFestivaisSeNonExisten() {
         // Inserir provincias
-        String[] provincias = { "A Coruña", "Lugo", "Ourense", "Pontevedra" };
+        String[] provincias = {"A Coruña", "Lugo", "Ourense", "Pontevedra"};
         try {
             Connection conn = DriverManager.getConnection(URL_DB);
             String inserirProvincia = "INSERT OR IGNORE INTO Provincias (nome) VALUES (?);";
@@ -93,18 +90,27 @@ public class DAOFestivalDB implements DAOFestival {
                 ps.setString(1, provincia);
                 ps.executeUpdate();
             }
-            
+
             ArrayList<Festival> listaFestivales = AnhadirDatos.crearDatos();
-            String insertarFestival = "INSERT OR IGNORE INTO Festivais (nome,poboacion,provincia_id,data_comezo,data_fin) VALUES (?,?,?,?,?);";
+            String insertarFestival = "INSERT OR IGNORE INTO Festivais (nome,poboacion,provincia_id,data_comenzo,data_fin) VALUES (?,?,?,?,?);";
             PreparedStatement psFestival = conn.prepareStatement(insertarFestival);
 
             for (Festival festival : listaFestivales) {
                 psFestival.setString(1, festival.getNombre());
                 psFestival.setString(2, festival.getPoblacion());
                 String getProvincia = "Select id from Provincias where nome='" + festival.getProvincia().getProvincia() + "'";
-                psFestival.setString(3, getProvincia);
-                psFestival.setDate(4, java.sql.Date.valueOf(festival.getHoraInicio()));
-                psFestival.setDate(5, java.sql.Date.valueOf(festival.getHoraFinal()));
+                PreparedStatement psProvincia = conn.prepareStatement(getProvincia);
+                ResultSet rsPovincia = psProvincia.executeQuery();
+                int idProvincia = rsPovincia.getInt("id");
+                psFestival.setInt(3, idProvincia);
+                java.sql.Date sqlHoraInicio = new java.sql.Date(
+                        Date.from(festival.getHoraInicio().atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime()
+                );
+                psFestival.setDate(4, sqlHoraInicio);
+                java.sql.Date sqlHoraFinal = new java.sql.Date(
+                        Date.from(festival.getHoraFinal().atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime()
+                );
+                psFestival.setDate(5, sqlHoraFinal);
                 psFestival.executeUpdate();
                 // psFestival.setDate(4, new java.sql.Date(Date.from(festival.getHoraInicio().atStartOfDay(ZoneId.systemDefault()).toInstant())));
                 // psFestival.setString(4, new Java.sql.Date(Date.from(festival.getHoraInicio().format(formato).atStartOfDay(defaultZoneId).toInstant()).getTime()));
@@ -116,41 +122,97 @@ public class DAOFestivalDB implements DAOFestival {
     }
 
     // TODO: Implementar os métodos que faltan
-
+    @Override
     public List<Festival> getFestivales() {
-        ArrayList<Festival> listaDevolver = new ArrayList<>();
-        for (Festival festival : listaFestivales) {
-            listaDevolver.add(festival);
+        List<Festival> listaDevolver = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(URL_DB);
+            String select = "select * from Festivais";
+            PreparedStatement stmt = conn.prepareStatement(select);
+            ResultSet rsFestivales = stmt.executeQuery();
+            listaDevolver = transformarDeSQliteAMemoria(rsFestivales);
+        } catch (SQLException e) {
+            // TODO: handle exception
         }
         return listaDevolver;
     }
 
+    @Override
     public Festival getProximoFestival() {
-        Festival festivalFinal = null;
-        int diff = -1;
-        for (Festival festival : listaFestivales) {
-            int diffNow = (int) ChronoUnit.DAYS.between(LocalDate.now(), festival.getHoraInicio());
-            if (diff == -1 || diff > diffNow) {
-                diff = diffNow;
-                festivalFinal = festival;
-            }
+        List<Festival> listaDevolver = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(URL_DB);
+            String select = "SELECT * "
+                    + "FROM Festivais "
+                    + "WHERE data_comenzo > strftime('%s', 'now') * 1000 "
+                    + "ORDER BY data_comenzo ASC "
+                    + "LIMIT 1;";
+            PreparedStatement stmt = conn.prepareStatement(select);
+            ResultSet rsFestivales = stmt.executeQuery();
+            listaDevolver = transformarDeSQliteAMemoria(rsFestivales);
+        } catch (SQLException e) {
+            // TODO: handle exception
         }
-        return festivalFinal;
+        if (listaDevolver.isEmpty()) {
+            System.out.println("No se encontró ningún festival próximo.");
+            return null;
+        }
+        return listaDevolver.get(0);
     }
 
+    @Override
     public List<Festival> getFestivaisProvincia(NombreProvincia nombreProvincia) {
-        ArrayList<Festival> festivalesPorProvincia = new ArrayList<>();
-        for (Festival festival : listaFestivales) {
-            if (nombreProvincia == festival.getProvincia()) {
-                festivalesPorProvincia.add(festival);
-            }
+        List<Festival> listaDevolver = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(URL_DB);
+            String select = "select * from Festivais where provincia_id=(select id from Provincias where nome='" + nombreProvincia.getProvincia() + "')";
+            PreparedStatement stmt = conn.prepareStatement(select);
+            ResultSet rsFestivales = stmt.executeQuery();
+            listaDevolver = transformarDeSQliteAMemoria(rsFestivales);
+        } catch (SQLException e) {
+            // TODO: handle exception
         }
-        return festivalesPorProvincia;
+        return listaDevolver;
     }
 
     private List<Festival> transformarDeSQliteAMemoria(ResultSet rs) throws SQLException {
+        List<Festival> listaFestivales = new ArrayList<>();
         while (rs.next()) {
-            int
+            NombreProvincia newNombreProvincia = null;
+            int provincia_id = rs.getInt("provincia_id");
+            String provinciaNombre = "Select nome from Provincias where id=" + provincia_id;
+            Connection conn = DriverManager.getConnection(URL_DB);
+            PreparedStatement stmt = conn.prepareStatement(provinciaNombre);
+            ResultSet rsprovincia = stmt.executeQuery();
+            switch (rsprovincia.getString("nome")) {
+                case "Lugo":
+                    newNombreProvincia = NombreProvincia.LUGO;
+                    break;
+                case "A Coruña":
+                    newNombreProvincia = NombreProvincia.CORUÑA;
+                    break;
+                case "Ourense":
+                    newNombreProvincia = NombreProvincia.OURENSE;
+                    break;
+                case "Pontevedra":
+                    newNombreProvincia = NombreProvincia.PONTEVEDRA;
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+            LocalDate localDateInicio = Instant.ofEpochMilli(rs.getLong("data_comenzo"))
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            LocalDate localDateFinal = Instant.ofEpochMilli(rs.getLong("data_fin"))
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            // Convertir LocalDate a String con formato dd/MM/yyyy
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String fechaComienzoString = localDateInicio.format(formato);
+            String fechaFinalString = localDateFinal.format(formato);
+            Festival newFestival = new Festival(rs.getString("nome"), rs.getString("poboacion"), newNombreProvincia, fechaComienzoString, fechaFinalString);
+            listaFestivales.add(newFestival);
         }
+        return listaFestivales;
     }
 }

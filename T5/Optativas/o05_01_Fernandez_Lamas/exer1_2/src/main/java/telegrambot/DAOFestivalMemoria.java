@@ -5,8 +5,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import telegrambot.DAO.DAOFestival;
-
 public class DAOFestivalMemoria implements DAOFestival{
     public ArrayList<Festival> listaFestivales = AnhadirDatos.crearDatos();
    
