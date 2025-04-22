@@ -1,28 +1,39 @@
 package arbore;
 
-public class ArboreBinariaBusca<T extends Comparable<T>> {
-    private Nodo<T> nodoRaiz;
-    
+public class ArboreBinariaBusca<T extends Comparable<T>> implements Comparable<T> {
 
-    public void anhadirElemento (T elemento){
-        Nodo<T> nodoNow = this.nodoRaiz;
-        if (nodoNow.equals(null)) {
-            this.setNodoRaiz(nodoNow);
+    private T nodo;
+    private ArboreBinariaBusca<T> izq;
+    private ArboreBinariaBusca<T> der;
+
+    public ArboreBinariaBusca(T nodo) {
+        this.nodo = nodo;
+    }
+
+    public void anhadirElemento(T elemento) {
+        if (nodo == null) {
+            nodo = elemento;
         }
-        else{
-            
+        if (this.nodo.compareTo(elemento) < 0) {
+            this.der.setNodo(elemento);
+        }
+        else if (this.nodo.compareTo(elemento) > 0) {
+            this.izq.setNodo(elemento);
         }
     }
 
 
-    public Nodo<T> getNodoRaiz() {
-        return nodoRaiz;
-    }
-
-
-    public void setNodoRaiz(Nodo<T> nodoRaiz) {
-        this.nodoRaiz = nodoRaiz;
-    }
-
     
+    public T getNodo() {
+        return nodo;
+    }
+
+    public void setNodo(T nodo) {
+        this.nodo = nodo;
+    }
+
+    @Override
+    public int compareTo(T elemento) {
+        return this.nodo.compareTo(elemento);
+    }
 }
