@@ -34,6 +34,6 @@ public class ArboreBinariaBusca<T extends Comparable<T>> implements Comparable<T
 
     @Override
     public int compareTo(T elemento) {
-        return this.nodo.compareTo(elemento);
+        return (char)nodo - (char)elemento;
     }
 }
