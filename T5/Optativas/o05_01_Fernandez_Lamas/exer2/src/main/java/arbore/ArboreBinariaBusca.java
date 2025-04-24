@@ -1,9 +1,10 @@
 package arbore;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class ArboreBinariaBusca<T extends Comparable<T>> implements Comparable<T> {
+public class ArboreBinariaBusca<T extends Comparable<T>> implements Comparable<T>, Iterable<T> {
 
     private T nodo;
     private ArboreBinariaBusca<T> izq;
@@ -49,6 +50,11 @@ public class ArboreBinariaBusca<T extends Comparable<T>> implements Comparable<T
             // }
         }
         return listaDevolver;
+    }
+
+    @Override
+    public Iterator<T> iterator(){
+        return new IteradorABB<>(this);
     }
 
     

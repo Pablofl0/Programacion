@@ -7,7 +7,7 @@ import java.util.List;
  */
 public final class App {
     public static void main(String[] args) {
-        ArboreBinariaBusca abb = new ArboreBinariaBusca<>();
+        ArboreBinariaBusca<Xogador> abb = new ArboreBinariaBusca<>();
 
         
         Xogador xog1 = new Xogador("Lionel Messi", 10);
@@ -36,6 +36,10 @@ public final class App {
         List<Xogador> listaXogadores = abb.recorridoInOrde();
         for (Xogador xog : listaXogadores) {
             System.out.println(xog);
+        }
+
+        for (Xogador xogador : abb) {
+            System.out.println(xogador);
         }
     }
 }
