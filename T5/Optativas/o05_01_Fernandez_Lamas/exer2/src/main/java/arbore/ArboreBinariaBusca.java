@@ -1,27 +1,55 @@
 package arbore;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ArboreBinariaBusca<T extends Comparable<T>> implements Comparable<T> {
 
     private T nodo;
     private ArboreBinariaBusca<T> izq;
     private ArboreBinariaBusca<T> der;
 
-    public ArboreBinariaBusca(T nodo) {
-        this.nodo = nodo;
+    public ArboreBinariaBusca() {
     }
 
     public void anhadirElemento(T elemento) {
         if (nodo == null) {
-            nodo = elemento;
+            this.setNodo(elemento);
         }
         if (this.nodo.compareTo(elemento) < 0) {
-            this.der.setNodo(elemento);
+            if (this.der == null) {
+                this.der = new ArboreBinariaBusca<>();
+            }
+            this.der.anhadirElemento(elemento);
         }
         else if (this.nodo.compareTo(elemento) > 0) {
-            this.izq.setNodo(elemento);
+            if (this.izq == null) {
+                this.izq = new ArboreBinariaBusca<>();
+            }
+            this.izq.anhadirElemento(elemento);
         }
     }
 
+
+    public List<T> recorridoInOrde() {
+        List<T> listaDevolver = new ArrayList<>();
+        if (izq != null) {
+            listaDevolver.addAll(izq.recorridoInOrde());
+            // List<T> listaIzq = izq.recorridoInOrde();
+            // for (T t : listaIzq) {
+            //     listaDevolver.add(t);
+            // }
+        }
+        listaDevolver.add(nodo);
+        if (der != null) {
+            listaDevolver.addAll(der.recorridoInOrde());
+            // List<T> listaDer = der.recorridoInOrde();
+            // for (T t : listaDer) {
+            //     listaDevolver.add(t);
+            // }
+        }
+        return listaDevolver;
+    }
 
     
     public T getNodo() {
@@ -34,6 +62,6 @@ public class ArboreBinariaBusca<T extends Comparable<T>> implements Comparable<T
 
     @Override
     public int compareTo(T elemento) {
-        return (char)nodo - (char)elemento;
+        return nodo.compareTo(elemento);
     }
 }
