@@ -26,7 +26,7 @@ public class BotFestivales extends TelegramLongPollingBot {
 
             // Leer el archivo de configuración
             ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readTree(new File("C:/Clase/NOUNI/Programacion/T5/Optativas/o05_01_Fernandez_Lamas/exer1_2/src/main/java/telegrambot/config.json"));
+            JsonNode rootNode = mapper.readTree(new File("config.json"));
 
             String dataSource = rootNode.path("data_source").asText();
 
