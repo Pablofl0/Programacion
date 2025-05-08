@@ -44,6 +44,8 @@ public final class App {
 
         datos.stream()
         .filter(c -> c.date().getYear() == 2023 && c.position() == 1)
+        .map(c -> c.artist())
+        .distinct()
         .forEach(c -> System.out.println(c));
 
         // // 2-Indica o número de canción diferentes que foron número 1 en 2024.
@@ -62,6 +64,8 @@ public final class App {
         datos.stream()
         .filter(c -> (c.artist().equals("Aitana") && (c.position() >= 1 &&
         c.position() <= 10)))
+        .map(c -> c.song())
+        .distinct()
         .forEach(c -> System.out.println(c));
 
         // 4-Indica as cancións que foron máis escoitadas durante o mes de agosto de
@@ -70,6 +74,7 @@ public final class App {
         datos.stream()
         .filter(c -> c.date().getMonth().equals(Month.AUGUST) && c.date().getYear()
         == 2024 && c.position() == 1)
+        .map(c -> c.song())
         .distinct().forEach(c -> System.out.println(c));
 
         // 5-Indica as posicións diferentes que obtiveron as cancións de “Aitan"a”
@@ -108,6 +113,7 @@ public final class App {
 
         Long numeroCancioneslargas = datos.stream()
                 .filter(c -> (c.position() >= 1 && c.position() <= 5) && c.duration_ms() > 360000)
+                .distinct()
                 .count();
 
         System.out.println(numeroCancioneslargas);
