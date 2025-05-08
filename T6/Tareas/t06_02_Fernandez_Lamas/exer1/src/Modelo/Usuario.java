@@ -3,6 +3,7 @@ package Modelo;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import Excepciones.ExcepcionEmailInvalido;
 import Excepciones.ExcepcionGeneral;
 
 public abstract class Usuario {
@@ -19,10 +20,15 @@ public abstract class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nombreUsuario, String contrasenhaUsuario, TipoUsuario tipoUsuario) throws ExcepcionGeneral {
+    public Usuario(String nombreUsuario, String contrasenhaUsuario, TipoUsuario tipoUsuario, String nombre,String apellido1, String apellido2,String dni, String correo) throws ExcepcionEmailInvalido,ExcepcionGeneral {
         this.setNombreUsuario(nombreUsuario);
         this.setContrasenhaUsuario(contrasenhaUsuario);
         this.setTipoUsuario(tipoUsuario);
+        this.setNombre(nombre);
+        this.setApellido1(apellido1);
+        this.setApellido2(apellido2);
+        this.setDni(dni);
+        this.setCorreo(correo);
     }
 
     public String getNombreUsuario() {
@@ -149,7 +155,10 @@ public abstract class Usuario {
         return correo;
     }
 
-    public void setCorreo(String correo) {
+    public void setCorreo(String correo) throws ExcepcionEmailInvalido{
+        if (!comprobarEmail(correo)) {
+            throw new ExcepcionEmailInvalido("El correo no es válido.");
+        }
         this.correo = correo;
     }
 

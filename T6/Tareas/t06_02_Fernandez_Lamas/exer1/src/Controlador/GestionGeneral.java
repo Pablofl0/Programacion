@@ -5,45 +5,32 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 
-import Excepciones.ExcepcionComprarProductoSinStock;
-import Excepciones.ExcepcionEliminarStockDeMas;
 import Excepciones.ExcepcionGeneral;
 import Excepciones.ExcepcionISBNNoValido;
-import Excepciones.ExcepcionIdNoValido;
-import Excepciones.ExcepcionPrecioNegativo;
-import Excepciones.ExcepcionRegistroUsuario;
-import Excepciones.ExcepcionStockNegativo;
-import Modelos.Administrador;
-import Modelos.Cliente;
-import Modelos.Estuche;
-import Modelos.Flauta;
-import Modelos.Libro;
-import Modelos.Producto;
-import Modelos.Saxofon;
-import Modelos.TipoInstrumento;
-import Modelos.TipoProducto;
-import Modelos.TipoSaxo;
-import Modelos.TipoUsuario;
-import Modelos.Trombon;
-import Modelos.Usuario;
+import Modelo.AdministradorBiblioteca;
+import Modelo.AdministradorGeneral;
+import Modelo.Cliente;
+import Modelo.Libro;
+import Modelo.TipoUsuario;
+import Modelo.Usuario;
+import Modelo.Biblioteca;
 
 public class GestionGeneral {
 
     private static GestionGeneral INSTANCE; // Singleton
 
-    private HashMap<String,Biblioteca> redDeBibliotecas;
+    private HashMap<String, Biblioteca> redDeBibliotecas;
     private HashMap<String, Usuario> usuarios;
-
-    
-    private HashMap<Integer, Producto> productos;
+    private HashMap<String, Libro> redDeLibros;
 
     private GestionGeneral() {
         this.usuarios = new HashMap<>();
-        this.productos = new HashMap<>();
+        this.redDeBibliotecas = new HashMap<>();
+        this.redDeLibros = new HashMap<>();
         this.anhadirDatosDePrueba();
     }
 
-    private void anhadirDatosDePrueba(){
+    private void anhadirDatosDePrueba() {
         try {
             this.anhadirAdministrador("Pepe", "AAAAAAaaaa1");
             this.anhadirCliente("Juan", "AAAAAaaaa2");
@@ -57,16 +44,18 @@ public class GestionGeneral {
             this.anhadirProducto(estuche);
             Libro libro = new Libro(10, 10, "ksdfj", "fksajf", "sdfs", "1000000001");
             this.anhadirProducto(libro);
-        } catch (ExcepcionISBNNoValido|ExcepcionStockNegativo|ExcepcionGeneral|ExcepcionPrecioNegativo|ExcepcionRegistroUsuario e) {
-            
+        } catch (ExcepcionISBNNoValido | ExcepcionStockNegativo | ExcepcionGeneral | ExcepcionPrecioNegativo
+                | ExcepcionRegistroUsuario e) {
+
         }
     }
 
     // //Añade el usuario, sea cliente o admin, a la tabla de usuarios.
     // public void anhadirUsuario(Usuario newUsuario) {
-    //     this.usuarios.put(newUsuario.getNombreUsuario(), newUsuario);
+    // this.usuarios.put(newUsuario.getNombreUsuario(), newUsuario);
     // }
-    public void anhadirCliente(String nombreUsuario, String contrasenhaUsuario) throws ExcepcionRegistroUsuario, ExcepcionGeneral {
+    public void anhadirCliente(String nombreUsuario, String contrasenhaUsuario)
+            throws ExcepcionRegistroUsuario, ExcepcionGeneral {
         if (existeNombreUsuario(nombreUsuario)) {
             throw new ExcepcionRegistroUsuario();
         }
@@ -74,11 +63,12 @@ public class GestionGeneral {
         this.usuarios.put(nombreUsuario, newCliente);
     }
 
-    public void anhadirAdministrador(String nombreUsuario, String contrasenhaUsuario) throws ExcepcionRegistroUsuario, ExcepcionGeneral {
+    public void anhadirAdministrador(String nombreUsuario, String contrasenhaUsuario)
+            throws ExcepcionRegistroUsuario, ExcepcionGeneral {
         if (existeNombreUsuario(nombreUsuario)) {
             throw new ExcepcionRegistroUsuario();
         }
-        Administrador newAdmin = new Administrador(nombreUsuario, contrasenhaUsuario);
+        AdministradorGeneral newAdmin = new AdministradorGeneral(nombreUsuario, contrasenhaUsuario);
         this.usuarios.put(nombreUsuario, newAdmin);
     }
 
@@ -88,22 +78,26 @@ public class GestionGeneral {
         }
     }
 
-    //Registrarse
-    // public boolean registroValido(String nombreUsuario, String con1, String con2){
-    //     return ((!(existeNombreUsuario(nombreUsuario))) && contrasenhaValida(con1) && coincidenCon1YCon2(con1, con2));
+    // Registrarse
+    // public boolean registroValido(String nombreUsuario, String con1, String
+    // con2){
+    // return ((!(existeNombreUsuario(nombreUsuario))) && contrasenhaValida(con1) &&
+    // coincidenCon1YCon2(con1, con2));
     // }
     // public boolean existeNombreUsuario(String nombreUsuario) {
-    //     return (GestionUsuarios.getInstance().obtenerNombreUsuarios().contains(nombreUsuario));
+    // return
+    // (GestionUsuarios.getInstance().obtenerNombreUsuarios().contains(nombreUsuario));
     // }
     // public boolean contrasenhaValida(String contrasenhaUsuario) {
-    //     Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$");
-    //     Matcher matcher = pattern.matcher(contrasenhaUsuario);
-    //     return matcher.matches();
+    // Pattern pattern =
+    // Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$");
+    // Matcher matcher = pattern.matcher(contrasenhaUsuario);
+    // return matcher.matches();
     // }
     // private static boolean coincidenCon1YCon2(String con1, String con2) {
-    //     return (con1.equals(con2));
+    // return (con1.equals(con2));
     // }
-    //Iniciar sesión.
+    // Iniciar sesión.
     public TipoUsuario getTipoUsuario(String nombreUsuario) {
         return this.usuarios.get(nombreUsuario).getTipoUsuario();
     }
@@ -144,11 +138,13 @@ public class GestionGeneral {
         verProductoSegunID(idProducto).anhadirStock(newStock);
     }
 
-    public void eliminarStockDeUnProducto(int idProducto, int stockAEliminar) throws ExcepcionEliminarStockDeMas, ExcepcionIdNoValido {
+    public void eliminarStockDeUnProducto(int idProducto, int stockAEliminar)
+            throws ExcepcionEliminarStockDeMas, ExcepcionIdNoValido {
         verProductoSegunID(idProducto).eliminarStock(stockAEliminar);
     }
 
-    public void comprarUnaUnidadDeUnProducto(int idProducto) throws ExcepcionComprarProductoSinStock, ExcepcionIdNoValido {
+    public void comprarUnaUnidadDeUnProducto(int idProducto)
+            throws ExcepcionComprarProductoSinStock, ExcepcionIdNoValido {
         verProductoSegunID(idProducto).comprarUnaUnidad();
     }
 
@@ -168,7 +164,9 @@ public class GestionGeneral {
         ArrayList<Producto> lista = new ArrayList<>();
         for (int idProducto : this.productos.keySet()) {
             Producto productoNow = this.productos.get(idProducto);
-            if (productoNow.getTipoProducto().equals(TipoProducto.flauta) || productoNow.getTipoProducto().equals(TipoProducto.saxofon) || productoNow.getTipoProducto().equals(TipoProducto.trombon)) {
+            if (productoNow.getTipoProducto().equals(TipoProducto.flauta)
+                    || productoNow.getTipoProducto().equals(TipoProducto.saxofon)
+                    || productoNow.getTipoProducto().equals(TipoProducto.trombon)) {
                 lista.add(productoNow);
             }
         }
@@ -179,7 +177,8 @@ public class GestionGeneral {
         ArrayList<Producto> lista = new ArrayList<>();
         for (int idProducto : this.productos.keySet()) {
             Producto productoNow = this.productos.get(idProducto);
-            if (productoNow.getTipoProducto().equals(TipoProducto.libro) || productoNow.getTipoProducto().equals(TipoProducto.estuche)) {
+            if (productoNow.getTipoProducto().equals(TipoProducto.libro)
+                    || productoNow.getTipoProducto().equals(TipoProducto.estuche)) {
                 lista.add(productoNow);
             }
         }

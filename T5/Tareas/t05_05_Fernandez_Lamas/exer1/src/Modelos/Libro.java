@@ -19,7 +19,7 @@ public class Libro extends Complemento{
 
     @Override
     public String toString() {
-        return "Libro" + super.toString();
+        return "Libro" + super. toString();
     }
 
     public String getTitulo() {
