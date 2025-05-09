@@ -8,9 +8,8 @@ public class Ejemplar {
     private static int contadorDeIdentificador = 1;
 
 
-    public Ejemplar(Libro libro, Biblioteca biblioteca) {
+    public Ejemplar(Libro libro) {
         this.setLibro(libro);
-        this.setBiblioteca(biblioteca);
         this.setCliente(cliente);
         this.setIdEjemplar();
         this.getLibro().anhadirEjemplar(this);

@@ -1,17 +1,22 @@
 package Modelo;
 
+import java.util.ArrayList;
+
+import Excepciones.ExcepcionEjemplaresInsuficientes;
+
 public class Biblioteca {
-    private String identificadorBiblioteca;
+    private Integer identificadorBiblioteca;
     private String nombre;
     private String direccion;
     private String ciudad;
     private String provincia;
+    private ArrayList<Ejemplar> listaEjemplares = new ArrayList<>();
 
-    
+    private static int contadorDeIdentificador = 1;
 
-    public Biblioteca(String identificadorBiblioteca, String nombre, String direccion, String ciudad,
+    public Biblioteca(String nombre, String direccion, String ciudad,
             String provincia) {
-        this.setIdentificadorBiblioteca(identificadorBiblioteca);
+        this.setIdentificadorBiblioteca();
         this.setNombre(nombre);
         this.setDireccion(direccion);
         this.setCiudad(ciudad);
@@ -20,15 +25,17 @@ public class Biblioteca {
 
     @Override
     public String toString() {
-        return this.getIdentificadorBiblioteca() + this.getNombre() + ", " + this.getDireccion() + "; " + this.getCiudad() + "(" + this.getProvincia() + ")";
+        return this.getIdentificadorBiblioteca() + this.getNombre() + ", " + this.getDireccion() + "; "
+                + this.getCiudad() + "(" + this.getProvincia() + ")";
     }
 
-    public String getIdentificadorBiblioteca() {
+    public Integer getIdentificadorBiblioteca() {
         return identificadorBiblioteca;
     }
 
-    public void setIdentificadorBiblioteca(String identificadorBiblioteca) {
-        this.identificadorBiblioteca = identificadorBiblioteca;
+    public void setIdentificadorBiblioteca() {
+        this.identificadorBiblioteca = contadorDeIdentificador;
+        contadorDeIdentificador++;
     }
 
     public String getNombre() {
@@ -63,6 +70,21 @@ public class Biblioteca {
         this.provincia = provincia;
     }
 
-    
+    public void anhadirEjemplares(int numeroDeEjemplares, Libro libro) throws ExcepcionEjemplaresInsuficientes{
+        if (libro.getNumeroEjemplaresDisponibles() < numeroDeEjemplares) {
+            throw new ExcepcionEjemplaresInsuficientes();
+        }
+        ArrayList<Ejemplar> listaEjemplaresDisponibles = libro.getEjemplaresDisponibles();
+        for (int i = 0; i < numeroDeEjemplares; i++) {
+            libro.anhadirEjemplar(listaEjemplaresDisponibles.get(i));
+        }
+    }
 
+    public ArrayList<Ejemplar> getListaEjemplares() {
+        return listaEjemplares;
+    }
+
+    public void setListaEjemplares(ArrayList<Ejemplar> listaEjemplares) {
+        this.listaEjemplares = listaEjemplares;
+    }
 }

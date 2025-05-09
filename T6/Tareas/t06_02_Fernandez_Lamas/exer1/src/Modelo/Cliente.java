@@ -17,6 +17,10 @@ public class Cliente extends Usuario {
         super(nombreUsuario, contrasenhaUsuario, TipoUsuario.CLIENTE, nombre, apellido1, apellido2, dni, correo);
     }
 
+    public void anhadirPrestamo(Libro libroPrestado, String fechaPrestamo) {
+        this.prestamos.add(new Prestamo(libroPrestado, fechaPrestamo));
+    }
+
     public boolean isSancionado() {
         int suma = CERO;
         for (Prestamo prestamo : prestamos) {
@@ -35,6 +39,15 @@ public class Cliente extends Usuario {
             if (prestamo.isEnPrestamo()) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        Cliente cliente = (Cliente) object;
+        if (this.getDni().equals(cliente.getDni())) {
+            return true;
         }
         return false;
     }

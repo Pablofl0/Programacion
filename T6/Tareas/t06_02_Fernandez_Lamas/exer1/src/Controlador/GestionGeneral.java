@@ -5,12 +5,15 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 
+import Excepciones.ExcepcionEjemplaresInsuficientes;
 import Excepciones.ExcepcionGeneral;
 import Excepciones.ExcepcionISBNNoValido;
+import Excepciones.ExcepcionIdNoValido;
 import Modelo.AdministradorBiblioteca;
 import Modelo.AdministradorGeneral;
 import Modelo.Cliente;
 import Modelo.Libro;
+import Modelo.TipoLengua;
 import Modelo.TipoUsuario;
 import Modelo.Usuario;
 import Modelo.Biblioteca;
@@ -19,7 +22,7 @@ public class GestionGeneral {
 
     private static GestionGeneral INSTANCE; // Singleton
 
-    private HashMap<String, Biblioteca> redDeBibliotecas;
+    private HashMap<Integer, Biblioteca> redDeBibliotecas;
     private HashMap<String, Usuario> usuarios;
     private HashMap<String, Libro> redDeLibros;
 
@@ -28,6 +31,61 @@ public class GestionGeneral {
         this.redDeBibliotecas = new HashMap<>();
         this.redDeLibros = new HashMap<>();
         this.anhadirDatosDePrueba();
+    }
+
+    //Métodos de la red de Bibliotecas.
+    public void anhadirBiblioteca(String nombre, String direccion, String ciudad, String provincia) {
+        Biblioteca newBiblioteca = new Biblioteca(nombre, direccion, ciudad, provincia);
+        this.redDeBibliotecas.put(newBiblioteca.getIdentificadorBiblioteca(), newBiblioteca);
+    }
+
+    public Biblioteca verBibliotecaSegunID(Integer id) throws ExcepcionIdNoValido {
+        if (!this.redDeBibliotecas.keySet().contains(id)) {
+            throw new ExcepcionIdNoValido();
+        }
+        return this.redDeBibliotecas.get(id);
+    }
+
+    public ArrayList<Biblioteca> getBibliotecas() {
+        ArrayList<Biblioteca> listaBibliotecas = new ArrayList<>();
+        for (int idProducto : this.redDeBibliotecas.keySet()) {
+            listaBibliotecas.add(this.redDeBibliotecas.get(idProducto));
+        }
+        return listaBibliotecas;
+    }
+
+    public void anhadirEjemplaresAUnaBiblioteca(Integer identificadorDeBiblioteca, int numeroDeEjemplares, Libro libro) throws ExcepcionEjemplaresInsuficientes{
+        this.redDeBibliotecas.get(identificadorDeBiblioteca).anhadirEjemplares(numeroDeEjemplares, libro);
+    }
+
+    public void anhadirLibro(String titulo, String autor, TipoLengua lengua, String editorial, String ISBN,
+    Integer numeroDeEjemplares) throws ExcepcionISBNNoValido {
+        Libro newLibro = new Libro(titulo, autor, lengua, editorial, ISBN, numeroDeEjemplares);
+        this.redDeLibros.put(ISBN, newLibro);
+    }
+
+
+    //Métodos de clientes.
+    public ArrayList<Cliente> getClientes() {
+        ArrayList<Cliente> listaClientes = new ArrayList<>();
+        for (String idUsuario : this.usuarios.keySet()) {
+            if (this.usuarios.get(idUsuario).getTipoUsuario().equals(TipoUsuario.CLIENTE)) {
+                listaClientes.add((Cliente) this.usuarios.get(idUsuario));
+            }
+        }
+        return listaClientes;
+    }
+
+    public Cliente getClienteSegunDNI(String dni) {
+        for (Cliente cliente : this.getClientes()) {
+            if (cliente.getDni().equals(dni)) {
+                
+            }
+        }
+    }
+
+    public void anhadirUnPrestamoAUnCliente(String nombreCliente, Libro libroPrestado, String fechaPrestamo) {
+
     }
 
     private void anhadirDatosDePrueba() {

@@ -10,19 +10,20 @@ public class Libro {
     private TipoLengua lengua;
     private String editorial;
     private String ISBN;
-    private ArrayList<Ejemplar> ejemplares;
+    private ArrayList<Ejemplar> ejemplares = new ArrayList<>();
 
     public Libro() {
     }
 
-    public Libro(String titulo, String autor, TipoLengua lengua, String editorial, String ISBN)
+    public Libro(String titulo, String autor, TipoLengua lengua, String editorial, String ISBN,
+            Integer numeroDeEjemplares)
             throws ExcepcionISBNNoValido {
         this.setTitulo(titulo);
         this.setAutor(autor);
         this.setLengua(lengua);
         this.setEditorial(editorial);
         this.setISBN(ISBN);
-        this.setEjemplares(new ArrayList<>());
+        this.setEjemplares(numeroDeEjemplares);
     }
 
     public void anhadirEjemplar(Ejemplar ejemplar) {
@@ -31,7 +32,8 @@ public class Libro {
 
     @Override
     public String toString() {
-        return this.getISBN() + ", " + this.getTitulo() + " de " + this.getAutor() + " en " + this.getLengua() + "(" + this.getEditorial() + ")";
+        return this.getISBN() + ", " + this.getTitulo() + " de " + this.getAutor() + " en " + this.getLengua() + "("
+                + this.getEditorial() + ")";
     }
 
     public String getTitulo() {
@@ -123,8 +125,31 @@ public class Libro {
         return ejemplares;
     }
 
-    public void setEjemplares(ArrayList<Ejemplar> ejemplares) {
-        this.ejemplares = ejemplares;
+    public Integer getNumeroEjemplaresDisponibles() {
+        Integer numeroEjemplaresDisponibles = 0;
+        for (Ejemplar ejemplar : this.getEjemplares()) {
+            if (ejemplar.getBiblioteca().equals(null)) {
+                numeroEjemplaresDisponibles++;
+            }
+        }
+        return numeroEjemplaresDisponibles;
+    }
+
+    public ArrayList<Ejemplar> getEjemplaresDisponibles() {
+        ArrayList<Ejemplar> listaEjemplaresDisponibles = new ArrayList<>();
+        for (Ejemplar ejemplar : this.getEjemplares()) {
+            if (ejemplar.getBiblioteca().equals(null)) {
+                listaEjemplaresDisponibles.add(ejemplar);
+            }
+        }
+        return listaEjemplaresDisponibles;
+    }
+
+    public void setEjemplares(Integer numeroDeEjemplares) {
+        for (int i = 0; i < numeroDeEjemplares; i++) {
+            Ejemplar newEjemplar = new Ejemplar(this);
+            this.ejemplares.add(newEjemplar);
+        }
     }
 
 }
