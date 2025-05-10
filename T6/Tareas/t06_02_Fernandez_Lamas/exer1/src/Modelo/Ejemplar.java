@@ -5,13 +5,14 @@ public class Ejemplar {
     private Biblioteca biblioteca;
     private Cliente cliente;
     private String idEjemplar;
+    private boolean prestado;
     private static int contadorDeIdentificador = 1;
 
 
     public Ejemplar(Libro libro) {
         this.setLibro(libro);
-        this.setCliente(cliente);
         this.setIdEjemplar();
+        this.setPrestado(false);
         this.getLibro().anhadirEjemplar(this);
     }
 
@@ -37,6 +38,12 @@ public class Ejemplar {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+        this.setPrestado(true);
+    }
+
+    public void quitarCliente() {
+        this.setCliente(null);
+        this.setPrestado(false);
     }
 
     public String getIdEjemplar() {
@@ -46,6 +53,14 @@ public class Ejemplar {
     public void setIdEjemplar() {
         this.idEjemplar = libro.getISBN() + contadorDeIdentificador;
         contadorDeIdentificador++;
+    }
+
+    public boolean isPrestado() {
+        return prestado;
+    }
+
+    public void setPrestado(boolean prestado) {
+        this.prestado = prestado;
     }
 
 }

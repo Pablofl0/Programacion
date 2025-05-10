@@ -5,10 +5,14 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 
+import Excepciones.ExcepcionBibliotecaNoEnLaRed;
 import Excepciones.ExcepcionEjemplaresInsuficientes;
+import Excepciones.ExcepcionEmailInvalido;
 import Excepciones.ExcepcionGeneral;
 import Excepciones.ExcepcionISBNNoValido;
+import Excepciones.ExcepcionISBNRepetido;
 import Excepciones.ExcepcionIdNoValido;
+import Excepciones.ExcepcionRegistroUsuario;
 import Modelo.AdministradorBiblioteca;
 import Modelo.AdministradorGeneral;
 import Modelo.Cliente;
@@ -17,6 +21,7 @@ import Modelo.TipoLengua;
 import Modelo.TipoUsuario;
 import Modelo.Usuario;
 import Modelo.Biblioteca;
+import Modelo.Ejemplar;
 
 public class GestionGeneral {
 
@@ -33,7 +38,13 @@ public class GestionGeneral {
         this.anhadirDatosDePrueba();
     }
 
-    //Métodos de la red de Bibliotecas.
+    //Métodos de préstamos.
+    
+    public void anhadirUnPrestamoAUnCliente(String nombreCliente, Libro libroPrestado, String fechaPrestamo) {
+
+    }
+
+    //Métodos de la red de bibliotecas.
     public void anhadirBiblioteca(String nombre, String direccion, String ciudad, String provincia) {
         Biblioteca newBiblioteca = new Biblioteca(nombre, direccion, ciudad, provincia);
         this.redDeBibliotecas.put(newBiblioteca.getIdentificadorBiblioteca(), newBiblioteca);
@@ -54,16 +65,32 @@ public class GestionGeneral {
         return listaBibliotecas;
     }
 
-    public void anhadirEjemplaresAUnaBiblioteca(Integer identificadorDeBiblioteca, int numeroDeEjemplares, Libro libro) throws ExcepcionEjemplaresInsuficientes{
+    public void anhadirEjemplaresAUnaBiblioteca(Integer identificadorDeBiblioteca, int numeroDeEjemplares, Libro libro) throws ExcepcionEjemplaresInsuficientes {
         this.redDeBibliotecas.get(identificadorDeBiblioteca).anhadirEjemplares(numeroDeEjemplares, libro);
     }
 
+    //Métodos de red de libros.
     public void anhadirLibro(String titulo, String autor, TipoLengua lengua, String editorial, String ISBN,
-    Integer numeroDeEjemplares) throws ExcepcionISBNNoValido {
+            Integer numeroDeEjemplares) throws ExcepcionISBNNoValido, ExcepcionISBNRepetido {
+        existeLibroEnLaRedDeLibros(ISBN);
         Libro newLibro = new Libro(titulo, autor, lengua, editorial, ISBN, numeroDeEjemplares);
         this.redDeLibros.put(ISBN, newLibro);
     }
 
+    private boolean existeLibroEnLaRedDeLibros(String isbn) throws ExcepcionISBNRepetido {
+        if (!this.redDeLibros.keySet().contains(isbn)) {
+            throw new ExcepcionISBNRepetido();
+        }
+        return false;
+    }
+
+    public ArrayList<Libro> getLibros() {
+        ArrayList<Libro> listaLibros = new ArrayList<>();
+        for (String isbn : redDeLibros.keySet()) {
+            listaLibros.add(this.redDeLibros.get(isbn));
+        }
+        return listaLibros;
+    }
 
     //Métodos de clientes.
     public ArrayList<Cliente> getClientes() {
@@ -79,32 +106,48 @@ public class GestionGeneral {
     public Cliente getClienteSegunDNI(String dni) {
         for (Cliente cliente : this.getClientes()) {
             if (cliente.getDni().equals(dni)) {
-                
+
             }
         }
     }
 
-    public void anhadirUnPrestamoAUnCliente(String nombreCliente, Libro libroPrestado, String fechaPrestamo) {
-
+    //Métodos de usuarios.
+    public void anhadirCliente(String nombreUsuario, String contrasenhaUsuario, String nombre,
+            String apellido1, String apellido2, String dni, String correo)
+            throws ExcepcionRegistroUsuario, ExcepcionGeneral, ExcepcionEmailInvalido {
+        if (existeNombreUsuario(nombreUsuario)) {
+            throw new ExcepcionRegistroUsuario();
+        }
+        Cliente newCliente = new Cliente(nombreUsuario, contrasenhaUsuario, nombre, apellido1, apellido2, dni, correo);
+        this.usuarios.put(nombreUsuario, newCliente);
     }
 
+    public void anhadirAdministradorGeneral(String nombreUsuario, String contrasenhaUsuario, String nombre,
+            String apellido1, String apellido2, String dni, String correo) throws ExcepcionGeneral, ExcepcionEmailInvalido, ExcepcionRegistroUsuario {
+        if (existeNombreUsuario(nombreUsuario)) {
+            throw new ExcepcionRegistroUsuario();
+        }
+        AdministradorGeneral newAdmin = new AdministradorGeneral(nombreUsuario, contrasenhaUsuario, nombre, apellido1, apellido2, dni, correo);
+        this.usuarios.put(nombreUsuario, newAdmin);
+    }
+
+    public void anhadirAdministradorBiblioteca(String nombreUsuario, String contrasenhaUsuario, String nombre,
+            String apellido1, String apellido2, String dni, String correo, Integer idBiblioteca) throws ExcepcionBibliotecaNoEnLaRed, ExcepcionGeneral, ExcepcionEmailInvalido, ExcepcionRegistroUsuario {
+        if (existeNombreUsuario(nombreUsuario)) {
+            throw new ExcepcionRegistroUsuario();
+        } else if (!existeBiblioteca(idBiblioteca)) {
+            throw new ExcepcionBibliotecaNoEnLaRed();
+        }
+        AdministradorBiblioteca newAdmin = new AdministradorBiblioteca(nombreUsuario, contrasenhaUsuario, nombre, apellido1, apellido2, dni, correo, this.redDeBibliotecas.get(idBiblioteca));
+        this.usuarios.put(nombreUsuario, newAdmin);
+    }
+
+    // Añadir admin:abc123.
     private void anhadirDatosDePrueba() {
         try {
-            this.anhadirAdministrador("Pepe", "AAAAAAaaaa1");
-            this.anhadirCliente("Juan", "AAAAAaaaa2");
-            Flauta flauta = new Flauta(10, 10, "adsga", "sdfsa", "dsfas", false);
-            this.anhadirProducto(flauta);
-            Saxofon saxofon = new Saxofon(10, 10, "adsga", "sdfsa", "dsfas", TipoSaxo.alto);
-            this.anhadirProducto(saxofon);
-            Trombon trombon = new Trombon(10, 10, "adsga", "sdfsa", "dsfas", false);
-            this.anhadirProducto(trombon);
-            Estuche estuche = new Estuche(10, 10, "nosf", "lsjf", TipoInstrumento.flauta);
-            this.anhadirProducto(estuche);
-            Libro libro = new Libro(10, 10, "ksdfj", "fksajf", "sdfs", "1000000001");
-            this.anhadirProducto(libro);
-        } catch (ExcepcionISBNNoValido | ExcepcionStockNegativo | ExcepcionGeneral | ExcepcionPrecioNegativo
-                | ExcepcionRegistroUsuario e) {
-
+            this.anhadirAdministradorGeneral("admin", "abc123.", "Pablo", "Fernández", "Lamas", "34630933V", "a24pablofl@ies.sanclemente.net");
+        } catch (ExcepcionEmailInvalido | ExcepcionGeneral | ExcepcionRegistroUsuario e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -112,24 +155,6 @@ public class GestionGeneral {
     // public void anhadirUsuario(Usuario newUsuario) {
     // this.usuarios.put(newUsuario.getNombreUsuario(), newUsuario);
     // }
-    public void anhadirCliente(String nombreUsuario, String contrasenhaUsuario)
-            throws ExcepcionRegistroUsuario, ExcepcionGeneral {
-        if (existeNombreUsuario(nombreUsuario)) {
-            throw new ExcepcionRegistroUsuario();
-        }
-        Cliente newCliente = new Cliente(nombreUsuario, contrasenhaUsuario);
-        this.usuarios.put(nombreUsuario, newCliente);
-    }
-
-    public void anhadirAdministrador(String nombreUsuario, String contrasenhaUsuario)
-            throws ExcepcionRegistroUsuario, ExcepcionGeneral {
-        if (existeNombreUsuario(nombreUsuario)) {
-            throw new ExcepcionRegistroUsuario();
-        }
-        AdministradorGeneral newAdmin = new AdministradorGeneral(nombreUsuario, contrasenhaUsuario);
-        this.usuarios.put(nombreUsuario, newAdmin);
-    }
-
     public void InicioDeSesionValido(String nombre, String contrasenha) throws ExcepcionGeneral {
         if (!(this.usuarios.containsKey(nombre) && this.usuarios.get(nombre).coincideContrasenha(contrasenha))) {
             throw new ExcepcionGeneral("No ha sido posible iniciar sesión.");
@@ -162,6 +187,10 @@ public class GestionGeneral {
 
     public boolean existeNombreUsuario(String nombreUsuario) {
         return (this.usuarios.keySet().contains(nombreUsuario));
+    }
+
+    public boolean existeBiblioteca(Integer idBiblioteca) {
+        return (this.redDeBibliotecas.keySet().contains(idBiblioteca));
     }
 
     public boolean coincidenCon1YCon2(String con1, String con2) {
@@ -276,17 +305,16 @@ public class GestionGeneral {
         return lista;
     }
 
-    public ArrayList<Producto> getLibros() {
-        ArrayList<Producto> lista = new ArrayList<>();
-        for (int idProducto : this.productos.keySet()) {
-            Producto productoNow = this.productos.get(idProducto);
-            if (productoNow.getTipoProducto().equals(TipoProducto.libro)) {
-                lista.add(productoNow);
-            }
-        }
-        return lista;
-    }
-
+    // public ArrayList<Producto> getLibros() {
+    //     ArrayList<Producto> lista = new ArrayList<>();
+    //     for (int idProducto : this.productos.keySet()) {
+    //         Producto productoNow = this.productos.get(idProducto);
+    //         if (productoNow.getTipoProducto().equals(TipoProducto.libro)) {
+    //             lista.add(productoNow);
+    //         }
+    //     }
+    //     return lista;
+    // }
     public ArrayList<Producto> getEstuches() {
         ArrayList<Producto> lista = new ArrayList<>();
         for (int idProducto : this.productos.keySet()) {

@@ -1,8 +1,7 @@
 package Modelo;
 
-import java.util.ArrayList;
-
 import Excepciones.ExcepcionEjemplaresInsuficientes;
+import java.util.ArrayList;
 
 public class Biblioteca {
     private Integer identificadorBiblioteca;
@@ -21,6 +20,16 @@ public class Biblioteca {
         this.setDireccion(direccion);
         this.setCiudad(ciudad);
         this.setProvincia(provincia);
+    }
+
+    public ArrayList<Ejemplar> getListaEjemplaresSinPrestar() {
+        ArrayList<Ejemplar> listaEjemplaresSinPrestar = new ArrayList<>();
+        for (Ejemplar ejemplar : this.listaEjemplares) {
+            if (!ejemplar.isPrestado()) {
+                listaEjemplaresSinPrestar.add(ejemplar);
+            }
+        }
+        return listaEjemplaresSinPrestar;
     }
 
     @Override

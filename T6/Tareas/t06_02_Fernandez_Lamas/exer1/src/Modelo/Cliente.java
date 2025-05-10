@@ -11,7 +11,7 @@ public class Cliente extends Usuario {
     private final int UNO = 1;
     private final int DOS = 2;
 
-    public Cliente(String nombreUsuario, String contrasenhaUsuario, TipoUsuario tipoUsuario, String nombre,
+    public Cliente(String nombreUsuario, String contrasenhaUsuario, String nombre,
             String apellido1, String apellido2, String dni, String correo)
             throws ExcepcionGeneral, ExcepcionEmailInvalido {
         super(nombreUsuario, contrasenhaUsuario, TipoUsuario.CLIENTE, nombre, apellido1, apellido2, dni, correo);
