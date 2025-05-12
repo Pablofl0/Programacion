@@ -2,6 +2,7 @@ package Controlador;
 
 import Excepciones.ExcepcionBibliotecaNoEnLaRed;
 import Excepciones.ExcepcionClienteConPrestamos;
+import Excepciones.ExcepcionClienteSancionado;
 import Excepciones.ExcepcionClienteSinPrestamos;
 import Excepciones.ExcepcionDNIExistente;
 import Excepciones.ExcepcionDNIInexistente;
@@ -43,7 +44,7 @@ public class GestionGeneral {
     }
 
     // Métodos de préstamos.
-    public void anhadirUnPrestamoAUnCliente(String dni, String isbnLibroDelEjemplarParaPrestar, String fechaPrestamo, Biblioteca bibliotecaDelAdminBiblio) throws ExcepcionDNIInexistente, ExcepcionClienteConPrestamos{
+    public void anhadirUnPrestamoAUnCliente(String dni, String isbnLibroDelEjemplarParaPrestar, String fechaPrestamo, Biblioteca bibliotecaDelAdminBiblio) throws ExcepcionClienteSancionado ,ExcepcionDNIInexistente, ExcepcionClienteConPrestamos{
         if (this.getClienteSegunDNI(dni).isEmpty()) {
             throw new ExcepcionDNIInexistente();
         }

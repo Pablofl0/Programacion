@@ -5,6 +5,8 @@ import Excepciones.ExcepcionDNIExistente;
 import Excepciones.ExcepcionEmailInvalido;
 import Excepciones.ExcepcionGeneral;
 import Excepciones.ExcepcionRegistroUsuario;
+import Modelo.AdministradorBiblioteca;
+import Modelo.AdministradorGeneral;
 import Modelo.Cliente;
 import Modelo.TipoUsuario;
 import Modelo.Usuario;
@@ -128,15 +130,17 @@ public class MenuPrincipal extends Menu {
                     try {
                         GestionGeneral.getInstance().InicioDeSesionValido(nombreUsuarioInicio,
                                 contrasenhaUsuarioInicio);
-                                Usuario usuarioNow = GestionGeneral.getInstance().getUsuarios().get(nombreUsuarioInicio);
+                        Usuario usuarioNow = GestionGeneral.getInstance().getUsuarios().get(nombreUsuarioInicio);
                         TipoUsuario tipoUsuarioIniciandoSesion = GestionGeneral.getInstance()
                                 .getTipoUsuario(nombreUsuarioInicio);
                         switch (tipoUsuarioIniciandoSesion) {
                             case TipoUsuario.ADMINGENERAL:
-                                // new MenuAdminGeneral().mostrar();
+                                AdministradorGeneral adminGeneral = (AdministradorGeneral) usuarioNow;
+                                new MenuAdministradorGeneral().mostrar(adminGeneral);
                                 break;
                             case TipoUsuario.ADMINBIBLIOTECA:
-                                // new MenuAdminBiblio().mostrar();
+                                AdministradorBiblioteca adminBiblio = (AdministradorBiblioteca) usuarioNow;
+                                new MenuAdministradorBiblioteca().mostrar(adminBiblio);
                                 break;
                             case TipoUsuario.CLIENTE:
                                 Cliente cliente = (Cliente) usuarioNow;

@@ -1,13 +1,15 @@
 package Vista;
 
 import Controlador.GestionGeneral;
-import Excepciones.ExcepcionEliminarStockDeMas;
 import Excepciones.ExcepcionIdNoValido;
+import Modelo.AdministradorGeneral;
 
-public class MenuAdministrador extends Menu {
+public class MenuAdministradorGeneral extends Menu {
 
     @Override
-    public void mostrar() {
+    public void mostrar() {}
+
+    public void mostrar(AdministradorGeneral adminGeneral) {
         //Eligiendo lo que quiere hacer el administrador.
         boolean eligiendoQueHacer = true;
 

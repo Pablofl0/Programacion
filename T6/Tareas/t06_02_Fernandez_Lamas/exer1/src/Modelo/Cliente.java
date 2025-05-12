@@ -1,6 +1,7 @@
 package Modelo;
 
 import Excepciones.ExcepcionClienteConPrestamos;
+import Excepciones.ExcepcionClienteSancionado;
 import Excepciones.ExcepcionClienteSinPrestamos;
 import Excepciones.ExcepcionEmailInvalido;
 import Excepciones.ExcepcionGeneral;
@@ -20,12 +21,12 @@ public class Cliente extends Usuario {
         this.setPrestamos(new ArrayList<>());
     }
 
-    public void anhadirPrestamo(Ejemplar ejemplarPrestado, String fechaPrestamo) throws ExcepcionClienteConPrestamos{
+    public void anhadirPrestamo(Ejemplar ejemplarPrestado, String fechaPrestamo) throws ExcepcionClienteConPrestamos, ExcepcionClienteSancionado{
         if (this.tieneLibrosPrestados()) {
             throw new ExcepcionClienteConPrestamos();
         }
-        else if (isSancionado()) {
-            throw new Excepcion
+        if (isSancionado()) {
+            throw new ExcepcionClienteSancionado();
         }
         this.prestamos.add(new Prestamo(ejemplarPrestado, fechaPrestamo));
     }
