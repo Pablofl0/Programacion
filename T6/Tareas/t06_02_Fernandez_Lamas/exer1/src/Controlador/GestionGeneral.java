@@ -1,11 +1,14 @@
 package Controlador;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import Excepciones.ExcepcionBibliotecaNoEnLaRed;
+import Excepciones.ExcepcionDNIExistente;
 import Excepciones.ExcepcionEjemplaresInsuficientes;
 import Excepciones.ExcepcionEmailInvalido;
 import Excepciones.ExcepcionGeneral;
@@ -38,13 +41,13 @@ public class GestionGeneral {
         this.anhadirDatosDePrueba();
     }
 
-    //Métodos de préstamos.
-    
+    // Métodos de préstamos.
+
     public void anhadirUnPrestamoAUnCliente(String nombreCliente, Libro libroPrestado, String fechaPrestamo) {
 
     }
 
-    //Métodos de la red de bibliotecas.
+    // Métodos de la red de bibliotecas.
     public void anhadirBiblioteca(String nombre, String direccion, String ciudad, String provincia) {
         Biblioteca newBiblioteca = new Biblioteca(nombre, direccion, ciudad, provincia);
         this.redDeBibliotecas.put(newBiblioteca.getIdentificadorBiblioteca(), newBiblioteca);
@@ -65,11 +68,25 @@ public class GestionGeneral {
         return listaBibliotecas;
     }
 
-    public void anhadirEjemplaresAUnaBiblioteca(Integer identificadorDeBiblioteca, int numeroDeEjemplares, Libro libro) throws ExcepcionEjemplaresInsuficientes {
+    public void anhadirEjemplaresAUnaBiblioteca(Integer identificadorDeBiblioteca, int numeroDeEjemplares, Libro libro)
+            throws ExcepcionEjemplaresInsuficientes {
         this.redDeBibliotecas.get(identificadorDeBiblioteca).anhadirEjemplares(numeroDeEjemplares, libro);
     }
 
-    //Métodos de red de libros.
+    public Integer idDeBibliotecaMaximo() {
+        // return int intvalue =
+        // optionalint.get(this.redDeBibliotecas.keySet().stream().max(Comparator.comparing(c
+        // -> c)));
+        Integer maximo = null;
+        for (Integer idBiblio : this.redDeBibliotecas.keySet()) {
+            if (idBiblio > maximo || maximo == null) {
+                maximo = idBiblio;
+            }
+        }
+        return maximo;
+    }
+
+    // Métodos de red de libros.
     public void anhadirLibro(String titulo, String autor, TipoLengua lengua, String editorial, String ISBN,
             Integer numeroDeEjemplares) throws ExcepcionISBNNoValido, ExcepcionISBNRepetido {
         existeLibroEnLaRedDeLibros(ISBN);
@@ -92,7 +109,7 @@ public class GestionGeneral {
         return listaLibros;
     }
 
-    //Métodos de clientes.
+    // Métodos de clientes.
     public ArrayList<Cliente> getClientes() {
         ArrayList<Cliente> listaClientes = new ArrayList<>();
         for (String idUsuario : this.usuarios.keySet()) {
@@ -104,48 +121,73 @@ public class GestionGeneral {
     }
 
     public Cliente getClienteSegunDNI(String dni) {
+        Cliente clienteSegunDni = null;
         for (Cliente cliente : this.getClientes()) {
             if (cliente.getDni().equals(dni)) {
-
+                clienteSegunDni = cliente;
             }
         }
+        return clienteSegunDni;
     }
 
-    //Métodos de usuarios.
+    public Stream<Libro> librosPorTitulo(String titulo) {
+        return this.getLibros().stream()
+                .filter(c -> c.getTitulo().contains(titulo) && c.getEjemplaresDisponibles().size() > 0)
+                .sorted();
+    }
+
+    public Stream<Libro> librosPorAutor(String autor) {
+        return this.getLibros().stream()
+                .filter(c -> c.getAutor().contains(autor) && c.getEjemplaresDisponibles().size() > 0)
+                .sorted();
+    }
+
+    // Métodos de usuarios.
     public void anhadirCliente(String nombreUsuario, String contrasenhaUsuario, String nombre,
             String apellido1, String apellido2, String dni, String correo)
-            throws ExcepcionRegistroUsuario, ExcepcionGeneral, ExcepcionEmailInvalido {
+            throws ExcepcionRegistroUsuario, ExcepcionGeneral, ExcepcionEmailInvalido, ExcepcionDNIExistente {
         if (existeNombreUsuario(nombreUsuario)) {
             throw new ExcepcionRegistroUsuario();
+        } else if (!(getClienteSegunDNI(dni) == null)) {
+            throw new ExcepcionDNIExistente();
         }
         Cliente newCliente = new Cliente(nombreUsuario, contrasenhaUsuario, nombre, apellido1, apellido2, dni, correo);
         this.usuarios.put(nombreUsuario, newCliente);
     }
 
     public void anhadirAdministradorGeneral(String nombreUsuario, String contrasenhaUsuario, String nombre,
-            String apellido1, String apellido2, String dni, String correo) throws ExcepcionGeneral, ExcepcionEmailInvalido, ExcepcionRegistroUsuario {
+            String apellido1, String apellido2, String dni, String correo)
+            throws ExcepcionGeneral, ExcepcionEmailInvalido, ExcepcionRegistroUsuario {
         if (existeNombreUsuario(nombreUsuario)) {
             throw new ExcepcionRegistroUsuario();
         }
-        AdministradorGeneral newAdmin = new AdministradorGeneral(nombreUsuario, contrasenhaUsuario, nombre, apellido1, apellido2, dni, correo);
+        AdministradorGeneral newAdmin = new AdministradorGeneral(nombreUsuario, contrasenhaUsuario, nombre, apellido1,
+                apellido2, dni, correo);
         this.usuarios.put(nombreUsuario, newAdmin);
     }
 
     public void anhadirAdministradorBiblioteca(String nombreUsuario, String contrasenhaUsuario, String nombre,
-            String apellido1, String apellido2, String dni, String correo, Integer idBiblioteca) throws ExcepcionBibliotecaNoEnLaRed, ExcepcionGeneral, ExcepcionEmailInvalido, ExcepcionRegistroUsuario {
+            String apellido1, String apellido2, String dni, String correo, Integer idBiblioteca)
+            throws ExcepcionBibliotecaNoEnLaRed, ExcepcionGeneral, ExcepcionEmailInvalido, ExcepcionRegistroUsuario {
         if (existeNombreUsuario(nombreUsuario)) {
             throw new ExcepcionRegistroUsuario();
         } else if (!existeBiblioteca(idBiblioteca)) {
             throw new ExcepcionBibliotecaNoEnLaRed();
         }
-        AdministradorBiblioteca newAdmin = new AdministradorBiblioteca(nombreUsuario, contrasenhaUsuario, nombre, apellido1, apellido2, dni, correo, this.redDeBibliotecas.get(idBiblioteca));
+        AdministradorBiblioteca newAdmin = new AdministradorBiblioteca(nombreUsuario, contrasenhaUsuario, nombre,
+                apellido1, apellido2, dni, correo, this.redDeBibliotecas.get(idBiblioteca));
         this.usuarios.put(nombreUsuario, newAdmin);
+    }
+
+    public HashMap<String, Usuario> getUsuarios() {
+        return usuarios;
     }
 
     // Añadir admin:abc123.
     private void anhadirDatosDePrueba() {
         try {
-            this.anhadirAdministradorGeneral("admin", "abc123.", "Pablo", "Fernández", "Lamas", "34630933V", "a24pablofl@ies.sanclemente.net");
+            this.anhadirAdministradorGeneral("admin", "abc123.", "Pablo", "Fernández", "Lamas", "34630933V",
+                    "a24pablofl@ies.sanclemente.net");
         } catch (ExcepcionEmailInvalido | ExcepcionGeneral | ExcepcionRegistroUsuario e) {
             System.out.println(e.getMessage());
         }
@@ -208,122 +250,6 @@ public class GestionGeneral {
             }
         }
         return Optional.empty();
-    }
-
-    public void anhadirProducto(Producto newProducto) {
-        this.productos.put(newProducto.getIdProducto(), newProducto);
-    }
-
-    public Producto verProductoSegunID(int idProducto) throws ExcepcionIdNoValido {
-        if (!this.productos.keySet().contains(idProducto)) {
-            throw new ExcepcionIdNoValido();
-        }
-        return this.productos.get(idProducto);
-    }
-
-    public void anhadirStockAUnProducto(int idProducto, int newStock) throws ExcepcionIdNoValido {
-        verProductoSegunID(idProducto).anhadirStock(newStock);
-    }
-
-    public void eliminarStockDeUnProducto(int idProducto, int stockAEliminar)
-            throws ExcepcionEliminarStockDeMas, ExcepcionIdNoValido {
-        verProductoSegunID(idProducto).eliminarStock(stockAEliminar);
-    }
-
-    public void comprarUnaUnidadDeUnProducto(int idProducto)
-            throws ExcepcionComprarProductoSinStock, ExcepcionIdNoValido {
-        verProductoSegunID(idProducto).comprarUnaUnidad();
-    }
-
-    public Set<Integer> obtenerIdProductos() {
-        return this.productos.keySet();
-    }
-
-    public ArrayList<Producto> getProductos() {
-        ArrayList<Producto> listaProductos = new ArrayList<>();
-        for (int idProducto : this.productos.keySet()) {
-            listaProductos.add(this.productos.get(idProducto));
-        }
-        return listaProductos;
-    }
-
-    public ArrayList<Producto> getInstrumentos() {
-        ArrayList<Producto> lista = new ArrayList<>();
-        for (int idProducto : this.productos.keySet()) {
-            Producto productoNow = this.productos.get(idProducto);
-            if (productoNow.getTipoProducto().equals(TipoProducto.flauta)
-                    || productoNow.getTipoProducto().equals(TipoProducto.saxofon)
-                    || productoNow.getTipoProducto().equals(TipoProducto.trombon)) {
-                lista.add(productoNow);
-            }
-        }
-        return lista;
-    }
-
-    public ArrayList<Producto> getComplementos() {
-        ArrayList<Producto> lista = new ArrayList<>();
-        for (int idProducto : this.productos.keySet()) {
-            Producto productoNow = this.productos.get(idProducto);
-            if (productoNow.getTipoProducto().equals(TipoProducto.libro)
-                    || productoNow.getTipoProducto().equals(TipoProducto.estuche)) {
-                lista.add(productoNow);
-            }
-        }
-        return lista;
-    }
-
-    public ArrayList<Producto> getFlautas() {
-        ArrayList<Producto> lista = new ArrayList<>();
-        for (int idProducto : this.productos.keySet()) {
-            Producto productoNow = this.productos.get(idProducto);
-            if (productoNow.getTipoProducto().equals(TipoProducto.flauta)) {
-                lista.add(productoNow);
-            }
-        }
-        return lista;
-    }
-
-    public ArrayList<Producto> getSaxofones() {
-        ArrayList<Producto> lista = new ArrayList<>();
-        for (int idProducto : this.productos.keySet()) {
-            Producto productoNow = this.productos.get(idProducto);
-            if (productoNow.getTipoProducto().equals(TipoProducto.saxofon)) {
-                lista.add(productoNow);
-            }
-        }
-        return lista;
-    }
-
-    public ArrayList<Producto> getTrombones() {
-        ArrayList<Producto> lista = new ArrayList<>();
-        for (int idProducto : this.productos.keySet()) {
-            Producto productoNow = this.productos.get(idProducto);
-            if (productoNow.getTipoProducto().equals(TipoProducto.trombon)) {
-                lista.add(productoNow);
-            }
-        }
-        return lista;
-    }
-
-    // public ArrayList<Producto> getLibros() {
-    //     ArrayList<Producto> lista = new ArrayList<>();
-    //     for (int idProducto : this.productos.keySet()) {
-    //         Producto productoNow = this.productos.get(idProducto);
-    //         if (productoNow.getTipoProducto().equals(TipoProducto.libro)) {
-    //             lista.add(productoNow);
-    //         }
-    //     }
-    //     return lista;
-    // }
-    public ArrayList<Producto> getEstuches() {
-        ArrayList<Producto> lista = new ArrayList<>();
-        for (int idProducto : this.productos.keySet()) {
-            Producto productoNow = this.productos.get(idProducto);
-            if (productoNow.getTipoProducto().equals(TipoProducto.estuche)) {
-                lista.add(productoNow);
-            }
-        }
-        return lista;
     }
 
     // Patrón Singleton

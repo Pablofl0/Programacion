@@ -15,6 +15,7 @@ public class Cliente extends Usuario {
             String apellido1, String apellido2, String dni, String correo)
             throws ExcepcionGeneral, ExcepcionEmailInvalido {
         super(nombreUsuario, contrasenhaUsuario, TipoUsuario.CLIENTE, nombre, apellido1, apellido2, dni, correo);
+        this.setPrestamos(new ArrayList<>());
     }
 
     public void anhadirPrestamo(Libro libroPrestado, String fechaPrestamo) {
@@ -35,6 +36,9 @@ public class Cliente extends Usuario {
     }
 
     public boolean tieneLibrosPrestados() {
+        if (this.prestamos.isEmpty()) {
+            return false;
+        }
         for (Prestamo prestamo : prestamos) {
             if (prestamo.isEnPrestamo()) {
                 return true;
@@ -43,12 +47,31 @@ public class Cliente extends Usuario {
         return false;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        Cliente cliente = (Cliente) object;
-        if (this.getDni().equals(cliente.getDni())) {
-            return true;
+    public String fechaDevolucionPrestamoActual() {
+        String fecha = null;
+        for (Prestamo prestamo : prestamos) {
+            if (prestamo.isEnPrestamo()) {
+                fecha = prestamo.getFechaLimiteDevolucion();
+            }
         }
-        return false;
+        return fecha;
     }
+
+    public ArrayList<Prestamo> getPrestamos() {
+        return prestamos;
+    }
+
+    public void setPrestamos(ArrayList<Prestamo> prestamos) {
+        this.prestamos = prestamos;
+    }
+
+    // @Override
+    // public boolean equals(Object object) {
+    //     Cliente cliente = (Cliente) object;
+    //     if (this.getDni().equals(cliente.getDni())) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
+    
 }

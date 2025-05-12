@@ -26,6 +26,10 @@ public class Libro {
         this.setEjemplares(numeroDeEjemplares);
     }
 
+    public int compareTo(Libro otro) {
+        return this.getAutor().compareToIgnoreCase(otro.getAutor());
+    }
+
     public void anhadirEjemplar(Ejemplar ejemplar) {
         this.ejemplares.add(ejemplar);
     }
@@ -42,6 +46,10 @@ public class Libro {
 
     private void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    public String[] getAutores() {
+        return this.autor;
     }
 
     public String getAutor() {

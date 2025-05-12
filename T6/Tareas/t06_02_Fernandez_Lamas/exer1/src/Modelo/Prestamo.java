@@ -52,8 +52,8 @@ public class Prestamo {
         this.fechaPrestamo = LocalDate.parse(fechaPrestamo, formato);
     }
 
-    public LocalDate getFechaLimiteDevolucion() {
-        return fechaLimiteDevolucion;
+    public String getFechaLimiteDevolucion() {
+        return fechaLimiteDevolucion.format(formato);
     }
 
     public void setFechaLimiteDevolucion() {
