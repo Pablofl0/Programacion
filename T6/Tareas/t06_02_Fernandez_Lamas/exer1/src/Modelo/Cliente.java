@@ -1,5 +1,7 @@
 package Modelo;
 
+import Excepciones.ExcepcionClienteConPrestamos;
+import Excepciones.ExcepcionClienteSinPrestamos;
 import Excepciones.ExcepcionEmailInvalido;
 import Excepciones.ExcepcionGeneral;
 import java.util.ArrayList;
@@ -18,8 +20,14 @@ public class Cliente extends Usuario {
         this.setPrestamos(new ArrayList<>());
     }
 
-    public void anhadirPrestamo(Libro libroPrestado, String fechaPrestamo) {
-        this.prestamos.add(new Prestamo(libroPrestado, fechaPrestamo));
+    public void anhadirPrestamo(Ejemplar ejemplarPrestado, String fechaPrestamo) throws ExcepcionClienteConPrestamos{
+        if (this.tieneLibrosPrestados()) {
+            throw new ExcepcionClienteConPrestamos();
+        }
+        else if (isSancionado()) {
+            throw new Excepcion
+        }
+        this.prestamos.add(new Prestamo(ejemplarPrestado, fechaPrestamo));
     }
 
     public boolean isSancionado() {
@@ -55,6 +63,17 @@ public class Cliente extends Usuario {
             }
         }
         return fecha;
+    }
+
+    public Prestamo getPrestamoActual() throws ExcepcionClienteSinPrestamos{
+        if (!this.tieneLibrosPrestados()) {
+            throw new ExcepcionClienteSinPrestamos();
+        }
+        return this.prestamos.stream().filter(c -> c.isEnPrestamo()).findFirst().get();
+    }
+
+    public void devolverPrestamoActual(String fechaDevolucion) throws ExcepcionClienteSinPrestamos{
+        this.getPrestamoActual().setFechaDevolucion(fechaDevolucion);
     }
 
     public ArrayList<Prestamo> getPrestamos() {

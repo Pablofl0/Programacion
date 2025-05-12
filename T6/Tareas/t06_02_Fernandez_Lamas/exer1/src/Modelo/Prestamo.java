@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 
 public class Prestamo {
 
-    private Libro libroPrestado;
+    private Ejemplar ejemplarPrestado;
     private LocalDate fechaPrestamo;
     private LocalDate fechaLimiteDevolucion;
     private LocalDate fechaDevolucion;
@@ -15,8 +15,8 @@ public class Prestamo {
 
     private static DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public Prestamo(Libro libroPrestado, String fechaPrestamo) {
-        this.setLibroPrestado(libroPrestado);
+    public Prestamo(Ejemplar ejemplarPrestado, String fechaPrestamo) {
+        this.setEjemplarPrestado(ejemplarPrestado);
         this.setFechaPrestamo(fechaPrestamo);
         this.setEnPrestamo(true);
     }
@@ -36,12 +36,12 @@ public class Prestamo {
         return false;
     }
 
-    public Libro getLibroPrestado() {
-        return libroPrestado;
+    public Ejemplar getEjemplarPrestado() {
+        return ejemplarPrestado;
     }
 
-    public void setLibroPrestado(Libro libroPrestado) {
-        this.libroPrestado = libroPrestado;
+    public void setEjemplarPrestado(Ejemplar ejemplarPrestado) {
+        this.ejemplarPrestado = ejemplarPrestado;
     }
 
     public LocalDate getFechaPrestamo() {
@@ -50,6 +50,7 @@ public class Prestamo {
 
     public void setFechaPrestamo(String fechaPrestamo) {
         this.fechaPrestamo = LocalDate.parse(fechaPrestamo, formato);
+        this.setFechaLimiteDevolucion();
     }
 
     public String getFechaLimiteDevolucion() {

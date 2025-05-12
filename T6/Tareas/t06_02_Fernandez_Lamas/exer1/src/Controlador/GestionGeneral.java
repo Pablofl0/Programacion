@@ -1,14 +1,10 @@
 package Controlador;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Stream;
-
 import Excepciones.ExcepcionBibliotecaNoEnLaRed;
+import Excepciones.ExcepcionClienteConPrestamos;
+import Excepciones.ExcepcionClienteSinPrestamos;
 import Excepciones.ExcepcionDNIExistente;
+import Excepciones.ExcepcionDNIInexistente;
 import Excepciones.ExcepcionEjemplaresInsuficientes;
 import Excepciones.ExcepcionEmailInvalido;
 import Excepciones.ExcepcionGeneral;
@@ -18,13 +14,18 @@ import Excepciones.ExcepcionIdNoValido;
 import Excepciones.ExcepcionRegistroUsuario;
 import Modelo.AdministradorBiblioteca;
 import Modelo.AdministradorGeneral;
+import Modelo.Biblioteca;
 import Modelo.Cliente;
 import Modelo.Libro;
 import Modelo.TipoLengua;
 import Modelo.TipoUsuario;
 import Modelo.Usuario;
-import Modelo.Biblioteca;
-import Modelo.Ejemplar;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
 
 public class GestionGeneral {
 
@@ -42,9 +43,15 @@ public class GestionGeneral {
     }
 
     // Métodos de préstamos.
+    public void anhadirUnPrestamoAUnCliente(String dni, String isbnLibroDelEjemplarParaPrestar, String fechaPrestamo, Biblioteca bibliotecaDelAdminBiblio) throws ExcepcionDNIInexistente, ExcepcionClienteConPrestamos{
+        if (this.getClienteSegunDNI(dni).isEmpty()) {
+            throw new ExcepcionDNIInexistente();
+        }
+        this.getClienteSegunDNI(dni).get().anhadirPrestamo(bibliotecaDelAdminBiblio.getListaEjemplaresSinPrestar().stream().filter(c -> c.getLibro().getISBN().equals(isbnLibroDelEjemplarParaPrestar)).findFirst().get(), fechaPrestamo);
+    }
 
-    public void anhadirUnPrestamoAUnCliente(String nombreCliente, Libro libroPrestado, String fechaPrestamo) {
-
+    public void devolverPrestamoDeUnCliente(String dni, String fechaDevolucion) throws ExcepcionClienteSinPrestamos{
+        this.getClienteSegunDNI(dni).get().devolverPrestamoActual(fechaDevolucion);
     }
 
     // Métodos de la red de bibliotecas.
@@ -73,17 +80,20 @@ public class GestionGeneral {
         this.redDeBibliotecas.get(identificadorDeBiblioteca).anhadirEjemplares(numeroDeEjemplares, libro);
     }
 
-    public Integer idDeBibliotecaMaximo() {
-        // return int intvalue =
-        // optionalint.get(this.redDeBibliotecas.keySet().stream().max(Comparator.comparing(c
-        // -> c)));
-        Integer maximo = null;
-        for (Integer idBiblio : this.redDeBibliotecas.keySet()) {
-            if (idBiblio > maximo || maximo == null) {
-                maximo = idBiblio;
-            }
-        }
-        return maximo;
+    // public Integer idDeBibliotecaMaximo() {
+    //     // return int intvalue =
+    //     // optionalint.get(this.redDeBibliotecas.keySet().stream().max(Comparator.comparing(c
+    //     // -> c)));
+    //     Integer maximo = null;
+    //     for (Integer idBiblio : this.redDeBibliotecas.keySet()) {
+    //         if (idBiblio > maximo || maximo == null) {
+    //             maximo = idBiblio;
+    //         }
+    //     }
+    //     return maximo;
+    // }
+    public Optional<Integer> idDeBibliotecaMaximo() {
+        return this.redDeBibliotecas.keySet().stream().max(Comparator.comparing(c -> c));
     }
 
     // Métodos de red de libros.
@@ -120,14 +130,17 @@ public class GestionGeneral {
         return listaClientes;
     }
 
-    public Cliente getClienteSegunDNI(String dni) {
-        Cliente clienteSegunDni = null;
-        for (Cliente cliente : this.getClientes()) {
-            if (cliente.getDni().equals(dni)) {
-                clienteSegunDni = cliente;
-            }
-        }
-        return clienteSegunDni;
+    // public Cliente getClienteSegunDNI(String dni) {
+    //     Cliente clienteSegunDni = null;
+    //     for (Cliente cliente : this.getClientes()) {
+    //         if (cliente.getDni().equals(dni)) {
+    //             clienteSegunDni = cliente;
+    //         }
+    //     }
+    //     return clienteSegunDni;
+    // }
+    public Optional<Cliente> getClienteSegunDNI(String dni) {
+        return this.getClientes().stream().filter(c -> c.getDni().equals(dni)).findFirst();
     }
 
     public Stream<Libro> librosPorTitulo(String titulo) {
@@ -148,7 +161,7 @@ public class GestionGeneral {
             throws ExcepcionRegistroUsuario, ExcepcionGeneral, ExcepcionEmailInvalido, ExcepcionDNIExistente {
         if (existeNombreUsuario(nombreUsuario)) {
             throw new ExcepcionRegistroUsuario();
-        } else if (!(getClienteSegunDNI(dni) == null)) {
+        } else if (!getClienteSegunDNI(dni).isEmpty()) {
             throw new ExcepcionDNIExistente();
         }
         Cliente newCliente = new Cliente(nombreUsuario, contrasenhaUsuario, nombre, apellido1, apellido2, dni, correo);
