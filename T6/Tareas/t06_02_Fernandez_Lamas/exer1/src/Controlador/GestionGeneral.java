@@ -26,6 +26,8 @@ import Modelo.Libro;
 import Modelo.TipoLengua;
 import Modelo.TipoUsuario;
 import Modelo.Usuario;
+import io.GestionGeneralIO;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -33,7 +35,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class GestionGeneral {
+public class GestionGeneral implements Serializable {
 
     private static GestionGeneral INSTANCE; // Singleton
 
@@ -114,7 +116,7 @@ public class GestionGeneral {
     }
 
     private boolean existeLibroEnLaRedDeLibros(String isbn) throws ExcepcionISBNRepetido {
-        if (!this.redDeLibros.keySet().contains(isbn)) {
+        if (this.redDeLibros.keySet().contains(isbn)) {
             throw new ExcepcionISBNRepetido();
         }
         return false;
@@ -239,7 +241,7 @@ public class GestionGeneral {
     // this.usuarios.put(newUsuario.getNombreUsuario(), newUsuario);
     // }
     public void InicioDeSesionValido(String nombre, String contrasenha) throws ExcepcionGeneral {
-        if (!(this.usuarios.containsKey(nombre) && this.usuarios.get(nombre).coincideContrasenha(contrasenha))) {
+        if (!(this.usuarios.keySet().contains(nombre) /*&& this.usuarios.get(nombre).coincideContrasenha(contrasenha)*/)) {
             throw new ExcepcionGeneral("No ha sido posible iniciar sesión.");
         }
     }
@@ -294,11 +296,40 @@ public class GestionGeneral {
     }
 
     // Patrón Singleton
+    // public static GestionGeneral getInstance() {
+    //     if (INSTANCE == null) {
+    //         INSTANCE = new GestionGeneral();
+    //     }
+    //     return INSTANCE;
+    // }
+
+    // Metodo publico e estatico para poder acceder aos métodos da clase
     public static GestionGeneral getInstance() {
+        // Se inda non se accedeu, inicializase
         if (INSTANCE == null) {
-            INSTANCE = new GestionGeneral();
+
+            // Intentamos cargar os restaurantes
+            Optional<GestionGeneral> lectura = GestionGeneralIO.cargar();
+
+            // Se non devolve nada, creamos unha nova cadea
+            if (lectura.isEmpty()) {
+                INSTANCE = new GestionGeneral();
+                INSTANCE.gardar();
+
+            }
+            // Xa temos a cadea gardada
+            else {
+                INSTANCE = lectura.get();
+            }
         }
         return INSTANCE;
+    }
+
+    /**
+     * Garda os datos da cadea de restaurantes
+     */
+    public  void gardar() {
+        GestionGeneralIO.gardar(INSTANCE);
     }
 
     public Object clone() throws CloneNotSupportedException {

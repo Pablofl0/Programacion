@@ -1,10 +1,10 @@
 package Modelo;
 
+import Excepciones.ExcepcionISBNNoValido;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-import Excepciones.ExcepcionISBNNoValido;
-
-public class Libro {
+public class Libro implements Serializable {
     private String titulo;
     private String[] autor;
     private TipoLengua lengua;
@@ -36,7 +36,7 @@ public class Libro {
 
     @Override
     public String toString() {
-        return this.getISBN() + ", " + this.getTitulo() + " de " + this.getAutor() + " en " + this.getLengua() + "("
+        return this.getISBN() + ", " + this.getTitulo() + " de " + this.getAutor() + " en " + this.getLengua() + " ("
                 + this.getEditorial() + ")";
     }
 
@@ -53,7 +53,7 @@ public class Libro {
     }
 
     public String getAutor() {
-        String autoresDevolucion = null;
+        String autoresDevolucion = "";
         for (int i = 0; i < autor.length; i++) {
             autoresDevolucion += autor[i];
             if (i < autor.length - 1) {

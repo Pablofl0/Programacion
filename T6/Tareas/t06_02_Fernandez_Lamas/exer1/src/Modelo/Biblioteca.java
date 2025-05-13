@@ -1,9 +1,10 @@
 package Modelo;
 
 import Excepciones.ExcepcionEjemplaresInsuficientes;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Biblioteca {
+public class Biblioteca implements Serializable {
     private Integer identificadorBiblioteca;
     private String nombre;
     private String direccion;

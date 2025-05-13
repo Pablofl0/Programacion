@@ -5,9 +5,10 @@ import Excepciones.ExcepcionClienteSancionado;
 import Excepciones.ExcepcionClienteSinPrestamos;
 import Excepciones.ExcepcionEmailInvalido;
 import Excepciones.ExcepcionGeneral;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Cliente extends Usuario {
+public class Cliente extends Usuario implements Serializable {
 
     private ArrayList<Prestamo> prestamos;
     private final int CERO = 0;

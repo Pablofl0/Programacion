@@ -1,11 +1,12 @@
 package Modelo;
 
+import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
-public class Prestamo {
+public class Prestamo implements Serializable {
 
     private Ejemplar ejemplarPrestado;
     private LocalDate fechaPrestamo;

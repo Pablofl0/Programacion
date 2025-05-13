@@ -1,6 +1,8 @@
 package Modelo;
 
-public class Ejemplar {
+import java.io.Serializable;
+
+public class Ejemplar implements Serializable {
     private Libro libro;
     private Biblioteca biblioteca;
     private Cliente cliente;

@@ -15,6 +15,7 @@ public class MenuPrincipal extends Menu {
 
     @Override
     public void mostrar() {
+        GestionGeneral.getInstance();
         printMessage("¡Bienvenido!");
 
         // Eligiendo qué acción tomar.
@@ -154,6 +155,7 @@ public class MenuPrincipal extends Menu {
                     }
                     break;
                 case "s":
+                    GestionGeneral.getInstance().gardar();
                     eligiendoQueHacer = false;
                     break;
                 default:

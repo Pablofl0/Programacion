@@ -8,12 +8,14 @@ import Excepciones.ExcepcionGeneral;
 import Excepciones.ExcepcionISBNNoExistente;
 import Excepciones.ExcepcionISBNNoValido;
 import Excepciones.ExcepcionISBNRepetido;
-import Excepciones.ExcepcionIdNoValido;
 import Excepciones.ExcepcionRedDeBibliotecasVacia;
 import Excepciones.ExcepcionRedDeLibrosVacia;
 import Excepciones.ExcepcionRegistroUsuario;
 import Modelo.AdministradorGeneral;
 import Modelo.TipoLengua;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class MenuAdministradorGeneral extends Menu {
 
@@ -29,10 +31,11 @@ public class MenuAdministradorGeneral extends Menu {
             printMessage("¿Qué quiere hacer el administrador?");
             printMessage("a) Dar de alta nueva biblioteca.");
             printMessage("b) Ver bibliotecas de la red.");
-            printMessage("c) Añadir un libro.");
-            printMessage("d) Ver libros de la red.");
-            printMessage("e) Añadir ejemplares a una biblioteca.");
-            printMessage("f) Dar de alta administradores de biblioteca.");
+            printMessage("c) Añadir un libro mediante línea de comandos.");
+            printMessage("c) Añadir libros mediante un archivo.");
+            printMessage("e) Ver libros de la red.");
+            printMessage("f) Añadir ejemplares a una biblioteca.");
+            printMessage("g) Dar de alta administradores de biblioteca.");
             printMessage("s) Salir.");
             String opcionHacer = this.getString("> ");
 
@@ -83,15 +86,52 @@ public class MenuAdministradorGeneral extends Menu {
                     }
                     break;
                 case "d":
+                    String rutaFicheiro = this.getString("Introduce el nombre del fichero: ");
+
+                    // Try con resources
+                    try (BufferedReader reader = new BufferedReader(new FileReader(rutaFicheiro))) {
+                        String liña;
+                        reader.readLine();
+                        while ((liña = reader.readLine()) != null) {
+                            // Separar a liña en campos usando a coma como delimitador
+                            String[] campos = liña.split(",");
+
+                            TipoLengua tipoLenguaLibro = null;
+                            switch (campos[2]) {
+                                case "INGLES":
+                                    tipoLenguaLibro = TipoLengua.INGLÉS;
+                                    break;
+                                case "GALEGO":
+                                    tipoLenguaLibro = TipoLengua.GALLEGO;
+                                    break;
+                                case "ESPAÑOL":
+                                    tipoLenguaLibro = TipoLengua.CASTELLANO;
+                                    break;
+                                default:
+                                    throw new AssertionError();
+                            }
+                            try {
+                                GestionGeneral.getInstance().anhadirLibro(campos[0], campos[3], tipoLenguaLibro, campos[1], campos[4], Integer.valueOf(campos[5]));
+                            } catch (ExcepcionISBNNoValido e) {
+                                printMessage(e.getMessage());
+                            } catch (ExcepcionISBNRepetido e) {
+                                printMessage(e.getMessage());
+                            }
+                        }
+                    } catch (IOException e) {
+                        System.out.println(e);
+                    }
+                    break;
+                case "e":
                     try {
                         GestionGeneral.getInstance().getLibros().stream().forEach(b -> System.out.println(b));
                     } catch (ExcepcionRedDeLibrosVacia e) {
                         printMessage(e.getMessage());
                     }
                     break;
-                case "e":
+                case "f":
                     Integer numeroDeEjemplaresAAnhadir = this.getInt("Introduce el número de ejemplares: ");
-                    Integer idBiblioteca = null;
+                    Integer idBiblioteca = 0;
                     while (idBiblioteca < 1
                             || idBiblioteca > GestionGeneral.getInstance().idDeBibliotecaMaximo().get()) {
                         idBiblioteca = this.getInt("Introduce el id de la Biblioteca: ");
@@ -107,7 +147,7 @@ public class MenuAdministradorGeneral extends Menu {
                         printMessage(e.getMessage());
                     }
                     break;
-                case "f":
+                case "g":
                     boolean registroNombre = true;
                     boolean registroContrasenhas = true;
                     String nombreUsuarioRegistro = null;

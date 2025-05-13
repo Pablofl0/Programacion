@@ -2,9 +2,10 @@ package Modelo;
 
 import Excepciones.ExcepcionEmailInvalido;
 import Excepciones.ExcepcionGeneral;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class AdministradorBiblioteca extends Usuario {
+public class AdministradorBiblioteca extends Usuario implements Serializable{
     private Biblioteca bibliotecaAsignada;
 
     public AdministradorBiblioteca(String nombreUsuario, String contrasenhaUsuario, 

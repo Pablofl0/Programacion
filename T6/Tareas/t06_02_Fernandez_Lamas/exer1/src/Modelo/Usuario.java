@@ -1,12 +1,12 @@
 package Modelo;
 
+import Excepciones.ExcepcionEmailInvalido;
+import Excepciones.ExcepcionGeneral;
+import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import Excepciones.ExcepcionEmailInvalido;
-import Excepciones.ExcepcionGeneral;
-
-public abstract class Usuario {
+public abstract class Usuario implements Serializable {
 
     private String nombreUsuario;
     private String contrasenhaUsuario;
@@ -59,7 +59,7 @@ public abstract class Usuario {
 
     private boolean contrasenhaValida(String contrasenhaUsuario) {
         // Expresión regular para validar la contraseña
-        String regex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z0-9]{8,}$";
+        String regex = "^[a-zA-Z\\d.]+$";
 
         // Verificar si la contraseña coincide con el patrón
         return Pattern.matches(regex, contrasenhaUsuario);

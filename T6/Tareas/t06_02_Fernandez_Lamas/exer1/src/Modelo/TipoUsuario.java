@@ -1,5 +1,8 @@
 package Modelo;
-public enum TipoUsuario {
+
+import java.io.Serializable;
+
+public enum TipoUsuario implements Serializable {
     ADMINGENERAL,
     ADMINBIBLIOTECA,
     CLIENTE
