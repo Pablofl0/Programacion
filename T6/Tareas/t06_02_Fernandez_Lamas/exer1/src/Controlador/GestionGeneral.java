@@ -9,9 +9,14 @@ import Excepciones.ExcepcionDNIInexistente;
 import Excepciones.ExcepcionEjemplaresInsuficientes;
 import Excepciones.ExcepcionEmailInvalido;
 import Excepciones.ExcepcionGeneral;
+import Excepciones.ExcepcionISBNNoExistente;
 import Excepciones.ExcepcionISBNNoValido;
 import Excepciones.ExcepcionISBNRepetido;
 import Excepciones.ExcepcionIdNoValido;
+import Excepciones.ExcepcionNoLibrosPorAutor;
+import Excepciones.ExcepcionNoLibrosPorTitulo;
+import Excepciones.ExcepcionRedDeBibliotecasVacia;
+import Excepciones.ExcepcionRedDeLibrosVacia;
 import Excepciones.ExcepcionRegistroUsuario;
 import Modelo.AdministradorBiblioteca;
 import Modelo.AdministradorGeneral;
@@ -68,12 +73,15 @@ public class GestionGeneral {
         return this.redDeBibliotecas.get(id);
     }
 
-    public ArrayList<Biblioteca> getBibliotecas() {
+    public Optional<ArrayList<Biblioteca>> getBibliotecas() throws ExcepcionRedDeBibliotecasVacia {
+        if (this.redDeBibliotecas.isEmpty()) {
+            throw new ExcepcionRedDeBibliotecasVacia();
+        }
         ArrayList<Biblioteca> listaBibliotecas = new ArrayList<>();
         for (int idProducto : this.redDeBibliotecas.keySet()) {
             listaBibliotecas.add(this.redDeBibliotecas.get(idProducto));
         }
-        return listaBibliotecas;
+        return Optional.of(listaBibliotecas);
     }
 
     public void anhadirEjemplaresAUnaBiblioteca(Integer identificadorDeBiblioteca, int numeroDeEjemplares, Libro libro)
@@ -100,7 +108,7 @@ public class GestionGeneral {
     // Métodos de red de libros.
     public void anhadirLibro(String titulo, String autor, TipoLengua lengua, String editorial, String ISBN,
             Integer numeroDeEjemplares) throws ExcepcionISBNNoValido, ExcepcionISBNRepetido {
-        existeLibroEnLaRedDeLibros(ISBN);
+        this.existeLibroEnLaRedDeLibros(ISBN);
         Libro newLibro = new Libro(titulo, autor, lengua, editorial, ISBN, numeroDeEjemplares);
         this.redDeLibros.put(ISBN, newLibro);
     }
@@ -112,14 +120,23 @@ public class GestionGeneral {
         return false;
     }
 
-    public ArrayList<Libro> getLibros() {
+    public Optional<ArrayList<Libro>> getLibros() throws ExcepcionRedDeLibrosVacia{
+        if (this.redDeLibros.isEmpty()) {
+            throw new ExcepcionRedDeLibrosVacia();
+        }
         ArrayList<Libro> listaLibros = new ArrayList<>();
         for (String isbn : redDeLibros.keySet()) {
             listaLibros.add(this.redDeLibros.get(isbn));
         }
-        return listaLibros;
+        return Optional.of(listaLibros);
     }
 
+    public Libro existeLibroConISBN(String ISBN) throws ExcepcionISBNNoExistente {
+        if (!this.redDeLibros.keySet().contains(ISBN)) {
+            throw new ExcepcionISBNNoExistente();
+        }
+        return this.redDeLibros.get(ISBN);
+    }
     // Métodos de clientes.
     public ArrayList<Cliente> getClientes() {
         ArrayList<Cliente> listaClientes = new ArrayList<>();
@@ -144,14 +161,24 @@ public class GestionGeneral {
         return this.getClientes().stream().filter(c -> c.getDni().equals(dni)).findFirst();
     }
 
-    public Stream<Libro> librosPorTitulo(String titulo) {
-        return this.getLibros().stream()
-                .filter(c -> c.getTitulo().contains(titulo) && c.getEjemplaresDisponibles().size() > 0)
-                .sorted();
+    public Stream<Libro> librosPorTitulo(String titulo) throws ExcepcionRedDeLibrosVacia, ExcepcionNoLibrosPorTitulo {
+        Stream<Libro> librosPorTitulo = this.getLibros().get().stream()
+        .filter(c -> c.getTitulo().contains(titulo) && c.getEjemplaresDisponibles().size() > 0)
+        .sorted();
+        if (Optional.of(librosPorTitulo).isEmpty()) {
+            throw new ExcepcionNoLibrosPorTitulo();
+        }
+        return librosPorTitulo;
     }
 
-    public Stream<Libro> librosPorAutor(String autor) {
-        return this.getLibros().stream()
+    public Stream<Libro> librosPorAutor(String autor) throws ExcepcionRedDeLibrosVacia, ExcepcionNoLibrosPorAutor {
+        Stream<Libro> librosPorAutor = this.getLibros().get().stream()
+        .filter(c -> c.getAutor().contains(autor) && c.getEjemplaresDisponibles().size() > 0)
+        .sorted();
+        if (Optional.of(librosPorAutor).isEmpty()) {
+            throw new ExcepcionNoLibrosPorAutor();
+        }
+        return this.getLibros().get().stream()
                 .filter(c -> c.getAutor().contains(autor) && c.getEjemplaresDisponibles().size() > 0)
                 .sorted();
     }
@@ -169,7 +196,7 @@ public class GestionGeneral {
         this.usuarios.put(nombreUsuario, newCliente);
     }
 
-    public void anhadirAdministradorGeneral(String nombreUsuario, String contrasenhaUsuario, String nombre,
+    private void anhadirAdministradorGeneral(String nombreUsuario, String contrasenhaUsuario, String nombre,
             String apellido1, String apellido2, String dni, String correo)
             throws ExcepcionGeneral, ExcepcionEmailInvalido, ExcepcionRegistroUsuario {
         if (existeNombreUsuario(nombreUsuario)) {

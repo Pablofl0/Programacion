@@ -2,6 +2,9 @@ package Vista;
 
 import Controlador.GestionGeneral;
 import Excepciones.ExcepcionIdNoValido;
+import Excepciones.ExcepcionNoLibrosPorAutor;
+import Excepciones.ExcepcionNoLibrosPorTitulo;
+import Excepciones.ExcepcionRedDeLibrosVacia;
 import Modelo.Cliente;
 import Modelo.Usuario;
 
@@ -25,17 +28,23 @@ public class MenuCliente extends Menu {
             switch (opcionHacer) {
                 case "a":
                     String tituloLibro = this.getString("Introduce el título del libro: ");
-                    if (GestionGeneral.getInstance().librosPorTitulo(tituloLibro).toList().isEmpty()) {
-                        printMessage("No hay libros con ese título.");
+                    try {
+                        GestionGeneral.getInstance().librosPorTitulo(tituloLibro).forEach(c -> System.out.println(c));
+                    } catch (ExcepcionNoLibrosPorTitulo e) {
+                        printMessage(e.getMessage());
+                    } catch (ExcepcionRedDeLibrosVacia e) {
+                        printMessage(e.getMessage());
                     }
-                    GestionGeneral.getInstance().librosPorTitulo(tituloLibro).forEach(c -> System.out.println(c));
                     break;
                 case "b":
                     String autorLibro = this.getString("Introduce el autor del libro: ");
-                    if (GestionGeneral.getInstance().librosPorAutor(autorLibro).toList().isEmpty()) {
-                        printMessage("No hay libros con ese autor.");
+                    try {
+                        GestionGeneral.getInstance().librosPorAutor(autorLibro).forEach(c -> System.out.println(c));
+                    } catch (ExcepcionNoLibrosPorAutor e) {
+                        printMessage(e.getMessage());
+                    } catch (ExcepcionRedDeLibrosVacia e) {
+                        printMessage(e.getMessage());
                     }
-                    GestionGeneral.getInstance().librosPorAutor(autorLibro);
                     break;
                 case "c":
                     if (!clienteNow.tieneLibrosPrestados()) {
