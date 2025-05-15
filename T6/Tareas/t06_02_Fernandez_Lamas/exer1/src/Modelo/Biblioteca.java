@@ -86,8 +86,12 @@ public class Biblioteca implements Serializable {
         }
         ArrayList<Ejemplar> listaEjemplaresDisponibles = libro.getEjemplaresDisponibles();
         for (int i = 0; i < numeroDeEjemplares; i++) {
-            libro.anhadirEjemplar(listaEjemplaresDisponibles.get(i));
+            this.anhadirEjemplarABiblioteca(listaEjemplaresDisponibles.get(i));
         }
+    }
+
+    private void anhadirEjemplarABiblioteca(Ejemplar ejemplar) {
+        this.listaEjemplares.add(ejemplar);
     }
 
     public ArrayList<Ejemplar> getListaEjemplares() {

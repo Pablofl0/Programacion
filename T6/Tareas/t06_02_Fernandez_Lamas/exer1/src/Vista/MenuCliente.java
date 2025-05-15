@@ -1,6 +1,7 @@
 package Vista;
 
 import Controlador.GestionGeneral;
+import Excepciones.ExcepcionClienteSinPrestamos;
 import Excepciones.ExcepcionIdNoValido;
 import Excepciones.ExcepcionNoLibrosPorAutor;
 import Excepciones.ExcepcionNoLibrosPorTitulo;
@@ -51,7 +52,12 @@ public class MenuCliente extends Menu {
                         printMessage("No tienes libros prestados.");
                         break;
                     }
-                    printMessage(clienteNow.fechaDevolucionPrestamoActual());
+                    try {
+                        printMessage(clienteNow.fechaDevolucionPrestamoActual());
+                    } catch (ExcepcionClienteSinPrestamos e) {
+                        printMessage(e.getMessage());
+                    }
+                    
                     break;
                 case "s":
                     eligiendoQueHacer = false;

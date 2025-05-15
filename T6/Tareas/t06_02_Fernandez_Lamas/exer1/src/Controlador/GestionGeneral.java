@@ -33,6 +33,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class GestionGeneral implements Serializable {
@@ -56,16 +58,19 @@ public class GestionGeneral implements Serializable {
             throw new ExcepcionDNIInexistente();
         }
         this.getClienteSegunDNI(dni).get().anhadirPrestamo(bibliotecaDelAdminBiblio.getListaEjemplaresSinPrestar().stream().filter(c -> c.getLibro().getISBN().equals(isbnLibroDelEjemplarParaPrestar)).findFirst().get(), fechaPrestamo);
+        this.gardar();
     }
 
     public void devolverPrestamoDeUnCliente(String dni, String fechaDevolucion) throws ExcepcionClienteSinPrestamos{
         this.getClienteSegunDNI(dni).get().devolverPrestamoActual(fechaDevolucion);
+        this.gardar();
     }
 
     // Métodos de la red de bibliotecas.
     public void anhadirBiblioteca(String nombre, String direccion, String ciudad, String provincia) {
         Biblioteca newBiblioteca = new Biblioteca(nombre, direccion, ciudad, provincia);
         this.redDeBibliotecas.put(newBiblioteca.getIdentificadorBiblioteca(), newBiblioteca);
+        this.gardar();
     }
 
     public Biblioteca verBibliotecaSegunID(Integer id) throws ExcepcionIdNoValido {
@@ -89,6 +94,7 @@ public class GestionGeneral implements Serializable {
     public void anhadirEjemplaresAUnaBiblioteca(Integer identificadorDeBiblioteca, int numeroDeEjemplares, Libro libro)
             throws ExcepcionEjemplaresInsuficientes {
         this.redDeBibliotecas.get(identificadorDeBiblioteca).anhadirEjemplares(numeroDeEjemplares, libro);
+        this.gardar();
     }
 
     // public Integer idDeBibliotecaMaximo() {
@@ -103,8 +109,8 @@ public class GestionGeneral implements Serializable {
     //     }
     //     return maximo;
     // }
-    public Optional<Integer> idDeBibliotecaMaximo() {
-        return this.redDeBibliotecas.keySet().stream().max(Comparator.comparing(c -> c));
+    public Long idDeBibliotecaMaximo() {
+        return this.redDeBibliotecas.keySet().stream().count();
     }
 
     // Métodos de red de libros.
@@ -113,6 +119,7 @@ public class GestionGeneral implements Serializable {
         this.existeLibroEnLaRedDeLibros(ISBN);
         Libro newLibro = new Libro(titulo, autor, lengua, editorial, ISBN, numeroDeEjemplares);
         this.redDeLibros.put(ISBN, newLibro);
+        this.gardar();
     }
 
     private boolean existeLibroEnLaRedDeLibros(String isbn) throws ExcepcionISBNRepetido {
@@ -164,8 +171,10 @@ public class GestionGeneral implements Serializable {
     }
 
     public Stream<Libro> librosPorTitulo(String titulo) throws ExcepcionRedDeLibrosVacia, ExcepcionNoLibrosPorTitulo {
+        String regex = ".*" + titulo + ".*";
+
         Stream<Libro> librosPorTitulo = this.getLibros().get().stream()
-        .filter(c -> c.getTitulo().contains(titulo) && c.getEjemplaresDisponibles().size() > 0)
+        .filter(c -> Pattern.matches(regex,c.getTitulo()) && c.getEjemplaresDisponibles().size() > 0)
         .sorted();
         if (Optional.of(librosPorTitulo).isEmpty()) {
             throw new ExcepcionNoLibrosPorTitulo();
@@ -174,8 +183,10 @@ public class GestionGeneral implements Serializable {
     }
 
     public Stream<Libro> librosPorAutor(String autor) throws ExcepcionRedDeLibrosVacia, ExcepcionNoLibrosPorAutor {
+        String regex = ".*" + autor + ".*";
+
         Stream<Libro> librosPorAutor = this.getLibros().get().stream()
-        .filter(c -> c.getAutor().contains(autor) && c.getEjemplaresDisponibles().size() > 0)
+        .filter(c -> Pattern.matches(regex,c.getAutor()) && c.getEjemplaresDisponibles().size() > 0)
         .sorted();
         if (Optional.of(librosPorAutor).isEmpty()) {
             throw new ExcepcionNoLibrosPorAutor();
@@ -196,6 +207,7 @@ public class GestionGeneral implements Serializable {
         }
         Cliente newCliente = new Cliente(nombreUsuario, contrasenhaUsuario, nombre, apellido1, apellido2, dni, correo);
         this.usuarios.put(nombreUsuario, newCliente);
+        this.gardar();
     }
 
     private void anhadirAdministradorGeneral(String nombreUsuario, String contrasenhaUsuario, String nombre,
@@ -207,6 +219,7 @@ public class GestionGeneral implements Serializable {
         AdministradorGeneral newAdmin = new AdministradorGeneral(nombreUsuario, contrasenhaUsuario, nombre, apellido1,
                 apellido2, dni, correo);
         this.usuarios.put(nombreUsuario, newAdmin);
+        this.gardar();
     }
 
     public void anhadirAdministradorBiblioteca(String nombreUsuario, String contrasenhaUsuario, String nombre,
@@ -220,6 +233,7 @@ public class GestionGeneral implements Serializable {
         AdministradorBiblioteca newAdmin = new AdministradorBiblioteca(nombreUsuario, contrasenhaUsuario, nombre,
                 apellido1, apellido2, dni, correo, this.redDeBibliotecas.get(idBiblioteca));
         this.usuarios.put(nombreUsuario, newAdmin);
+        this.gardar();
     }
 
     public HashMap<String, Usuario> getUsuarios() {
@@ -231,7 +245,10 @@ public class GestionGeneral implements Serializable {
         try {
             this.anhadirAdministradorGeneral("admin", "abc123.", "Pablo", "Fernández", "Lamas", "34630933V",
                     "a24pablofl@ies.sanclemente.net");
-        } catch (ExcepcionEmailInvalido | ExcepcionGeneral | ExcepcionRegistroUsuario e) {
+            this.anhadirBiblioteca("sanbiblio", "sanbiblio", "sanbiblio", "sanbiblio");
+            this.anhadirAdministradorBiblioteca("pepe", "abc123.", "pepe", "pepe", "pepe", "34968656P", "pepe@gmail.com", 1);
+            this.anhadirCliente("jose", "abc123.", "jose", "jose", "jose", "34630934H", "jose@gmail.com");
+        } catch (ExcepcionEmailInvalido | ExcepcionGeneral | ExcepcionRegistroUsuario | ExcepcionBibliotecaNoEnLaRed | ExcepcionDNIExistente e) {
             System.out.println(e.getMessage());
         }
     }

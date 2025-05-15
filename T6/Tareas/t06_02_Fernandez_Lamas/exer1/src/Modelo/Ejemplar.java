@@ -10,12 +10,17 @@ public class Ejemplar implements Serializable {
     private boolean prestado;
     private static int contadorDeIdentificador = 1;
 
-
     public Ejemplar(Libro libro) {
         this.setLibro(libro);
         this.setIdEjemplar();
         this.setPrestado(false);
         this.getLibro().anhadirEjemplar(this);
+    }
+
+    @Override
+    public String toString() {
+        return this.getLibro().getISBN() + ", " + this.getLibro().getTitulo() + " de " + this.getLibro().getAutor() + " en " + this.getLibro().getLengua() + " ("
+        + this.getLibro().getEditorial() + "). ID Ejemplar: " + this.getIdEjemplar();
     }
 
     public Biblioteca getBiblioteca() {

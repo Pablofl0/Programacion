@@ -3,6 +3,7 @@ package Modelo;
 import Excepciones.ExcepcionISBNNoValido;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class Libro implements Serializable {
     private String titulo;
@@ -136,7 +137,7 @@ public class Libro implements Serializable {
     public Integer getNumeroEjemplaresDisponibles() {
         Integer numeroEjemplaresDisponibles = 0;
         for (Ejemplar ejemplar : this.getEjemplares()) {
-            if (ejemplar.getBiblioteca().equals(null)) {
+            if (ejemplar.getBiblioteca() == null ) {
                 numeroEjemplaresDisponibles++;
             }
         }
@@ -146,7 +147,7 @@ public class Libro implements Serializable {
     public ArrayList<Ejemplar> getEjemplaresDisponibles() {
         ArrayList<Ejemplar> listaEjemplaresDisponibles = new ArrayList<>();
         for (Ejemplar ejemplar : this.getEjemplares()) {
-            if (ejemplar.getBiblioteca().equals(null)) {
+            if (ejemplar.getBiblioteca() == null) {
                 listaEjemplaresDisponibles.add(ejemplar);
             }
         }

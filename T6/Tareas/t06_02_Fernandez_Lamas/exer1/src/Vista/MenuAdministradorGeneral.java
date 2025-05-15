@@ -32,7 +32,7 @@ public class MenuAdministradorGeneral extends Menu {
             printMessage("a) Dar de alta nueva biblioteca.");
             printMessage("b) Ver bibliotecas de la red.");
             printMessage("c) Añadir un libro mediante línea de comandos.");
-            printMessage("c) Añadir libros mediante un archivo.");
+            printMessage("d) Añadir libros mediante un archivo.");
             printMessage("e) Ver libros de la red.");
             printMessage("f) Añadir ejemplares a una biblioteca.");
             printMessage("g) Dar de alta administradores de biblioteca.");
@@ -133,7 +133,7 @@ public class MenuAdministradorGeneral extends Menu {
                     Integer numeroDeEjemplaresAAnhadir = this.getInt("Introduce el número de ejemplares: ");
                     Integer idBiblioteca = 0;
                     while (idBiblioteca < 1
-                            || idBiblioteca > GestionGeneral.getInstance().idDeBibliotecaMaximo().get()) {
+                            || idBiblioteca > GestionGeneral.getInstance().idDeBibliotecaMaximo()) {
                         idBiblioteca = this.getInt("Introduce el id de la Biblioteca: ");
                     }
                     String isbnLibro = this.getString("Introduce el ISBN del libro: ");
@@ -178,7 +178,7 @@ public class MenuAdministradorGeneral extends Menu {
                     String dni = this.getString("Introduce el DNI: ");
                     String correo = this.getString("Introduce un correo: ");
                     Integer idBibliotecaAdmin = 0;
-                    while (idBibliotecaAdmin < 1 || idBibliotecaAdmin > GestionGeneral.getInstance().idDeBibliotecaMaximo().get()) {
+                    while (idBibliotecaAdmin < 1 || idBibliotecaAdmin > GestionGeneral.getInstance().idDeBibliotecaMaximo()) {
                         idBibliotecaAdmin = this.getInt("Introduce el id de la biblioteca: ");
                     }
                     try {

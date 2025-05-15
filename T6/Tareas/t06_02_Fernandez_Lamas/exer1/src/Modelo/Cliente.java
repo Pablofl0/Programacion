@@ -6,6 +6,7 @@ import Excepciones.ExcepcionClienteSinPrestamos;
 import Excepciones.ExcepcionEmailInvalido;
 import Excepciones.ExcepcionGeneral;
 import java.io.Serializable;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Cliente extends Usuario implements Serializable {
@@ -57,14 +58,15 @@ public class Cliente extends Usuario implements Serializable {
         return false;
     }
 
-    public String fechaDevolucionPrestamoActual() {
-        String fecha = null;
-        for (Prestamo prestamo : prestamos) {
-            if (prestamo.isEnPrestamo()) {
-                fecha = prestamo.getFechaLimiteDevolucion();
-            }
-        }
-        return fecha;
+    public String fechaDevolucionPrestamoActual() throws ExcepcionClienteSinPrestamos {
+        // String fecha = null;
+        // for (Prestamo prestamo : prestamos) {
+        //     if (prestamo.isEnPrestamo()) {
+        //         fecha = prestamo.getFechaLimiteDevolucion();
+        //         break;
+        //     }
+        // }
+        return this.getPrestamoActual().getFechaLimiteDevolucion();
     }
 
     public Prestamo getPrestamoActual() throws ExcepcionClienteSinPrestamos{

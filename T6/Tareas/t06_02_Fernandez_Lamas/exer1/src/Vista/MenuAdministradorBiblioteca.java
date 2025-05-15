@@ -23,7 +23,7 @@ public class MenuAdministradorBiblioteca extends Menu {
 
             switch (opcionHacer) {
                 case "a":
-                    adminBiblio.getBibliotecaAsignada().getListaEjemplaresSinPrestar().stream().forEach(c -> System.out.println(c));
+                    adminBiblio.getBibliotecaAsignada().getListaEjemplaresSinPrestar().stream().forEach(c -> System.out.println(c.toString()));
                     break;
                 case "b":
                     String dni = this.getString("Introduce el DNI del cliente: ");

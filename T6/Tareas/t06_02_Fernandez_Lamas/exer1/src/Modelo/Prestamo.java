@@ -19,6 +19,7 @@ public class Prestamo implements Serializable {
     public Prestamo(Ejemplar ejemplarPrestado, String fechaPrestamo) {
         this.setEjemplarPrestado(ejemplarPrestado);
         this.setFechaPrestamo(fechaPrestamo);
+        this.setFechaLimiteDevolucion(fechaPrestamo);
         this.setEnPrestamo(true);
     }
 
@@ -26,7 +27,9 @@ public class Prestamo implements Serializable {
         LocalDate newFecha = null;
         if (fecha.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
             newFecha = fecha.plusDays(1);
+            return newFecha;
         }
+        newFecha = fecha;
         return newFecha;
     }
 
@@ -51,15 +54,15 @@ public class Prestamo implements Serializable {
 
     public void setFechaPrestamo(String fechaPrestamo) {
         this.fechaPrestamo = LocalDate.parse(fechaPrestamo, formato);
-        this.setFechaLimiteDevolucion();
+        // this.setFechaLimiteDevolucion(fechaPrestamo);
     }
 
     public String getFechaLimiteDevolucion() {
-        return fechaLimiteDevolucion.format(formato);
+        return this.fechaLimiteDevolucion.format(formato);
     }
 
-    public void setFechaLimiteDevolucion() {
-        this.fechaLimiteDevolucion = cambioAFechaNoDomingo(this.fechaPrestamo.plusDays(15));
+    public void setFechaLimiteDevolucion(String fechaPrestamo) {
+        this.fechaLimiteDevolucion = cambioAFechaNoDomingo(LocalDate.parse(fechaPrestamo, formato).plusDays(15));
     }
 
     public LocalDate getFechaDevolucion() {
