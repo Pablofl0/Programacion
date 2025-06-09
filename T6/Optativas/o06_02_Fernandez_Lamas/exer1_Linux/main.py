@@ -53,6 +53,40 @@ def index_page():
     
     return render_template("index.html",data=data, n_paxinas=n_paxinas, paxina=paxina, islice=islice)
 
+@app.route("/peso/")
+def por_peso():
+    datos_por_peso = sorted(data, key=lambda x: x["Mobile Weight"], reverse=True)
+    #pagina_actual = request.args.get("pagina", default=1, type=int)
+    # Collemos a páxina se se pasa por parámetro
+    parametros_get = request.args
+    if "paxina" in parametros_get:
+        paxina = int(parametros_get["paxina"])
+    else:
+        paxina = 1
+
+    elementos_por_paxina = 10
+    # Calcular número total de páxinas
+    n_paxinas = ceil(len(data) / elementos_por_paxina)
+    
+    return render_template("index.html",data=datos_por_peso, n_paxinas=n_paxinas, paxina=paxina, islice=islice)
+
+
+@app.route("/prezo/")
+def por_prezo():
+    datos_por_prezo = sorted(data, key=lambda x: x["Launched Price (UE)"], reverse=True)
+    #pagina_actual = request.args.get("pagina", default=1, type=int)
+    # Collemos a páxina se se pasa por parámetro
+    parametros_get = request.args
+    if "paxina" in parametros_get:
+        paxina = int(parametros_get["paxina"])
+    else:
+        paxina = 1
+
+    elementos_por_paxina = 10
+    # Calcular número total de páxinas
+    n_paxinas = ceil(len(data) / elementos_por_paxina)
+    
+    return render_template("index.html",data=datos_por_prezo, n_paxinas=n_paxinas, paxina=paxina, islice=islice)
 
 # Iniciamos a aplicación 
 if __name__ == "__main__":
